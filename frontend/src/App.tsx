@@ -1,8 +1,13 @@
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "./ThemeProvider";
+import "./style.css";
+
 function App() {
   return (
-    <>
-      <h1>Hello world!</h1>
-    </>
+    <ThemeProvider>
+      <CssBaseline />
+      <h1>Test</h1>
+    </ThemeProvider>
   );
 }
 
