@@ -71,5 +71,12 @@ h6 {
 
 :root {
   font-family: Montserrat, Helvetica, Arial, sans-serif;
-  font-size: 18px;
+  /* font-size: 18px; */
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+  padding: 0;
 }

@@ -20,6 +20,17 @@ export function ThemeProvider({ children }: { children: ReactElement | ReactElem
     shape: {
       borderRadius: 2,
     },
+    typography: {
+      fontFamily: [
+        "Montserrat",
+        '"Helvetica"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(","),
+    },
     components: {
       MuiCssBaseline: {
         styleOverrides: {
@@ -36,12 +47,14 @@ export function ThemeProvider({ children }: { children: ReactElement | ReactElem
   const lightPalette: PaletteOptions = {
     mode: "light",
     primary: { main: "#212121", contrastText: "fff" },
+    background: { default: "#e7e7e7" },
     ...basePalette,
   };
 
   const darkPalette: PaletteOptions = {
     mode: "dark",
     primary: { main: "#ffffff" },
+    background: { default: "#070707", paper: "#070707" },
     ...basePalette,
   };
 

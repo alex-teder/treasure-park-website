@@ -1,8 +1,8 @@
+import { FC } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import { SearchPage } from "./pages/SearchPage";
 import Layout from "./layout";
-import { FC } from "react";
 
 export const ROUTES = {
   ROOT: "/",
