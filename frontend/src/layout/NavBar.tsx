@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import { ROUTES } from "../router";
 import { useNavigate } from "react-router-dom";
 
-export function NavBar({ handleDrawerToggle }: { handleDrawerToggle: () => void }) {
+export function NavBar({ closeDrawer }: { closeDrawer: () => void }) {
   const navItems = [
     { label: "Home", path: ROUTES.ROOT },
     { label: "Search", path: ROUTES.SEARCH },
@@ -25,7 +25,7 @@ export function NavBar({ handleDrawerToggle }: { handleDrawerToggle: () => void 
             key={label}
             sx={{ p: 2 }}
             onClick={() => {
-              handleDrawerToggle();
+              closeDrawer();
               if (path) {
                 navigate(path);
               }

@@ -7,8 +7,9 @@ import { RightSideToolbar } from "./RightSideToolbar";
 export function MainAppBar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const handleDrawerToggle = () => setIsDrawerOpen((v) => !v);
+  const closeDrawer = () => setIsDrawerOpen(false);
 
-  const navBar = <NavBar handleDrawerToggle={handleDrawerToggle} />;
+  const navBar = <NavBar closeDrawer={closeDrawer} />;
 
   return (
     <AppBar elevation={0} color="transparent" position="static">

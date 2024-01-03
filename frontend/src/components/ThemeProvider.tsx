@@ -37,6 +37,23 @@ export function ThemeProvider({ children }: { children: ReactElement | ReactElem
           body: {
             transition: "all 0.25s ease",
           },
+          ":root": {
+            fontSize: 16,
+            "@media (min-width: 600px)": {
+              fontSize: 18,
+            },
+          },
+          "ul, ol, li": {
+            listStyle: "none",
+            padding: 0,
+          },
+          a: {
+            color: "inherit",
+            textDecoration: "none",
+          },
+          "a:hover": {
+            textDecoration: "underline",
+          },
         },
       },
     },
