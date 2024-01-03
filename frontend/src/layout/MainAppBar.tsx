@@ -8,12 +8,12 @@ export function MainAppBar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const handleDrawerToggle = () => setIsDrawerOpen((v) => !v);
 
+  const navBar = <NavBar handleDrawerToggle={handleDrawerToggle} />;
+
   return (
     <AppBar elevation={0} color="transparent" position="static">
       <Toolbar sx={{ display: "inline-flex", justifyContent: "space-between" }}>
-        <Box sx={{ display: { xs: "none", sm: "block" } }}>
-          <NavBar />
-        </Box>
+        <Box sx={{ display: { xs: "none", sm: "block" } }}>{navBar}</Box>
         <IconButton onClick={handleDrawerToggle} sx={{ p: 2, display: { sm: "none" } }}>
           <MenuIcon color="primary" />
         </IconButton>
@@ -31,7 +31,7 @@ export function MainAppBar() {
           "& .MuiDrawer-paper": { boxSizing: "border-box", paddingBlock: "1rem", width: "75%" },
         }}
       >
-        <NavBar />
+        {navBar}
       </Drawer>
     </AppBar>
   );

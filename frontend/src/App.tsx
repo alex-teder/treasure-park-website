@@ -1,13 +1,12 @@
-import { ThemeProvider } from "./ThemeProvider";
-import Layout from "./layout";
+import { RouterProvider } from "react-router-dom";
+import { ThemeProvider } from "./components/ThemeProvider";
 import "./style.css";
+import { router } from "./router";
 
 function App() {
   return (
     <ThemeProvider>
-      <Layout>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae, officiis.</p>
-      </Layout>
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }
