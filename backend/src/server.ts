@@ -42,6 +42,13 @@ export async function buildServer() {
     root: path.join(__dirname, "../../frontend/dist"),
   });
 
+  server.setNotFoundHandler((req, reply) => {
+    if (!req.url.includes("/api")) {
+      return reply.sendFile("index.html");
+    }
+    reply.code(404).send({ error: "Not Found" });
+  });
+
   server.get("/api/ping", async () => {
     return "pong\n";
   });
