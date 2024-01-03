@@ -1,12 +1,13 @@
-import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "./ThemeProvider";
+import Layout from "./layout";
 import "./style.css";
 
 function App() {
   return (
     <ThemeProvider>
-      <CssBaseline />
-      <h1>Test</h1>
+      <Layout>
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae, officiis.</p>
+      </Layout>
     </ThemeProvider>
   );
 }

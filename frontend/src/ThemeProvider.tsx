@@ -5,6 +5,7 @@ import {
   PaletteOptions,
   ThemeOptions,
 } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 export function ThemeProvider({
   children,
@@ -22,7 +23,7 @@ export function ThemeProvider({
   const basePalette: PaletteOptions = { secondary: { main: "#3f51b5" } };
   const lightPalette: PaletteOptions = {
     mode: "light",
-    primary: { main: "#212121" },
+    primary: { main: "#212121", contrastText: "fff" },
     ...basePalette,
   };
   const darkPalette: PaletteOptions = {
@@ -43,6 +44,7 @@ export function ThemeProvider({
   return (
     <>
       <MuiThemeProvider theme={mode === "light" ? lightTheme : darkTheme}>
+        <CssBaseline />
         {children}
       </MuiThemeProvider>
     </>
