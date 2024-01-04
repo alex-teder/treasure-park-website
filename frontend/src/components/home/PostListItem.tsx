@@ -6,6 +6,7 @@ import {
   CardMedia,
   Typography,
   IconButton,
+  CardContent,
 } from "@mui/material";
 import {
   FavoriteBorder as LikeIcon,
@@ -17,7 +18,7 @@ export function PostListItem() {
   const navigate = useNavigate();
 
   return (
-    <Card onClick={() => {}}>
+    <Card>
       <CardHeader
         avatar={<Avatar sx={{ color: "white", bgcolor: "indigo" }}>U</Avatar>}
         title={<Link to="#">My Awesome Collection</Link>}
@@ -36,7 +37,7 @@ export function PostListItem() {
           py: 1,
           mx: "auto",
           display: "block",
-          maxHeight: "500px",
+          maxHeight: "450px",
           maxWidth: "100%",
           width: "auto",
           height: "auto",
@@ -44,6 +45,11 @@ export function PostListItem() {
         }}
         onClick={() => navigate("#")}
       />
+      <CardContent>
+        <Typography variant="body2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. At, libero.
+        </Typography>
+      </CardContent>
       <CardActions sx={{ mb: 1 }}>
         <IconButton color="inherit">
           <LikeIcon />

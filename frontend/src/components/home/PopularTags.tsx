@@ -1,3 +1,7 @@
 export function PopularTags() {
-  return <h2>Popular Tags:</h2>;
+  return (
+    <section>
+      <h2>Popular Tags:</h2>
+    </section>
+  );
 }

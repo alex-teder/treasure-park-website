@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { IconButton, useTheme } from "@mui/material";
 import { NightlightRound as DarkIcon, LightModeRounded as LightIcon } from "@mui/icons-material";
-import { ThemeSwitcherContext } from "./ThemeProvider";
+import { ThemeSwitcherContext } from "../components/ThemeProvider";
 
 export function ThemeSwitcherButton() {
   const toggleMode = useContext(ThemeSwitcherContext);

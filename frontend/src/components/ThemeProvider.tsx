@@ -63,7 +63,7 @@ export function ThemeProvider({ children }: { children: ReactElement | ReactElem
 
   const lightPalette: PaletteOptions = {
     mode: "light",
-    primary: { main: "#212121", contrastText: "fff" },
+    primary: { main: "#212121" },
     background: { default: "#e7e7e7" },
     ...basePalette,
   };
@@ -71,7 +71,7 @@ export function ThemeProvider({ children }: { children: ReactElement | ReactElem
   const darkPalette: PaletteOptions = {
     mode: "dark",
     primary: { main: "#ffffff" },
-    background: { default: "#070707", paper: "#070707" },
+    background: { default: "#070707", paper: "#101010" },
     ...basePalette,
   };
 
