@@ -6,7 +6,7 @@ export function NavBar({ closeDrawer }: { closeDrawer: () => void }) {
   const navItems = [
     { label: "Home", path: ROUTES.ROOT },
     { label: "Search", path: ROUTES.SEARCH },
-    { label: "My collections" },
+    { label: "My collections", path: "/users/2049685" },
   ];
   const navigate = useNavigate();
 

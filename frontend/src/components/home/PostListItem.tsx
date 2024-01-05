@@ -22,7 +22,7 @@ export function PostListItem() {
       <CardHeader
         avatar={<Avatar sx={{ color: "white", bgcolor: "indigo" }}>U</Avatar>}
         title={<Link to="#">My Awesome Collection</Link>}
-        subheader={<Link to="#">@username</Link>}
+        subheader={<Link to="/users/123">@username</Link>}
       />
       <Link to={"#"}>
         <Typography variant="h6" fontWeight="700" component="h5" sx={{ mx: 2 }}>
