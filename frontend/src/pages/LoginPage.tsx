@@ -24,7 +24,7 @@ export function LoginPage() {
   return (
     <Container
       sx={{
-        height: "90vh",
+        height: "85vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",

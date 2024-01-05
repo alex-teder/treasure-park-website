@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -13,7 +14,7 @@ import {
 } from "@mui/material";
 import { ArrowRight as ArrowRightIcon } from "@mui/icons-material";
 import { ROUTES } from "../../router";
-import { useState } from "react";
+import bannerImg from "/src/assets/banner.jpg";
 
 export function NoAuthBanner() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export function NoAuthBanner() {
     <MuiThemeProvider theme={scopedTheme}>
       <Box
         sx={{
-          backgroundImage: "url(/src/assets/banner.jpg)",
+          backgroundImage: `url(${bannerImg})`,
         }}
       >
         <Box py={4} bgcolor="rgba(0, 0, 0, 0.5)">
@@ -82,6 +83,7 @@ export function NoAuthBanner() {
               <Button
                 type="submit"
                 variant="contained"
+                size="small"
                 endIcon={<ArrowRightIcon />}
                 sx={{ border: "1px solid rgba(0,0,0,0.2)" }}
                 onClick={() => {
