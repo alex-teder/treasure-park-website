@@ -43,10 +43,10 @@ export function ThemeProvider({ children }: { children: ReactElement | ReactElem
               fontSize: 18,
             },
           },
-          "ul, ol, li": {
-            listStyle: "none",
-            padding: 0,
-          },
+          // "ul, ol, li": {
+          //   listStyle: "none",
+          //   padding: 0,
+          // },
           a: {
             color: "inherit",
             textDecoration: "none",

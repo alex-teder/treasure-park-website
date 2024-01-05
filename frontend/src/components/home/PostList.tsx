@@ -3,7 +3,7 @@ import { PostListItem } from "./PostListItem";
 
 export function PostList() {
   return (
-    <ul>
+    <ul style={{ padding: 0, listStyle: "none" }}>
       <Box mt={2} display="flex" flexDirection="column" gap="2rem">
         <li>
           <PostListItem />

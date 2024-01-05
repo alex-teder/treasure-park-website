@@ -6,7 +6,7 @@ export function TopCollections() {
     <section>
       <Box mb={2}>
         <h2>Top collections:</h2>
-        <ol>
+        <ol style={{ padding: 0, listStyle: "none" }}>
           <li>
             <Link to={"/"}>
               <Typography variant="body2">1. My Awesome collection - @username</Typography>
