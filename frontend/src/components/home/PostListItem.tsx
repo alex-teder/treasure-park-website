@@ -24,7 +24,7 @@ export function PostListItem() {
         title={<Link to="#">My Awesome Collection</Link>}
         subheader={<Link to="/users/123">@username</Link>}
       />
-      <Link to={"#"}>
+      <Link to={"/users/32/collections/4/items/2"}>
         <Typography variant="h6" fontWeight="700" component="h5" sx={{ mx: 2 }}>
           My new item
         </Typography>
@@ -43,7 +43,7 @@ export function PostListItem() {
           height: "auto",
           cursor: "pointer",
         }}
-        onClick={() => navigate("#")}
+        onClick={() => navigate("/users/32/collections/4/items/2")}
       />
       <CardContent>
         <Typography variant="body2">
