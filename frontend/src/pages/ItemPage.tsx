@@ -16,30 +16,18 @@ import {
   Edit,
   Delete,
 } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { CommentSection } from "../components/CommentSection";
 
 export function ItemPage() {
-  const navigate = useNavigate();
-
   return (
     <Container maxWidth="md">
       <Card sx={{ my: 2 }}>
         <CardHeader
           avatar={<Avatar sx={{ color: "white", bgcolor: "indigo" }}>U</Avatar>}
-          title="My Awesome Collection"
+          title={<Link to="/users/123/collections/7654">My Awesome Collection</Link>}
           subheader={<Link to="/users/123">@username</Link>}
-          action={
-            true && (
-              <ButtonGroup>
-                <IconButton>
-                  <Edit />
-                </IconButton>
-                <IconButton>
-                  <Delete />
-                </IconButton>
-              </ButtonGroup>
-            )
-          }
+          action={true && <OwnerActions />}
         />
         <Typography variant="h5" fontWeight="700" component="h5" sx={{ mx: 2 }}>
           My new item
@@ -56,9 +44,7 @@ export function ItemPage() {
             maxWidth: "100%",
             width: "auto",
             height: "auto",
-            cursor: "pointer",
           }}
-          onClick={() => navigate("#")}
         />
         <CardContent>
           <Typography>
@@ -73,12 +59,26 @@ export function ItemPage() {
           <IconButton color="inherit">
             <CommentIcon />
           </IconButton>
-          1<div style={{ flexGrow: 1 }}></div>
+          3<div style={{ flexGrow: 1 }}></div>
           <Typography variant="caption" mr={2}>
             Yesterday, 17:45
           </Typography>
         </CardActions>
+        <CommentSection />
       </Card>
     </Container>
+  );
+}
+
+function OwnerActions() {
+  return (
+    <ButtonGroup>
+      <IconButton>
+        <Edit />
+      </IconButton>
+      <IconButton>
+        <Delete />
+      </IconButton>
+    </ButtonGroup>
   );
 }

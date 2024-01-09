@@ -66,9 +66,13 @@ export function CollectionItemList() {
 
   return (
     <>
+      <Typography fontWeight={700} sx={{ mt: 4 }}>
+        Total items: {allItems.length}
+      </Typography>
       <TextField
         size="small"
         placeholder="Quick search"
+        autoComplete="false"
         sx={{ my: 2 }}
         InputProps={{
           sx: { borderRadius: 16 },

@@ -55,7 +55,7 @@ export function PostListItem() {
           <LikeIcon />
         </IconButton>
         5
-        <IconButton color="inherit">
+        <IconButton color="inherit" onClick={() => navigate("/users/32/collections/4/items/2")}>
           <CommentIcon />
         </IconButton>
         1<div style={{ flexGrow: 1 }}></div>
