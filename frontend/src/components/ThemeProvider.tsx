@@ -10,7 +10,6 @@ import { CssBaseline } from "@mui/material/";
 export const ThemeSwitcherContext = createContext<() => void>(() => {});
 
 export function ThemeProvider({ children }: { children: ReactElement | ReactElement[] }) {
-  // const initialMode = useMediaQuery("(prefers-color-scheme: dark)") ? "dark" : "light";
   const [mode, setMode] = useState("light");
   const toggleMode = () => {
     setMode((v) => (v === "light" ? "dark" : "light"));

@@ -59,11 +59,11 @@ export function NoAuthBanner() {
               }}
               pb={2}
             >
-              Endless memories.
+              Share your collections.
               <br />
-              Endless connections.
+              Explore and participate in discussions.
               <br />
-              Start sharing now
+              Join now!
             </Typography>
             <Box
               component="form"

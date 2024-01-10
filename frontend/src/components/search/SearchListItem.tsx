@@ -11,7 +11,12 @@ export function SearchListItem() {
             My Awesome Item <OpenInNew sx={{ fontSize: "1rem" }} />
           </Link>
         }
-        subheader={<Link to="/users/123">@username</Link>}
+        subheader={
+          <>
+            <Link to={"/users/123/collections/321"}>My Awesome collection</Link> -{" "}
+            <Link to="/users/123">@username</Link>
+          </>
+        }
       />
       <CardContent
         sx={{ pt: 0, display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}
