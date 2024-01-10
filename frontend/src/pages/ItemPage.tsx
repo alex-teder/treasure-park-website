@@ -16,8 +16,9 @@ import {
   Edit,
   Delete,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CommentSection } from "../components/item/CommentSection";
+import { ROUTES } from "../router";
 
 export function ItemPage() {
   return (
@@ -71,12 +72,14 @@ export function ItemPage() {
 }
 
 function OwnerActions() {
+  const navigate = useNavigate();
+
   return (
     <ButtonGroup>
       <IconButton>
         <Delete />
       </IconButton>
-      <IconButton>
+      <IconButton onClick={() => navigate(ROUTES.EDIT_ITEM)}>
         <Edit />
       </IconButton>
     </ButtonGroup>

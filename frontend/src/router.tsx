@@ -9,12 +9,16 @@ import { UserPage } from "./pages/UserPage";
 import { CollectionPage } from "./pages/CollectionPage";
 import { ItemPage } from "./pages/ItemPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { EditCollectionPage } from "./pages/EditCollectionPage";
+import { EditItemPage } from "./pages/EditItemPage";
 
 export const ROUTES = {
   ROOT: "/",
   SEARCH: "/search",
   LOGIN: "/login",
   SIGNUP: "/signup",
+  EDIT_COLLECTION: "/edit-collection",
+  EDIT_ITEM: "/edit-item",
 };
 
 const applyLayout = (Component: FC) => (
@@ -55,5 +59,13 @@ export const router = createBrowserRouter([
   {
     path: "/users/:userId/collections/:collectionId/items/:itemId",
     element: applyLayout(ItemPage),
+  },
+  {
+    path: ROUTES.EDIT_COLLECTION,
+    element: applyLayout(EditCollectionPage),
+  },
+  {
+    path: ROUTES.EDIT_ITEM,
+    element: applyLayout(EditItemPage),
   },
 ]);
