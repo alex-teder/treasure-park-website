@@ -5,6 +5,7 @@ import {
   Button,
   CardContent,
   CardHeader,
+  Container,
   Divider,
   IconButton,
   TextField,
@@ -13,24 +14,39 @@ import { Link } from "react-router-dom";
 
 export function CommentSection() {
   return (
-    <>
-      <SingleComment />
-      <SingleComment />
-      <SingleComment />
-      <Box p={2} mb={2} display="flex" flexDirection="column" alignItems="flex-end">
-        <TextField multiline minRows={2} size="small" placeholder="Leave a comment..." fullWidth />
-        <Button variant="contained" sx={{ mt: 1 }}>
-          Submit
-        </Button>
+    <Container>
+      <Divider />
+      <Box maxHeight={500} overflow="auto">
+        <SingleComment />
+        <SingleComment />
+        <SingleComment />
+        <SingleComment />
+        <SingleComment />
+        <SingleComment />
+        <SingleComment />
+        <SingleComment />
+        <SingleComment />
+        <SingleComment />
       </Box>
-    </>
+      <NewCommentField />
+    </Container>
+  );
+}
+
+function NewCommentField() {
+  return (
+    <Box p={2} mb={2} display="flex" flexDirection="column" alignItems="flex-end">
+      <TextField multiline minRows={2} size="small" placeholder="Leave a comment..." fullWidth />
+      <Button variant="contained" sx={{ mt: 1 }}>
+        Submit
+      </Button>
+    </Box>
   );
 }
 
 function SingleComment() {
   return (
     <>
-      <Divider />
       <CardHeader
         avatar={<Avatar>U</Avatar>}
         title={
@@ -45,6 +61,7 @@ function SingleComment() {
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe cum vitae doloremque
         reiciendis id perspiciatis exercitationem odit impedit corrupti necessitatibus!
       </CardContent>
+      <Divider />
     </>
   );
 }

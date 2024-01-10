@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   InputAdornment,
   Table,
   TableBody,
@@ -10,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { Image as ImageIcon, Search as SearchIcon } from "@mui/icons-material";
+import { Add, Image as ImageIcon, Search as SearchIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 const sampleItems = [
@@ -69,11 +70,14 @@ export function CollectionItemList() {
       <Typography fontWeight={700} sx={{ mt: 4 }}>
         Total items: {allItems.length}
       </Typography>
+      <Button variant="contained" startIcon={<Add />} sx={{ mt: 1, borderRadius: 64 }}>
+        Add new item
+      </Button>
       <TextField
         size="small"
         placeholder="Quick search"
         autoComplete="false"
-        sx={{ my: 2 }}
+        sx={{ display: "block", my: 2 }}
         InputProps={{
           sx: { borderRadius: 16 },
           startAdornment: (

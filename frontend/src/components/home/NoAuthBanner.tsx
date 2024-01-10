@@ -83,7 +83,6 @@ export function NoAuthBanner() {
               <Button
                 type="submit"
                 variant="contained"
-                size="small"
                 endIcon={<ArrowRightIcon />}
                 sx={{ border: "1px solid rgba(0,0,0,0.2)" }}
                 onClick={() => {

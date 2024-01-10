@@ -3,6 +3,7 @@ import { Avatar, Box, Container, SxProps, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { UserActions } from "../components/user/UserActions";
 
 export function UserPage() {
   return (
@@ -21,6 +22,7 @@ export function UserPage() {
           @username-123
         </Typography>
       </Box>
+      <UserActions />
       <h2>Personal collections:</h2>
       <CollectionList />
     </Container>

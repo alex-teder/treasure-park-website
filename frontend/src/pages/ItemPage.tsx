@@ -17,7 +17,7 @@ import {
   Delete,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { CommentSection } from "../components/CommentSection";
+import { CommentSection } from "../components/item/CommentSection";
 
 export function ItemPage() {
   return (
@@ -74,10 +74,10 @@ function OwnerActions() {
   return (
     <ButtonGroup>
       <IconButton>
-        <Edit />
+        <Delete />
       </IconButton>
       <IconButton>
-        <Delete />
+        <Edit />
       </IconButton>
     </ButtonGroup>
   );

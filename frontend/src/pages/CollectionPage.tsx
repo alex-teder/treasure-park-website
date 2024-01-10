@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { Card, Container, Typography } from "@mui/material";
 import MuiMarkdown from "mui-markdown";
-import { CollectionTagList } from "../components/CollectionTagList";
-import { CollectionItemList } from "../components/CollectionItemList";
-import { CollectionActions } from "../components/CollectionActions";
+import { CollectionTagList } from "../components/collection/CollectionTagList";
+import { CollectionItemList } from "../components/collection/CollectionItemList";
+import { CollectionActions } from "../components/collection/CollectionActions";
 
 const sampleMarkdown = `
 # Mystical Artifacts Collection
