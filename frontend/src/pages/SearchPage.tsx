@@ -25,7 +25,7 @@ export function SearchPage() {
         </Button>
       </Box>
       <Grid container columnSpacing={2} my={2}>
-        <Grid xs={12} sm={6}>
+        <Grid xs={12} md={6}>
           <Autocomplete
             options={[]}
             renderInput={(params) => (
@@ -33,7 +33,15 @@ export function SearchPage() {
             )}
           />
         </Grid>
-        <Grid xs={12} sm={6} display="flex" flexWrap="wrap" justifyContent="space-between">
+        <Grid
+          xs={12}
+          md={6}
+          mt={{ xs: 2, md: 0 }}
+          display="flex"
+          flexWrap="wrap"
+          justifyContent={{ md: "space-between" }}
+          gap={{ xs: 1, md: 0 }}
+        >
           <SortingOptionButton
             selected={sortBy === "relevance"}
             onClick={() => setSortBy("relevance")}

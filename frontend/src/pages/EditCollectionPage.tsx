@@ -1,5 +1,22 @@
-import { Add, CheckBoxOutlined, Edit, Event, Numbers, Remove } from "@mui/icons-material";
-import { Autocomplete, Box, Container, IconButton, TextField } from "@mui/material";
+import {
+  Add,
+  Check,
+  CheckBoxOutlined,
+  Edit,
+  Event,
+  HelpOutline,
+  Numbers,
+  Remove,
+} from "@mui/icons-material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { ReactNode, useReducer } from "react";
 
@@ -70,7 +87,13 @@ export function EditCollectionPage() {
   return (
     <Container maxWidth="md">
       <h1>Edit collection</h1>
-      <Grid container component="form" rowGap={2} columnSpacing={1}>
+      <Grid
+        container
+        component="form"
+        rowGap={2}
+        columnSpacing={1}
+        onSubmit={(e) => e.preventDefault()}
+      >
         <Grid xs={12}>
           <TextField
             fullWidth
@@ -115,7 +138,15 @@ export function EditCollectionPage() {
           />
         </Grid>
         <Grid xs={12}>
-          <h3 style={{ marginBottom: 0 }}>Custom fields</h3>
+          <h3 style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: "0.25rem" }}>
+            Custom fields
+            <Tooltip
+              title="You can choose the fields to be showcased on every item in your collection."
+              placement="top"
+            >
+              <HelpOutline sx={{ fontSize: "1rem" }} />
+            </Tooltip>
+          </h3>
         </Grid>
         <Grid xs={12} sm={6}>
           {Object.entries(customFields).map(([key, { icon, label }]) => {
@@ -138,6 +169,11 @@ export function EditCollectionPage() {
               />
             );
           })}
+        </Grid>
+        <Grid xs={12} mb={8} display="flex" justifyContent="flex-end">
+          <Button type="submit" variant="contained" endIcon={<Check />}>
+            Submit
+          </Button>
         </Grid>
       </Grid>
     </Container>
@@ -180,6 +216,7 @@ function CustomFieldAdder({
         <TextField
           key={idx}
           label={`Field ${idx + 1} title`}
+          size="small"
           value={title}
           onChange={(e) => onChange(idx, e.target.value)}
         />

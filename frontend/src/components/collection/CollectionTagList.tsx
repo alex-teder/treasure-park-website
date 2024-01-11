@@ -16,7 +16,7 @@ export function CollectionTagList() {
       {sampleTags.map(({ title }) => (
         <li key={title}>
           <Link to={"#"}>
-            <Chip icon={<TagIcon />} label={title} />
+            <Chip icon={<TagIcon />} label={title} sx={{ borderRadius: 1 }} />
           </Link>
         </li>
       ))}

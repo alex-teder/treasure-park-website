@@ -70,8 +70,8 @@ export function CollectionItemList() {
       <Typography fontWeight={700} sx={{ mt: 4 }}>
         Total items: {allItems.length}
       </Typography>
-      <Button variant="contained" startIcon={<Add />} sx={{ mt: 1, borderRadius: 64 }}>
-        Add new item
+      <Button variant="contained" startIcon={<Add />} sx={{ mt: 1 }}>
+        Add item
       </Button>
       <TextField
         size="small"
@@ -79,7 +79,6 @@ export function CollectionItemList() {
         autoComplete="false"
         sx={{ display: "block", my: 2 }}
         InputProps={{
-          sx: { borderRadius: 16 },
           startAdornment: (
             <InputAdornment position="start">
               <SearchIcon />
