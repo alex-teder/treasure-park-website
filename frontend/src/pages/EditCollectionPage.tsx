@@ -16,6 +16,7 @@ import {
   IconButton,
   TextField,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { ReactNode, useReducer } from "react";
@@ -132,7 +133,7 @@ export function EditCollectionPage() {
             multiline
             minRows={8}
             size="small"
-            label="Description"
+            label="Description:"
             helperText="Supports markdown syntax"
             fullWidth
           />
@@ -141,7 +142,11 @@ export function EditCollectionPage() {
           <h3 style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: "0.25rem" }}>
             Custom fields
             <Tooltip
-              title="You can choose the fields to be showcased on every item in your collection."
+              title={
+                <Typography variant="caption">
+                  You can choose the fields to be showcased on every item in your collection.
+                </Typography>
+              }
               placement="top"
             >
               <HelpOutline sx={{ fontSize: "1rem" }} />
@@ -160,7 +165,7 @@ export function EditCollectionPage() {
                 titleValues={state[fieldType]}
                 increment={() => dispatch({ type: "ADD", payload: { fieldType } })}
                 decrement={() => dispatch({ type: "REMOVE", payload: { fieldType } })}
-                onChange={(fieldIndex, titleValue) =>
+                change={(fieldIndex, titleValue) =>
                   dispatch({
                     type: "CHANGE",
                     payload: { fieldType, fieldIndex, titleValue },
@@ -170,7 +175,7 @@ export function EditCollectionPage() {
             );
           })}
         </Grid>
-        <Grid xs={12} mb={8} display="flex" justifyContent="flex-end">
+        <Grid xs={12} mt={2} mb={8} display="flex" justifyContent="flex-end">
           <Button type="submit" variant="contained" endIcon={<Check />}>
             Submit
           </Button>
@@ -186,14 +191,14 @@ function CustomFieldAdder({
   titleValues,
   increment,
   decrement,
-  onChange,
+  change,
 }: {
   icon?: ReactNode;
   label?: ReactNode;
   titleValues: { title: string }[];
   increment: () => void;
   decrement: () => void;
-  onChange: (index: number, value: string) => void;
+  change: (index: number, value: string) => void;
 }) {
   return (
     <Box display="flex" flexDirection="column" gap={1}>
@@ -215,10 +220,10 @@ function CustomFieldAdder({
       {titleValues.map(({ title }, idx) => (
         <TextField
           key={idx}
-          label={`Field ${idx + 1} title`}
+          label={`${label} field ${idx + 1} title`}
           size="small"
           value={title}
-          onChange={(e) => onChange(idx, e.target.value)}
+          onChange={(e) => change(idx, e.target.value)}
         />
       ))}
     </Box>
