@@ -15,10 +15,9 @@ import { UIEventHandler, useState } from "react";
 import { Link } from "react-router-dom";
 
 export function CommentSection() {
+  const OVERLAY_HEIGHT = 150;
   const [isAtBottom, setIsAtBottom] = useState(false);
-
   const { mode } = useTheme().palette;
-
   const handleScroll: UIEventHandler = (e) => {
     const element = e.target as HTMLDivElement;
     if (element.scrollHeight - element.scrollTop - element.clientHeight < 32) {
@@ -35,7 +34,7 @@ export function CommentSection() {
         style={{ maxHeight: 500, overflow: "auto", position: "relative" }}
         onScroll={handleScroll}
       >
-        <div style={{ marginBottom: "-100px" }}>
+        <div style={{ marginBottom: `${-OVERLAY_HEIGHT}px` }}>
           <SingleComment />
           <SingleComment />
           <SingleComment />
@@ -53,7 +52,7 @@ export function CommentSection() {
             position: "sticky",
             bottom: 0,
             width: "100%",
-            height: "100px",
+            height: `${OVERLAY_HEIGHT}px`,
             background: `linear-gradient(0deg, hsla(0,0%,${
               mode === "dark" ? 11 : 100
             }%,1) 0%, hsla(0,0%,${mode === "dark" ? 11 : 100}%,0) 100%)`,

@@ -1,14 +1,8 @@
 import path from "node:path";
 import Fastify from "fastify";
-import fastifyEnv from "@fastify/env";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
-
-declare module "fastify" {
-  interface FastifyInstance {
-    config: Record<string, any>;
-  }
-}
+import { env } from "./config/env";
 
 export async function buildServer() {
   const server = Fastify({
@@ -19,22 +13,9 @@ export async function buildServer() {
     },
   });
 
-  // .env configuration
-  await server.register(fastifyEnv, {
-    dotenv: true,
-    schema: {
-      type: "object",
-      properties: {
-        FRONTEND_DEV_PORT: {
-          type: "number",
-        },
-      },
-    },
-  });
-
-  if (server.config.FRONTEND_DEV_PORT) {
+  if (env.FRONTEND_DEV_PORT) {
     await server.register(cors, {
-      origin: `http://localhost:${server.config.FRONTEND_DEV_PORT}`,
+      origin: `http://localhost:${env.FRONTEND_DEV_PORT}`,
     });
   }
 
