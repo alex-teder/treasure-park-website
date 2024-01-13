@@ -11,12 +11,18 @@ import { ItemPage } from "./pages/ItemPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { EditCollectionPage } from "./pages/EditCollectionPage";
 import { EditItemPage } from "./pages/EditItemPage";
+import { CollectionRouteCreator, ItemRouteCreator, UserRouteCreator } from "./types";
 
 export const ROUTES = {
   ROOT: "/",
   SEARCH: "/search",
   LOGIN: "/login",
   SIGNUP: "/signup",
+  USER: ({ userId }: UserRouteCreator) => `/users/${userId}`,
+  COLLECTION: ({ userId, collectionId }: CollectionRouteCreator) =>
+    `/users/${userId}/collections/${collectionId}`,
+  ITEM: ({ userId, collectionId, itemId }: ItemRouteCreator) =>
+    `/users/${userId}/collections/${collectionId}/items/${itemId}`,
   EDIT_COLLECTION: "/edit-collection",
   EDIT_ITEM: "/edit-item",
 };

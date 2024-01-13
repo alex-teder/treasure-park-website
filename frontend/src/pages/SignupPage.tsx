@@ -11,9 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 import { ROUTES } from "../router";
+import { SignUpRouteState } from "../types";
 
 export function SignupPage() {
-  const { state: initialEmail } = useLocation();
+  const { state } = useLocation();
+  const { email: initialEmail }: SignUpRouteState = state;
   const [email, setEmail] = useState<string>(initialEmail || "");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
