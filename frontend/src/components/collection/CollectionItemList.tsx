@@ -8,11 +8,13 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  TextFieldProps,
   Typography,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { Add, Image as ImageIcon, Search as SearchIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../router";
 
 const sampleItems = [
   { id: "1", title: "Crystal Orb of Divination" },
@@ -45,6 +47,8 @@ export function CollectionItemList() {
   const [searchField, setSearchField] = useState("");
   const navigate = useNavigate();
 
+  const IMAGE_HREF = "https://source.unsplash.com/featured/";
+
   useEffect(() => setPage(0), [searchField]);
 
   const visibleItems = useMemo(
@@ -70,24 +74,19 @@ export function CollectionItemList() {
       <Typography fontWeight={700} sx={{ mt: 4 }}>
         Total items: {allItems.length}
       </Typography>
-      <Button variant="contained" startIcon={<Add />} sx={{ mt: 1 }}>
-        Add item
-      </Button>
-      <TextField
-        size="small"
-        placeholder="Quick search"
-        autoComplete="false"
-        sx={{ display: "block", my: 2 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-        value={searchField}
-        onChange={(e) => setSearchField(e.target.value)}
-      />
+      {true && (
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          sx={{ mt: 1 }}
+          onClick={() => navigate(ROUTES.EDIT_ITEM)}
+        >
+          Add item
+        </Button>
+      )}
+
+      <SearchField value={searchField} onChange={(e) => setSearchField(e.target.value)} />
+
       <Table size="small">
         <TableBody>
           {visibleItems.map((item) => (
@@ -96,35 +95,26 @@ export function CollectionItemList() {
               hover
               role="button"
               sx={{ cursor: "pointer" }}
-              onClick={() => navigate("/users/123/collections/123/items/1")}
+              onClick={() =>
+                navigate(ROUTES.ITEM({ userId: "123", collectionId: "321", itemId: "1" }))
+              }
             >
               <TableCell width={1}>{item.index}.</TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell width={1}>
-                <Avatar variant="square">
+                <Avatar variant="square" src={IMAGE_HREF}>
                   <ImageIcon />
                 </Avatar>
               </TableCell>
             </TableRow>
           ))}
-          {!visibleItems.length && (
-            <TableRow>
-              <Typography component="td" sx={{ color: "grey", textAlign: "center", p: 2 }}>
-                no items...
-              </Typography>
-            </TableRow>
-          )}
-          {emptyRows > 0 && (
-            <TableRow
-              style={{
-                height: 53 * emptyRows,
-              }}
-            >
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
+
+          {!visibleItems.length && <NoItemsPlaceholder />}
+
+          <EmptyPadding emptyRows={emptyRows} />
         </TableBody>
       </Table>
+
       <TablePagination
         component="div"
         count={sampleItems.length}
@@ -136,4 +126,46 @@ export function CollectionItemList() {
       />
     </>
   );
+}
+
+function SearchField({ value, onChange }: TextFieldProps) {
+  return (
+    <TextField
+      size="small"
+      placeholder="Quick search"
+      autoComplete="false"
+      sx={{ display: "block", my: 2 }}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon />
+          </InputAdornment>
+        ),
+      }}
+      value={value}
+      onChange={onChange}
+    />
+  );
+}
+
+function NoItemsPlaceholder() {
+  return (
+    <TableRow>
+      <Typography component="td" sx={{ color: "grey", textAlign: "center", p: 2 }}>
+        no items...
+      </Typography>
+    </TableRow>
+  );
+}
+
+function EmptyPadding({ emptyRows }: { emptyRows: number }) {
+  return emptyRows ? (
+    <TableRow
+      style={{
+        height: 53 * emptyRows,
+      }}
+    >
+      <TableCell colSpan={6} />
+    </TableRow>
+  ) : null;
 }
