@@ -1,6 +1,6 @@
 import { Box, Button } from "@mui/material";
 import { ROUTES } from "../router";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function NavBar({ closeDrawer }: { closeDrawer: () => void }) {
   const navItems = [
@@ -19,20 +19,21 @@ export function NavBar({ closeDrawer }: { closeDrawer: () => void }) {
         }}
       >
         {navItems.map(({ label, path }) => (
-          <Button
-            variant="text"
-            size="large"
-            key={label}
-            sx={{ p: 2 }}
-            onClick={() => {
-              closeDrawer();
-              if (path) {
-                navigate(path);
-              }
-            }}
-          >
-            {label}
-          </Button>
+          <Link to={path} key={label} style={{ display: "contents" }}>
+            <Button
+              variant="text"
+              size="large"
+              sx={{ p: 2 }}
+              onClick={() => {
+                closeDrawer();
+                if (path) {
+                  navigate(path);
+                }
+              }}
+            >
+              {label}
+            </Button>
+          </Link>
         ))}
       </Box>
     </nav>

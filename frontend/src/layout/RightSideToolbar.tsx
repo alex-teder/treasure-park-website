@@ -1,7 +1,7 @@
 import { Box, IconButton } from "@mui/material";
 import { Language as LanguageIcon } from "@mui/icons-material";
 import { ThemeSwitcherButton } from "./ThemeSwitcherButton";
-import { NoAuthUserButton } from "./NoAuthUserButton";
+import { UserButton } from "./UserButton";
 
 export function RightSideToolbar() {
   return (
@@ -10,7 +10,7 @@ export function RightSideToolbar() {
       <IconButton>
         <LanguageIcon color="primary" />
       </IconButton>
-      <NoAuthUserButton />
+      <UserButton />
     </Box>
   );
 }

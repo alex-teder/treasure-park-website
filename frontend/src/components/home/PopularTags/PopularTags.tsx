@@ -1,7 +1,7 @@
 import { TagCloud } from "react-tagcloud";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../router";
+import { ROUTES } from "../../../router";
 
 const mockData = [
   { value: "JavaScript", count: 38 },

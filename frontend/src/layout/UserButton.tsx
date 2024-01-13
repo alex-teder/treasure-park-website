@@ -1,13 +1,17 @@
 import { IconButton, ListItemIcon, Menu, MenuItem } from "@mui/material";
-import { Login, PersonAdd, Person as PersonIcon } from "@mui/icons-material";
+import {
+  Login as LoginIcon,
+  PersonAdd as SignupIcon,
+  Person as PersonIcon,
+} from "@mui/icons-material";
 import { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../router";
 
-export function NoAuthUserButton() {
+export function UserButton() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-  const open = Boolean(anchorEl);
+  const isOpen = Boolean(anchorEl);
 
   const handleClick = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget);
@@ -16,6 +20,30 @@ export function NoAuthUserButton() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const noAuthMenuOptions = [
+    {
+      label: "Sign up",
+      icon: <SignupIcon fontSize="small" color="primary" />,
+      action: () => navigate(ROUTES.SIGNUP),
+    },
+    {
+      label: "Log in",
+      icon: <LoginIcon fontSize="small" color="primary" />,
+      action: () => navigate(ROUTES.LOGIN),
+    },
+  ];
+
+  const authMenuOptions = [
+    {
+      label: "My profile",
+      icon: <PersonIcon fontSize="small" color="primary" />,
+      action: () => navigate(ROUTES.USER({ userId: "123" })),
+    },
+  ];
+
+  const IS_AUTH = false;
+  const currentMenuOptions = IS_AUTH ? authMenuOptions : noAuthMenuOptions;
 
   return (
     <>
@@ -26,7 +54,7 @@ export function NoAuthUserButton() {
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
-        open={open}
+        open={isOpen}
         onClose={handleClose}
         onClick={handleClose}
         slotProps={{
@@ -61,28 +89,18 @@ export function NoAuthUserButton() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         disableScrollLock
       >
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            navigate(ROUTES.SIGNUP);
-          }}
-        >
-          <ListItemIcon>
-            <PersonAdd fontSize="small" color="primary" />
-          </ListItemIcon>
-          Sign up
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            navigate(ROUTES.LOGIN);
-          }}
-        >
-          <ListItemIcon>
-            <Login fontSize="small" color="primary" />
-          </ListItemIcon>
-          Log in
-        </MenuItem>
+        {currentMenuOptions.map(({ label, icon, action }, idx) => (
+          <MenuItem
+            key={idx}
+            onClick={() => {
+              handleClose();
+              action();
+            }}
+          >
+            <ListItemIcon>{icon}</ListItemIcon>
+            {label}
+          </MenuItem>
+        ))}
       </Menu>
     </>
   );
