@@ -9,6 +9,7 @@ export const envSchema = z.object({
     .transform((port) => parseInt(port))
     .optional(),
   DATABASE_URL: z.string(),
+  PW_SALT: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

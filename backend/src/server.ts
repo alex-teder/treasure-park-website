@@ -3,6 +3,7 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
 import { env } from "./config/env";
+import { authRoutes } from "./modules/auth/auth.route";
 
 export async function buildServer() {
   const server = Fastify({
@@ -33,6 +34,8 @@ export async function buildServer() {
   server.get("/api/ping", async () => {
     return "pong\n";
   });
+
+  server.register(authRoutes, { prefix: "/api/auth" });
 
   return server;
 }
