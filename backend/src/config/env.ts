@@ -10,6 +10,7 @@ export const envSchema = z.object({
     .optional(),
   DATABASE_URL: z.string(),
   PW_SALT: z.string(),
+  JWT_SECRET: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

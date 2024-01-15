@@ -2,8 +2,10 @@ import path from "node:path";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
+import fastifyCookie from "@fastify/cookie";
 import { env } from "./config/env";
 import { authRoutes } from "./modules/auth/auth.route";
+import { jwtPlugin } from "./utils/jwtPlugin";
 
 export async function buildServer() {
   const server = Fastify({
@@ -35,7 +37,14 @@ export async function buildServer() {
     return "pong\n";
   });
 
+  server.register(fastifyCookie, {});
+  await server.register(jwtPlugin);
+
   server.register(authRoutes, { prefix: "/api/auth" });
+
+  server.get("/api/protected", { onRequest: [server.authenticate] }, async (request, reply) => {
+    reply.send("Protected data!");
+  });
 
   return server;
 }

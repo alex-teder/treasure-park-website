@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { logInHandler, signUpHandler } from "./auth.handler";
+import { logInHandler, logOutHandler, signUpHandler } from "./auth.handler";
 import zodToJsonSchema from "zod-to-json-schema";
 import { authErrorSchema, authResponseSchema, logInSchema, signUpSchema } from "./auth.schema";
 
@@ -33,4 +33,6 @@ export async function authRoutes(server: FastifyInstance) {
     },
     logInHandler
   );
+
+  server.get("/logout", logOutHandler);
 }
