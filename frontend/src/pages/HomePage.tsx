@@ -4,14 +4,17 @@ import { TopCollections } from "../components/home/TopCollections";
 import { PopularTags } from "../components/home/PopularTags";
 import { PostList } from "../components/home/PostList";
 import { NoAuthBanner } from "../components/home/NoAuthBanner";
+import { useContext } from "react";
+import { UserContext } from "../components/UserProvider";
 
 export function HomePage() {
   const theme = useTheme();
   const isScreenSmall = useMediaQuery(theme.breakpoints.down("md"));
+  const { user, isAuthReady } = useContext(UserContext);
 
   return (
     <>
-      <NoAuthBanner />
+      {!user && isAuthReady && <NoAuthBanner />}
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           <Grid xs={12} md={7} order={isScreenSmall ? 1 : 0}>

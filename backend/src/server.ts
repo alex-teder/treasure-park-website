@@ -18,7 +18,8 @@ export async function buildServer() {
 
   if (env.FRONTEND_DEV_PORT) {
     await server.register(cors, {
-      origin: `http://localhost:${env.FRONTEND_DEV_PORT}`,
+      origin: `http://127.0.0.1:${env.FRONTEND_DEV_PORT}`,
+      credentials: true,
     });
   }
 

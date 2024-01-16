@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { api } from "../../api";
 
 export function SignupForm() {
   const { state } = useLocation();
@@ -18,8 +19,10 @@ export function SignupForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    const result = await api.signUp({ email, username, password });
+    console.log(result);
   };
 
   return (

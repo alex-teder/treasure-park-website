@@ -1,5 +1,6 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
+  Alert,
   Button,
   Card,
   IconButton,
@@ -8,14 +9,30 @@ import {
   TextFieldProps,
   Typography,
 } from "@mui/material";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useContext, useState } from "react";
+import { api } from "../../api";
+import { UserContext } from "../UserProvider";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../router";
+import { ResponseWithError, User } from "../../types";
 
 export function LoginForm() {
   const [loginValue, setLoginValue] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string>("");
+  const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    setError("");
+    const result = await api.logIn({ loginValue, password });
+    if ((result as ResponseWithError).error !== undefined) {
+      setError((result as ResponseWithError).error);
+      return;
+    }
+    setUser(result as User);
+    navigate(ROUTES.ROOT);
   };
 
   return (
@@ -27,6 +44,9 @@ export function LoginForm() {
       <Heading />
       <LoginValueField value={loginValue} onChange={(e) => setLoginValue(e.target.value)} />
       <PasswordField value={password} onChange={(e) => setPassword(e.target.value)} />
+
+      {error && <Alert severity="error">{error}</Alert>}
+
       <Button type="submit" color="secondary" variant="contained">
         Log in
       </Button>

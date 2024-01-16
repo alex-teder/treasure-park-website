@@ -5,7 +5,7 @@ export const authErrorSchema = z.object({ error: z.string() });
 export const authResponseSchema = z.object({
   id: z.number(),
   email: z.string().email(),
-  username: z.string(),
+  isAdmin: z.boolean(),
 });
 
 export const signUpSchema = z.object({

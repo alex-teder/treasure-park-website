@@ -38,3 +38,16 @@ export async function logIn(input: LogInSchema) {
   }
   return { user: foundUser };
 }
+
+export async function relogIn({ id }: { id: number }) {
+  const foundUser = await db.query.users.findFirst({
+    where: eq(users.id, id),
+  });
+  if (!foundUser) {
+    return { error: "Not found" };
+  }
+  if (foundUser.isBlocked) {
+    return { error: "User is blocked by admin." };
+  }
+  return { user: foundUser };
+}

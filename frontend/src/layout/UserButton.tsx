@@ -3,13 +3,17 @@ import {
   Login as LoginIcon,
   PersonAdd as SignupIcon,
   Person as PersonIcon,
+  Logout as LogoutIcon,
 } from "@mui/icons-material";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../router";
+import { api } from "../api/";
+import { UserContext } from "../components/UserProvider";
 
 export function UserButton() {
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const isOpen = Boolean(anchorEl);
 
@@ -36,14 +40,18 @@ export function UserButton() {
 
   const authMenuOptions = [
     {
-      label: "My profile",
-      icon: <PersonIcon fontSize="small" color="primary" />,
-      action: () => navigate(ROUTES.USER({ userId: "123" })),
+      label: "Log out",
+      icon: <LogoutIcon fontSize="small" color="primary" />,
+      action: () => {
+        api.logOut().then(() => {
+          setUser(null);
+          navigate(ROUTES.ROOT);
+        });
+      },
     },
   ];
 
-  const IS_AUTH = false;
-  const currentMenuOptions = IS_AUTH ? authMenuOptions : noAuthMenuOptions;
+  const currentMenuOptions = user ? authMenuOptions : noAuthMenuOptions;
 
   return (
     <>
