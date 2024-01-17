@@ -15,37 +15,26 @@ export async function buildServer() {
       },
     },
   });
-
-  if (env.FRONTEND_DEV_PORT) {
+  if (env.IS_DEV) {
     await server.register(cors, {
       origin: `http://127.0.0.1:${env.FRONTEND_DEV_PORT}`,
       credentials: true,
     });
   }
-
   server.register(fastifyStatic, {
     root: path.join(__dirname, "../../frontend/dist"),
   });
-
   server.setNotFoundHandler((req, reply) => {
     if (!req.url.includes("/api")) {
       return reply.sendFile("index.html");
     }
     reply.code(404).send({ error: "Not Found" });
   });
-
   server.get("/api/ping", async () => {
     return "pong\n";
   });
-
   server.register(fastifyCookie, {});
   await server.register(jwtPlugin);
-
   server.register(authRoutes, { prefix: "/api/auth" });
-
-  server.get("/api/protected", { onRequest: [server.authenticate] }, async (request, reply) => {
-    reply.send("Protected data!");
-  });
-
   return server;
 }

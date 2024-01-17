@@ -9,7 +9,8 @@
     "build": "tsc -p tsconfig.json",
     "start": "node build/main.js",
     "generate": "rm -rf drizzle && drizzle-kit generate:mysql",
-    "push": "drizzle-kit push:mysql --config=drizzle.config.ts"
+    "push": "drizzle-kit push:mysql --config=drizzle.config.ts",
+    "migrate": "npm run generate && npm run push"
   },
   "keywords": [],
   "author": "",

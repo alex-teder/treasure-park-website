@@ -43,7 +43,6 @@ export async function logInHandler(request: FastifyRequest, reply: FastifyReply)
 export async function whoAmIHandler(request: FastifyRequest, reply: FastifyReply) {
   try {
     const userToFind = (await request.jwtDecode()) as AuthenticatedUser;
-    if (!userToFind) return reply.code(401).send({ error: "Not found" });
     const { user, accessToken, error } = await relogIn({ id: userToFind.id });
     if (error) {
       return reply.code(401).send({ error });
@@ -52,7 +51,7 @@ export async function whoAmIHandler(request: FastifyRequest, reply: FastifyReply
     return reply.send(user);
   } catch (err) {
     console.error(err);
-    return reply.code(500).send({ error: "Something went wrong" });
+    return reply.code(401).send({ error: "Unauthorized" });
   }
 }
 
