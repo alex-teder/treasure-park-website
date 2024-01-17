@@ -1,11 +1,11 @@
-import { createContext, ReactElement, useState } from "react";
+import { createContext, ReactElement, useEffect, useState } from "react";
 import {
   createTheme,
   ThemeProvider as MuiThemeProvider,
   PaletteOptions,
   ThemeOptions,
 } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material/";
+import { CssBaseline, PaletteMode } from "@mui/material/";
 
 const baseThemeOptions: ThemeOptions = {
   shape: {
@@ -75,10 +75,20 @@ const darkTheme = createTheme({
 export const ThemeSwitcherContext = createContext<() => void>(() => {});
 
 export function ThemeProvider({ children }: { children: ReactElement | ReactElement[] }) {
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState<PaletteMode>(
+    (localStorage.getItem("preferredTheme") as PaletteMode) || "light"
+  );
   const toggleMode = () => {
     setMode((v) => (v === "light" ? "dark" : "light"));
   };
+
+  useEffect(() => {
+    document.body.classList.remove("init-dark");
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("preferredTheme", mode);
+  }, [mode]);
 
   return (
     <ThemeSwitcherContext.Provider value={toggleMode}>
