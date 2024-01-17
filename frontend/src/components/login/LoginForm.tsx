@@ -72,7 +72,13 @@ function Heading() {
 
 function LoginValueField({ value, onChange }: TextFieldProps) {
   return (
-    <TextField variant="outlined" label="Username or Email" value={value} onChange={onChange} />
+    <TextField
+      variant="outlined"
+      label="Username or Email"
+      spellCheck="false"
+      value={value}
+      onChange={onChange}
+    />
   );
 }
 
@@ -84,6 +90,7 @@ function PasswordField({ value, onChange }: TextFieldProps) {
       type={showPassword ? "text" : "password"}
       variant="outlined"
       label="Password"
+      spellCheck="false"
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">

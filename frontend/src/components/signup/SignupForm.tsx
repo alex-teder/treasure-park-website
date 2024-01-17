@@ -1,6 +1,7 @@
-import { SyntheticEvent, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { SyntheticEvent, useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
+  Alert,
   Button,
   Card,
   IconButton,
@@ -11,6 +12,9 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { api } from "../../api";
+import { UserContext } from "../UserProvider";
+import { ResponseWithError, User } from "../../types";
+import { ROUTES } from "../../router";
 
 export function SignupForm() {
   const { state } = useLocation();
@@ -18,11 +22,20 @@ export function SignupForm() {
   const [email, setEmail] = useState<string>(initialEmail);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string>("");
+  const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    setError("");
     const result = await api.signUp({ email, username, password });
-    console.log(result);
+    if ((result as ResponseWithError).error !== undefined) {
+      setError((result as ResponseWithError).error);
+      return;
+    }
+    setUser(result as User);
+    navigate(ROUTES.ROOT);
   };
 
   return (
@@ -39,6 +52,9 @@ export function SignupForm() {
         onChange={(e) => setUsername(e.target.value)}
       />
       <PasswordField value={password} onChange={(e) => setPassword(e.target.value)} />
+
+      {error && <Alert severity="error">{error}</Alert>}
+
       <Button type="submit" color="secondary" variant="contained">
         Sign up
       </Button>
@@ -63,7 +79,15 @@ function Heading() {
 }
 
 function EmailField({ value, onChange }: TextFieldProps) {
-  return <TextField variant="outlined" label="Email" value={value} onChange={onChange} />;
+  return (
+    <TextField
+      variant="outlined"
+      label="Email"
+      spellCheck="false"
+      value={value}
+      onChange={onChange}
+    />
+  );
 }
 
 function UsernameField({ value, onChange, autoFocus }: TextFieldProps) {
@@ -72,6 +96,7 @@ function UsernameField({ value, onChange, autoFocus }: TextFieldProps) {
       variant="outlined"
       label="Username"
       helperText="Your username can only contain letters (A-Z, a-z), numbers, and hyphens (-)."
+      spellCheck="false"
       autoFocus={autoFocus}
       value={value}
       onChange={onChange}
@@ -86,6 +111,7 @@ function PasswordField({ value, onChange }: TextFieldProps) {
       type={showPassword ? "text" : "password"}
       variant="outlined"
       label="New password"
+      spellCheck="false"
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">

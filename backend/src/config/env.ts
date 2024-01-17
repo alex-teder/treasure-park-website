@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export const envSchema = z.object({
+  IS_DEV: z.string().optional(),
   FRONTEND_DEV_PORT: z
     .string()
     .transform((port) => parseInt(port))

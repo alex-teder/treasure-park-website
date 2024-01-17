@@ -5,13 +5,18 @@ import { users } from "../../db/schema";
 import { hashPassword, verifyPassword } from "../../utils/hash";
 import type { LogInSchema, SignUpSchema } from "./auth.schema";
 import { parseDatabaseError } from "../../utils/parseDatabaseError";
+import { issueTokenPair } from "../../utils/issueTokenPair";
 
-export async function signUp(input: SignUpSchema) {
+export async function signUp({ password, email, username }: SignUpSchema) {
   try {
-    const { password, ...rest } = input;
+    const isAdmin = false;
     const hashedPassword = await hashPassword(password);
-    const queryResult = await db.insert(users).values({ ...rest, password: hashedPassword });
-    return { user: { ...rest, id: parseInt(queryResult.insertId) } };
+    const { insertId } = await db
+      .insert(users)
+      .values({ email, username, password: hashedPassword });
+    const id = parseInt(insertId);
+    const { accessToken } = issueTokenPair({ id, email, isAdmin });
+    return { user: { id, email, isAdmin }, accessToken };
   } catch (err) {
     if (err instanceof DatabaseError) {
       return { error: parseDatabaseError(err) };
@@ -36,7 +41,9 @@ export async function logIn(input: LogInSchema) {
   if (!isPassValid) {
     return { error: "Wrong login or password." };
   }
-  return { user: foundUser };
+  const { id, email, isAdmin } = foundUser;
+  const { accessToken } = issueTokenPair({ id, email, isAdmin });
+  return { user: foundUser, accessToken };
 }
 
 export async function relogIn({ id }: { id: number }) {
@@ -49,5 +56,7 @@ export async function relogIn({ id }: { id: number }) {
   if (foundUser.isBlocked) {
     return { error: "User is blocked by admin." };
   }
-  return { user: foundUser };
+  const { email, isAdmin } = foundUser;
+  const { accessToken } = issueTokenPair({ id, email, isAdmin });
+  return { user: foundUser, accessToken };
 }

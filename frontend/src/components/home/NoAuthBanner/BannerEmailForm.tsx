@@ -21,10 +21,12 @@ export function BannerEmailForm() {
         <TextField
           size="small"
           placeholder="Enter your email:"
+          spellCheck="false"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </Card>
+
       <Button
         type="submit"
         variant="contained"
