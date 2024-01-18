@@ -1,3 +1,1 @@
-export type ResponseWithError = {
-  error: string;
-};
+export type { ResponseWithError } from "../zod/responses";

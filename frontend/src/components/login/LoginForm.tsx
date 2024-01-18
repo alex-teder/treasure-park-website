@@ -15,6 +15,7 @@ import { UserContext } from "../UserProvider";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../router";
 import { ResponseWithError, User } from "../../types";
+import { loginFormSchema } from "../../zod/forms";
 
 export function LoginForm() {
   const [loginValue, setLoginValue] = useState("");
@@ -25,6 +26,11 @@ export function LoginForm() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    const valitation = loginFormSchema.safeParse({ loginValue, password });
+    if (!valitation.success) {
+      setError("Invalid credentials.");
+      return;
+    }
     setError("");
     const result = await api.logIn({ loginValue, password });
     if ((result as ResponseWithError).error !== undefined) {
@@ -38,15 +44,13 @@ export function LoginForm() {
   return (
     <Card
       component="form"
-      sx={{ px: 2, py: 4, display: "flex", flexDirection: "column", gap: 2 }}
+      sx={{ maxWidth: 360, px: 2, py: 4, display: "flex", flexDirection: "column", gap: 2 }}
       onSubmit={handleSubmit}
     >
       <Heading />
       <LoginValueField value={loginValue} onChange={(e) => setLoginValue(e.target.value)} />
       <PasswordField value={password} onChange={(e) => setPassword(e.target.value)} />
-
       {error && <Alert severity="error">{error}</Alert>}
-
       <Button type="submit" color="secondary" variant="contained">
         Log in
       </Button>

@@ -83,10 +83,6 @@ export function ThemeProvider({ children }: { children: ReactElement | ReactElem
   };
 
   useEffect(() => {
-    document.body.classList.remove("init-dark");
-  }, []);
-
-  useEffect(() => {
     localStorage.setItem("preferredTheme", mode);
   }, [mode]);
 

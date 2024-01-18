@@ -4,7 +4,7 @@ class Api {
   private readonly BASE_URL: string = import.meta.env.DEV ? "http://127.0.0.1:8080/api/" : "/api/";
 
   private async fetch(url: string | URL, options: RequestInit = {}) {
-    let data: unknown | string;
+    let data;
     const response = await fetch(url, { ...options, credentials: "include" });
     if (response.headers.get("Content-Type")?.includes("application/json")) {
       data = (await response.json()) as unknown;

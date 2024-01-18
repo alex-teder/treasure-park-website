@@ -1,8 +1,6 @@
-export type User = {
-  id: number;
-  email: string;
-  isAdmin: boolean;
-};
+import type { User } from "../zod/responses";
+
+export type { User } from "../zod/responses";
 
 export type UserCtx = {
   user: User | null;

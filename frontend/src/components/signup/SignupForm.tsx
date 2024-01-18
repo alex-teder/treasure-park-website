@@ -15,6 +15,7 @@ import { api } from "../../api";
 import { UserContext } from "../UserProvider";
 import { ResponseWithError, User } from "../../types";
 import { ROUTES } from "../../router";
+import { signupFormSchema } from "../../zod/forms";
 
 export function SignupForm() {
   const { state } = useLocation();
@@ -28,6 +29,11 @@ export function SignupForm() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    const validation = signupFormSchema.safeParse({ email, username, password });
+    if (!validation.success) {
+      setError(`${validation.error.issues[0].message}`);
+      return;
+    }
     setError("");
     const result = await api.signUp({ email, username, password });
     if ((result as ResponseWithError).error !== undefined) {
@@ -52,9 +58,7 @@ export function SignupForm() {
         onChange={(e) => setUsername(e.target.value)}
       />
       <PasswordField value={password} onChange={(e) => setPassword(e.target.value)} />
-
       {error && <Alert severity="error">{error}</Alert>}
-
       <Button type="submit" color="secondary" variant="contained">
         Sign up
       </Button>

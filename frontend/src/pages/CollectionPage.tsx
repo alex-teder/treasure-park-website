@@ -19,7 +19,7 @@ export function CollectionPage() {
   const CATEGORY_TITLE = "Magic potions";
 
   return (
-    <Container>
+    <Container maxWidth="md">
       <Typography my={2} variant="h5" fontWeight={700} component="p">
         {COLLECTION_NAME}
       </Typography>
