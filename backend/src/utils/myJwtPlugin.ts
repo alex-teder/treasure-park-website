@@ -4,7 +4,7 @@ import fastifyPlugin from "fastify-plugin";
 import { AuthenticatedUser } from "../types";
 import { env } from "../config/env";
 
-export const jwtPlugin = fastifyPlugin(async function (fastify) {
+export const myJwtPlugin = fastifyPlugin(async function (fastify) {
   fastify.register(fastifyJwt, {
     secret: env.JWT_SECRET,
     cookie: {

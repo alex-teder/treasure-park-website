@@ -14,6 +14,7 @@ export async function signUp({ password, email, username }: SignUpSchema) {
     const { insertId } = await db
       .insert(users)
       .values({ email, username, password: hashedPassword });
+    // .returning() !!!
     const id = parseInt(insertId);
     const { accessToken } = issueTokenPair({ id, email, isAdmin });
     return { user: { id, email, isAdmin }, accessToken };

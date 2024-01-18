@@ -5,7 +5,9 @@ import fastifyStatic from "@fastify/static";
 import fastifyCookie from "@fastify/cookie";
 import { env } from "./config/env";
 import { authRoutes } from "./modules/auth/auth.route";
-import { jwtPlugin } from "./utils/jwtPlugin";
+import { myJwtPlugin } from "./utils/myJwtPlugin";
+import { userRoutes } from "./modules/users/users.route";
+import { collectionsRoutes } from "./modules/collections/collections.route";
 
 export async function buildServer() {
   const server = Fastify({
@@ -34,7 +36,9 @@ export async function buildServer() {
     return "pong\n";
   });
   server.register(fastifyCookie, {});
-  await server.register(jwtPlugin);
+  await server.register(myJwtPlugin);
   server.register(authRoutes, { prefix: "/api/auth" });
+  server.register(userRoutes, { prefix: "/api/users" });
+  server.register(collectionsRoutes, { prefix: "/api/collections" });
   return server;
 }
