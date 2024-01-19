@@ -13,7 +13,6 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { api } from "../../api";
 import { UserContext } from "../UserProvider";
-import { ResponseWithError, User } from "../../types";
 import { ROUTES } from "../../router";
 import { signupFormSchema } from "../../zod/forms";
 
@@ -35,12 +34,12 @@ export function SignupForm() {
       return;
     }
     setError("");
-    const result = await api.signUp({ email, username, password });
-    if ((result as ResponseWithError).error !== undefined) {
-      setError((result as ResponseWithError).error);
+    const { user, error } = await api.signUp({ email, username, password });
+    if (error) {
+      setError(error.message);
       return;
     }
-    setUser(result as User);
+    setUser(user);
     navigate(ROUTES.ROOT);
   };
 

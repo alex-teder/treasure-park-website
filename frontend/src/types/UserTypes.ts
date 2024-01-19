@@ -1,6 +1,7 @@
-import type { User } from "../zod/responses";
+import { z } from "zod";
+import { userSchema } from "../zod/responses";
 
-export type { User } from "../zod/responses";
+export type User = z.infer<typeof userSchema>;
 
 export type UserCtx = {
   user: User | null;

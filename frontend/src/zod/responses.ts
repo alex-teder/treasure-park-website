@@ -8,8 +8,7 @@ export const userSchema = z.object({
 
 export const responseWithErrorSchema = z.object({
   error: z.string(),
-  code: z.number().or(z.string()).optional(),
+  statusCode: z.number().optional(),
+  message: z.string(),
+  code: z.string().optional(),
 });
-
-export type User = z.infer<typeof userSchema>;
-export type ResponseWithError = z.infer<typeof responseWithErrorSchema>;

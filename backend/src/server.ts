@@ -32,7 +32,7 @@ export async function buildServer() {
     if (!req.url.includes("/api")) {
       return reply.sendFile("index.html");
     }
-    reply.code(404).send("Not Found");
+    reply.code(404).send({ error: "Not Found" });
   });
   server.setErrorHandler(myErrorHandler(server));
   server.get("/api/ping", async () => {

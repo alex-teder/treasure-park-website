@@ -1,9 +1,10 @@
-import { ResponseWithError, User } from "../types";
+import { MyApi } from "../types";
+import { responseWithErrorSchema, userSchema } from "../zod/responses";
 
-class Api {
-  private readonly BASE_URL: string = import.meta.env.DEV ? "http://127.0.0.1:8080/api/" : "/api/";
+class Api implements MyApi {
+  readonly BASE_URL: string = import.meta.env.DEV ? "http://127.0.0.1:8080/api/" : "/api/";
 
-  private async fetch(url: string | URL, options: RequestInit = {}) {
+  async fetch(url: string, options: RequestInit = {}) {
     let data;
     const response = await fetch(url, { ...options, credentials: "include" });
     if (response.headers.get("Content-Type")?.includes("application/json")) {
@@ -11,39 +12,40 @@ class Api {
     } else {
       data = await response.text();
     }
-    return data;
+    if (!response.ok) {
+      return { error: responseWithErrorSchema.parse(data) };
+    }
+    return { data };
   }
 
-  async logIn({ loginValue, password }: { loginValue: string; password: string }) {
-    return (await this.fetch(this.BASE_URL + "auth/login", {
+  async logIn(input: { loginValue: string; password: string }) {
+    const { data, error } = await this.fetch(this.BASE_URL + "auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ loginValue, password }),
-    })) as User | ResponseWithError;
+      body: JSON.stringify(input),
+    });
+    if (error) return { error };
+    return { user: userSchema.parse(data) };
   }
 
-  async signUp({
-    email,
-    username,
-    password,
-  }: {
-    email: string;
-    username: string;
-    password: string;
-  }) {
-    return (await this.fetch(this.BASE_URL + "auth/signup", {
+  async signUp(input: { email: string; username: string; password: string }) {
+    const { data, error } = await this.fetch(this.BASE_URL + "auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, username, password }),
-    })) as User | ResponseWithError;
+      body: JSON.stringify(input),
+    });
+    if (error) return { error };
+    return { user: userSchema.parse(data) };
   }
 
   async relogIn() {
-    return (await this.fetch(this.BASE_URL + "auth/whoami")) as User | ResponseWithError;
+    const { data, error } = await this.fetch(this.BASE_URL + "auth/whoami");
+    if (error) return { error };
+    return { user: userSchema.parse(data) };
   }
 
   async logOut() {

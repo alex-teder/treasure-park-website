@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { ResponseWithError, User, UserCtx } from "../types";
+import { User, UserCtx } from "../types";
 import { api } from "../api";
 
 export const UserContext = createContext<UserCtx>({
@@ -15,11 +15,11 @@ export function UserProvider({ children }: { children?: ReactNode | ReactNode[] 
   useEffect(() => {
     async function initAuth() {
       if (localStorage.getItem("isLoggedIn")) {
-        const data = await api.relogIn();
-        if ((data as ResponseWithError).error) {
+        const { user, error } = await api.relogIn();
+        if (error) {
           localStorage.removeItem("isLoggedIn");
         } else {
-          setUser(data as User);
+          setUser(user);
         }
       }
       setIsAuthReady(true);

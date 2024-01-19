@@ -1,3 +1,5 @@
+import { SyntheticEvent, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Alert,
@@ -9,12 +11,9 @@ import {
   TextFieldProps,
   Typography,
 } from "@mui/material";
-import { SyntheticEvent, useContext, useState } from "react";
 import { api } from "../../api";
 import { UserContext } from "../UserProvider";
-import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../router";
-import { ResponseWithError, User } from "../../types";
 import { loginFormSchema } from "../../zod/forms";
 
 export function LoginForm() {
@@ -32,12 +31,12 @@ export function LoginForm() {
       return;
     }
     setError("");
-    const result = await api.logIn({ loginValue, password });
-    if ((result as ResponseWithError).error !== undefined) {
-      setError((result as ResponseWithError).error);
+    const { user, error } = await api.logIn({ loginValue, password });
+    if (error) {
+      setError(error.message);
       return;
     }
-    setUser(result as User);
+    setUser(user);
     navigate(ROUTES.ROOT);
   };
 
