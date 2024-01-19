@@ -8,5 +8,5 @@ export function parseDatabaseError(error: DatabaseError) {
       return "This username is already taken.";
     }
   }
-  return "Something went wrong";
+  return "Something went wrong.";
 }

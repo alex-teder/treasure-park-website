@@ -1,24 +1,22 @@
 import { z } from "zod";
 
-export const authErrorSchema = z.object({ error: z.string() });
-
-export const authResponseSchema = z.object({
-  id: z.number(),
-  email: z.string().email(),
-  isAdmin: z.boolean(),
-});
-
-export const signUpSchema = z.object({
+export const signUpBodySchema = z.object({
   email: z.string().email().min(1),
   username: z.string().min(1),
   password: z.string().min(1),
   isTestUser: z.boolean().optional(),
 });
 
-export const logInSchema = z.object({
+export const logInBodySchema = z.object({
   loginValue: z.string().min(1),
   password: z.string().min(1),
 });
 
-export type SignUpSchema = z.infer<typeof signUpSchema>;
-export type LogInSchema = z.infer<typeof logInSchema>;
+export const authResponseSchema = z.object({
+  id: z.number(),
+  email: z.string(),
+  isAdmin: z.boolean(),
+});
+
+export type SignUpBody = z.infer<typeof signUpBodySchema>;
+export type LogInBody = z.infer<typeof logInBodySchema>;

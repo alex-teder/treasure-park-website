@@ -1,11 +1,11 @@
 import { FastifyInstance } from "fastify";
+import toJson from "zod-to-json-schema";
 import {
   createCollectionHandler,
   deleteCollectionHandler,
   getCollectionHandler,
   updateCollectionHandler,
 } from "./collections.handler";
-import toJson from "zod-to-json-schema";
 import {
   collectionsBodySchema,
   collectionsParamsSchema,
@@ -25,7 +25,7 @@ export async function collectionsRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      onRequest: [server.authenticate],
+      config: { protected: true },
       schema: {
         body: toJson(createCollectionBodySchema),
       },
@@ -35,7 +35,7 @@ export async function collectionsRoutes(server: FastifyInstance) {
   server.put(
     "/:collectionId",
     {
-      onRequest: [server.authenticate],
+      config: { protected: true },
       schema: {
         params: toJson(collectionsParamsSchema),
         body: toJson(collectionsBodySchema),
@@ -46,7 +46,7 @@ export async function collectionsRoutes(server: FastifyInstance) {
   server.delete(
     "/:collectionId",
     {
-      onRequest: [server.authenticate],
+      config: { protected: true },
       schema: {
         params: toJson(collectionsParamsSchema),
       },

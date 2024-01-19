@@ -8,16 +8,18 @@ import { authRoutes } from "./modules/auth/auth.route";
 import { myJwtPlugin } from "./utils/myJwtPlugin";
 import { userRoutes } from "./modules/users/users.route";
 import { collectionsRoutes } from "./modules/collections/collections.route";
+import { myErrorHandler } from "./utils/errors";
 
 export async function buildServer() {
   const server = Fastify({
+    connectionTimeout: 3000,
     logger: {
       transport: {
         target: "@fastify/one-line-logger",
       },
     },
   });
-  if (env.IS_DEV) {
+  if (env.FRONTEND_DEV_PORT) {
     await server.register(cors, {
       origin: `http://127.0.0.1:${env.FRONTEND_DEV_PORT}`,
       credentials: true,
@@ -30,8 +32,9 @@ export async function buildServer() {
     if (!req.url.includes("/api")) {
       return reply.sendFile("index.html");
     }
-    reply.code(404).send({ error: "Not Found" });
+    reply.code(404).send("Not Found");
   });
+  server.setErrorHandler(myErrorHandler(server));
   server.get("/api/ping", async () => {
     return "pong\n";
   });

@@ -3,47 +3,53 @@ import { DatabaseError } from "@planetscale/database";
 import { db } from "../../db";
 import { users } from "../../db/schema";
 import { hashPassword, verifyPassword } from "../../utils/hash";
-import type { LogInSchema, SignUpSchema } from "./auth.schema";
 import { parseDatabaseError } from "../../utils/parseDatabaseError";
-import { issueTokenPair } from "../../utils/issueTokenPair";
+import { issueToken } from "../../utils/issueToken";
+import { ErrorWithCode } from "../../utils/errors";
 
-export async function signUp({ password, email, username }: SignUpSchema) {
+export async function signUp({
+  password,
+  email,
+  username,
+}: {
+  password: string;
+  email: string;
+  username: string;
+}) {
   try {
-    const isAdmin = false;
     const hashedPassword = await hashPassword(password);
     const { insertId } = await db
       .insert(users)
       .values({ email, username, password: hashedPassword });
-    // .returning() !!!
     const id = parseInt(insertId);
-    const { accessToken } = issueTokenPair({ id, email, isAdmin });
+    const isAdmin = false;
+    const { accessToken } = issueToken({ id, email, isAdmin });
     return { user: { id, email, isAdmin }, accessToken };
   } catch (err) {
     if (err instanceof DatabaseError) {
-      return { error: parseDatabaseError(err) };
+      throw new ErrorWithCode(parseDatabaseError(err), 409);
     } else {
       throw err;
     }
   }
 }
 
-export async function logIn(input: LogInSchema) {
-  const { password, loginValue } = input;
+export async function logIn({ loginValue, password }: { loginValue: string; password: string }) {
   const foundUser = await db.query.users.findFirst({
     where: or(eq(users.email, loginValue), eq(users.username, loginValue)),
   });
   if (!foundUser) {
-    return { error: "Wrong login or password." };
+    throw new ErrorWithCode("Wrong login or password.", 400);
   }
   if (foundUser.isBlocked) {
-    return { error: "User is blocked by admin." };
+    throw new ErrorWithCode("User is blocked by admin.", 403);
   }
   const isPassValid = await verifyPassword(password, foundUser.password);
   if (!isPassValid) {
-    return { error: "Wrong login or password." };
+    throw new ErrorWithCode("Wrong login or password.", 400);
   }
   const { id, email, isAdmin } = foundUser;
-  const { accessToken } = issueTokenPair({ id, email, isAdmin });
+  const { accessToken } = issueToken({ id, email, isAdmin });
   return { user: foundUser, accessToken };
 }
 
@@ -52,12 +58,12 @@ export async function relogIn({ id }: { id: number }) {
     where: eq(users.id, id),
   });
   if (!foundUser) {
-    return { error: "Not found" };
+    throw new ErrorWithCode("Not found.", 404);
   }
   if (foundUser.isBlocked) {
-    return { error: "User is blocked by admin." };
+    throw new ErrorWithCode("User is blocked by admin.", 403);
   }
   const { email, isAdmin } = foundUser;
-  const { accessToken } = issueTokenPair({ id, email, isAdmin });
+  const { accessToken } = issueToken({ id, email, isAdmin });
   return { user: foundUser, accessToken };
 }

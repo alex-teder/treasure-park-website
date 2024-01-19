@@ -1,18 +1,16 @@
 import { FastifyInstance } from "fastify";
 import { logInHandler, logOutHandler, signUpHandler, whoAmIHandler } from "./auth.handler";
 import toJson from "zod-to-json-schema";
-import { authErrorSchema, authResponseSchema, logInSchema, signUpSchema } from "./auth.schema";
+import { authResponseSchema, logInBodySchema, signUpBodySchema } from "./auth.schema";
 
 export async function authRoutes(server: FastifyInstance) {
   server.post(
     "/signup",
     {
       schema: {
-        body: toJson(signUpSchema),
+        body: toJson(signUpBodySchema),
         response: {
-          201: toJson(authResponseSchema),
-          400: toJson(authErrorSchema),
-          500: toJson(authErrorSchema),
+          200: toJson(authResponseSchema),
         },
       },
     },
@@ -23,11 +21,9 @@ export async function authRoutes(server: FastifyInstance) {
     "/login",
     {
       schema: {
-        body: toJson(logInSchema),
+        body: toJson(logInBodySchema),
         response: {
           200: toJson(authResponseSchema),
-          400: toJson(authErrorSchema),
-          500: toJson(authErrorSchema),
         },
       },
     },
@@ -37,11 +33,10 @@ export async function authRoutes(server: FastifyInstance) {
   server.get(
     "/whoami",
     {
+      config: { protected: true },
       schema: {
         response: {
           200: toJson(authResponseSchema),
-          401: toJson(authErrorSchema),
-          500: toJson(authErrorSchema),
         },
       },
     },

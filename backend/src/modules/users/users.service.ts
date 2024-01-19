@@ -1,17 +1,20 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../db";
 import { users } from "../../db/schema";
+import { ErrorWithCode } from "../../utils/errors";
 
 export async function findUserById({ id }: { id: number }) {
   const foundUser = await db.query.users.findFirst({
     where: eq(users.id, id),
     columns: {
+      id: true,
       username: true,
       avatar: true,
     },
     with: {
       collections: {
         columns: {
+          id: true,
           title: true,
         },
         with: {
@@ -21,7 +24,7 @@ export async function findUserById({ id }: { id: number }) {
     },
   });
   if (!foundUser) {
-    return { error: "Not found", code: 404 };
+    throw new ErrorWithCode("Not found.", 404);
   }
   return { user: foundUser };
 }

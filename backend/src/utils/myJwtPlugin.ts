@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import fastifyJwt from "@fastify/jwt";
 import fastifyPlugin from "fastify-plugin";
-import { AuthenticatedUser } from "../types";
 import { env } from "../config/env";
 
 export const myJwtPlugin = fastifyPlugin(async function (fastify) {
@@ -11,23 +10,29 @@ export const myJwtPlugin = fastifyPlugin(async function (fastify) {
       cookieName: "token",
       signed: false,
     },
-    formatUser(payload) {
-      return {
-        id: payload.id,
-        email: payload.email,
-        isAdmin: payload.isAdmin,
-      } as AuthenticatedUser;
+    formatUser({ id, email, isAdmin }) {
+      return { id, email, isAdmin };
     },
   });
-
-  fastify.decorate(
-    "authenticate",
-    async function (request: FastifyRequest, reply: FastifyReply): Promise<void> {
-      try {
-        await request.jwtVerify();
-      } catch (err) {
-        reply.send(err);
-      }
+  fastify.addHook("onRoute", (routeOptions) => {
+    if (routeOptions.config && routeOptions.config.protected === true) {
+      routeOptions.onRequest = async function authenticate(request, reply) {
+        try {
+          await request.jwtVerify();
+        } catch (err) {
+          reply.send(err);
+        }
+      };
     }
-  );
+  });
+  // fastify.decorate(
+  //   "authenticate",
+  //   async function (request: FastifyRequest, reply: FastifyReply): Promise<void> {
+  //     try {
+  //       await request.jwtVerify();
+  //     } catch (err) {
+  //       reply.send(err);
+  //     }
+  //   }
+  // );
 });
