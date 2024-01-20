@@ -22,6 +22,8 @@ export function UserPage() {
     return <NotFoundPage />;
   }
 
+  const isOwner = Boolean(user && user.id === parseInt(userId!));
+
   return (
     <Container maxWidth="md">
       <Box
@@ -38,7 +40,7 @@ export function UserPage() {
           {"@" + data.userProfile.username}
         </Typography>
       </Box>
-      {user && user.id === parseInt(userId!) && <UserActions />}
+      {isOwner && <UserActions />}
       <h2>Personal collections:</h2>
       <CollectionList collections={data.userProfile.collections} />
     </Container>

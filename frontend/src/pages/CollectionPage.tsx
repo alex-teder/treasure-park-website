@@ -25,6 +25,8 @@ export function CollectionPage() {
     return <NotFoundPage />;
   }
 
+  const isOwner = Boolean(user && user.id === data.collection.userId);
+
   return (
     <Container maxWidth="md">
       <Typography my={2} variant="h5" fontWeight={700} component="p">
@@ -46,7 +48,7 @@ export function CollectionPage() {
         </Link>
       </Typography>
       <CollectionTagList />
-      {user && user.id === data.collection.userId && <CollectionActions />}
+      {isOwner && <CollectionActions />}
       <Card sx={{ mb: 2, p: 2, fontSize: "0.875rem" }}>
         <MuiMarkdown
           overrides={{

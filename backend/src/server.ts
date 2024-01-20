@@ -6,9 +6,10 @@ import fastifyCookie from "@fastify/cookie";
 import { env } from "./config/env";
 import { authRoutes } from "./modules/auth/auth.route";
 import { myJwtPlugin } from "./utils/myJwtPlugin";
+import { myErrorHandler } from "./utils/errors";
 import { userRoutes } from "./modules/users/users.route";
 import { collectionsRoutes } from "./modules/collections/collections.route";
-import { myErrorHandler } from "./utils/errors";
+import { itemsRoutes } from "./modules/items/items.route";
 
 export async function buildServer() {
   const server = Fastify({
@@ -43,5 +44,6 @@ export async function buildServer() {
   server.register(authRoutes, { prefix: "/api/auth" });
   server.register(userRoutes, { prefix: "/api/users" });
   server.register(collectionsRoutes, { prefix: "/api/collections" });
+  server.register(itemsRoutes, { prefix: "/api/items" });
   return server;
 }

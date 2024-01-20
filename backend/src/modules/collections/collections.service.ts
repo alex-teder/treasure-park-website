@@ -15,6 +15,7 @@ export async function getCollection({ id }: { id: number }) {
       },
       items: {
         columns: {
+          id: true,
           title: true,
         },
       },
