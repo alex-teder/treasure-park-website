@@ -29,6 +29,21 @@ export function UserProvider({ children }: { children?: ReactNode | ReactNode[] 
   }, [setUser]);
 
   useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(async () => {
+      const { user, error } = await api.relogIn();
+      if (error) {
+        localStorage.removeItem("isLoggedIn");
+        setUser(null);
+      } else {
+        setUser(user);
+      }
+    }, 60 * 1000);
+    return () => clearInterval(interval);
+  }, [user]);
+
+  useEffect(() => {
     if (isAuthReady) {
       if (user !== null) {
         localStorage.setItem("isLoggedIn", "1");

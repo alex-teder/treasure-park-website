@@ -4,6 +4,7 @@ import {
   PersonAdd as SignupIcon,
   Person as PersonIcon,
   Logout as LogoutIcon,
+  Shield as AdminIcon,
 } from "@mui/icons-material";
 import { SyntheticEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -53,10 +54,12 @@ export function UserButton() {
 
   const currentMenuOptions = user ? authMenuOptions : noAuthMenuOptions;
 
+  const isAdmin = user && user.isAdmin;
+
   return (
     <>
       <IconButton onClick={handleClick}>
-        <PersonIcon color="primary" />
+        {isAdmin ? <AdminIcon color="primary" /> : <PersonIcon color="primary" />}
       </IconButton>
 
       <Menu

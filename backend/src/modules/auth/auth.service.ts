@@ -41,12 +41,12 @@ export async function logIn({ loginValue, password }: { loginValue: string; pass
   if (!foundUser) {
     throw new ErrorWithCode("Wrong login or password.", 400);
   }
-  if (foundUser.isBlocked) {
-    throw new ErrorWithCode("User is blocked by admin.", 403);
-  }
   const isPassValid = await verifyPassword(password, foundUser.password);
   if (!isPassValid) {
     throw new ErrorWithCode("Wrong login or password.", 400);
+  }
+  if (foundUser.isBlocked) {
+    throw new ErrorWithCode("User is blocked by admin.", 403);
   }
   const { id, email, isAdmin } = foundUser;
   const { accessToken } = issueToken({ id, email, isAdmin });

@@ -36,4 +36,10 @@ export const collectionSchema = z.object({
     username: z.string(),
     avatar: z.string().nullable(),
   }),
+  items: z.array(
+    z.object({
+      id: z.number(),
+      title: z.string(),
+    })
+  ),
 });

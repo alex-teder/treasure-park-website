@@ -25,7 +25,7 @@ export function CollectionPage() {
     return <NotFoundPage />;
   }
 
-  const isOwner = Boolean(user && user.id === data.collection.userId);
+  const isOwner = Boolean(user?.id === data.collection.userId || user?.isAdmin);
 
   return (
     <Container maxWidth="md">
@@ -59,7 +59,7 @@ export function CollectionPage() {
         >
           {data.collection.description}
         </MuiMarkdown>
-        <CollectionItemList />
+        <CollectionItemList items={data.collection.items} isOwner={isOwner} />
       </Card>
     </Container>
   );

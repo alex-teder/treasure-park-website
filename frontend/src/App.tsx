@@ -7,11 +7,11 @@ import { QueryProvider } from "./components/QueryProvider";
 function App() {
   return (
     <ThemeProvider>
-      <UserProvider>
-        <QueryProvider>
+      <QueryProvider>
+        <UserProvider>
           <RouterProvider />
-        </QueryProvider>
-      </UserProvider>
+        </UserProvider>
+      </QueryProvider>
     </ThemeProvider>
   );
 }
