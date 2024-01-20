@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { responseWithErrorSchema } from "../zod/responses";
 import { User } from "./UserTypes";
-import { UserProfile } from "./DomainTypes";
+import { Collection, UserProfile } from "./DomainTypes";
 
 type ResponseWithError = z.infer<typeof responseWithErrorSchema>;
 
@@ -31,4 +31,6 @@ export interface MyApi {
   getUserProfile(id: number): Promise<{
     userProfile: UserProfile;
   }>;
+
+  getCollection(id: number): Promise<{ collection: Collection }>;
 }

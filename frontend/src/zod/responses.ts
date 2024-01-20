@@ -25,3 +25,15 @@ export const userProfileSchema = z.object({
     })
   ),
 });
+
+export const collectionSchema = z.object({
+  id: z.number(),
+  createdAt: z.string().transform((dateStr) => new Date(dateStr)),
+  description: z.string().nullable(),
+  userId: z.number(),
+  title: z.string(),
+  user: z.object({
+    username: z.string(),
+    avatar: z.string().nullable(),
+  }),
+});

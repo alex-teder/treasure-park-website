@@ -1,5 +1,10 @@
 import { MyApi } from "../types";
-import { responseWithErrorSchema, userProfileSchema, userSchema } from "../zod/responses";
+import {
+  collectionSchema,
+  responseWithErrorSchema,
+  userProfileSchema,
+  userSchema,
+} from "../zod/responses";
 
 class Api implements MyApi {
   readonly BASE_URL: string = import.meta.env.DEV ? "http://127.0.0.1:8080/api/" : "/api/";
@@ -56,6 +61,12 @@ class Api implements MyApi {
     const { data, error } = await this.fetch(`users/${id}`);
     if (error) throw error;
     return { userProfile: userProfileSchema.parse(data) };
+  }
+
+  async getCollection(id: number) {
+    const { data, error } = await this.fetch(`collections/${id}`);
+    if (error) throw error;
+    return { collection: collectionSchema.parse(data) };
   }
 }
 

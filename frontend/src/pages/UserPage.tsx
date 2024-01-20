@@ -11,7 +11,7 @@ import { UserContext } from "../components/UserProvider";
 export function UserPage() {
   const { userId } = useParams();
   const { user } = useContext(UserContext);
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["user"],
     queryFn: () => api.getUserProfile(parseInt(userId!)),
     retry: false,
@@ -19,7 +19,6 @@ export function UserPage() {
 
   if (isPending) return null;
   if (isError) {
-    console.error(error);
     return <NotFoundPage />;
   }
 

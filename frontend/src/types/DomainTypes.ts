@@ -1,4 +1,5 @@
 import { z } from "zod";
-import { userProfileSchema } from "../zod/responses";
+import { collectionSchema, userProfileSchema } from "../zod/responses";
 
 export type UserProfile = z.infer<typeof userProfileSchema>;
+export type Collection = z.infer<typeof collectionSchema>;
