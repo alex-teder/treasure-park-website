@@ -19,11 +19,11 @@ export function PostListItem() {
   const navigate = useNavigate();
 
   const COLLECTION_NAME = "My Awesome Collection";
-  const COLLECTION_LINK = ROUTES.COLLECTION({ userId: "123", collectionId: "321" });
+  const COLLECTION_LINK = ROUTES.COLLECTION({ id: 123 });
   const USER_NAME = "@username";
-  const USER_LINK = ROUTES.USER({ userId: "123" });
+  const USER_LINK = ROUTES.USER({ id: 123 });
   const ITEM_NAME = "My new item";
-  const ITEM_LINK = ROUTES.ITEM({ userId: "123", collectionId: "321", itemId: "1" });
+  const ITEM_LINK = ROUTES.ITEM({ id: 123 });
   const IMAGE_HREF = "https://source.unsplash.com/featured/";
   const DESCRIPTION = "Lorem ipsum dolor sit amet consectetur adipisicing elit. At, libero.";
   const LIKE_COUNT = "5";

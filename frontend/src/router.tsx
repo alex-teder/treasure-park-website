@@ -11,18 +11,15 @@ import { ItemPage } from "./pages/ItemPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { EditCollectionPage } from "./pages/EditCollectionPage";
 import { EditItemPage } from "./pages/EditItemPage";
-import { CollectionRouteCreator, ItemRouteCreator, UserRouteCreator } from "./types";
 
 export const ROUTES = {
   ROOT: "/",
   SEARCH: "/search",
   LOGIN: "/login",
   SIGNUP: "/signup",
-  USER: ({ userId }: UserRouteCreator) => `/users/${userId}`,
-  COLLECTION: ({ userId, collectionId }: CollectionRouteCreator) =>
-    `/users/${userId}/collections/${collectionId}`,
-  ITEM: ({ userId, collectionId, itemId }: ItemRouteCreator) =>
-    `/users/${userId}/collections/${collectionId}/items/${itemId}`,
+  USER: ({ id }: { id: number }) => `/users/${id}`,
+  COLLECTION: ({ id }: { id: number }) => `/collections/${id}`,
+  ITEM: ({ id }: { id: number }) => `/items/${id}`,
   EDIT_COLLECTION: "/edit-collection",
   EDIT_ITEM: "/edit-item",
 };
@@ -59,11 +56,11 @@ export const router = createBrowserRouter([
     element: applyLayout(UserPage),
   },
   {
-    path: "/users/:userId/collections/:collectionId",
+    path: "/collections/:collectionId",
     element: applyLayout(CollectionPage),
   },
   {
-    path: "/users/:userId/collections/:collectionId/items/:itemId",
+    path: "/items/:itemId",
     element: applyLayout(ItemPage),
   },
   {

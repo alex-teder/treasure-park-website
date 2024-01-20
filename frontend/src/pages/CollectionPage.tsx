@@ -35,7 +35,7 @@ export function CollectionPage() {
       <Typography mb={2}>
         Author:{" "}
         <Link
-          to={ROUTES.USER({ userId: String(data.collection.userId) })}
+          to={ROUTES.USER({ id: data.collection.userId })}
           style={{ textDecoration: "underline" }}
         >
           {"@" + data.collection.user.username}

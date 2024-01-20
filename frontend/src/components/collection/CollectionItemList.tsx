@@ -75,9 +75,7 @@ export function CollectionItemList({
               hover
               role="button"
               sx={{ cursor: "pointer" }}
-              onClick={() =>
-                navigate(ROUTES.ITEM({ userId: "123", collectionId: "321", itemId: "1" }))
-              }
+              onClick={() => navigate(ROUTES.ITEM({ id: item.id }))}
             >
               <TableCell width={1}>{item.index}.</TableCell>
               <TableCell>{item.title}</TableCell>

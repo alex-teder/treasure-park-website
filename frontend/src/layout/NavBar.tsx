@@ -12,7 +12,7 @@ export function NavBar({ closeDrawer }: { closeDrawer: () => void }) {
     { label: "Search", path: ROUTES.SEARCH },
     {
       label: "My collections",
-      path: user ? ROUTES.USER({ userId: String(user.id) }) : ROUTES.LOGIN,
+      path: user ? ROUTES.USER({ id: user.id }) : ROUTES.LOGIN,
     },
   ];
 

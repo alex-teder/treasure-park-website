@@ -2,15 +2,15 @@ import { Inventory } from "@mui/icons-material";
 import { Avatar, SxProps, Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { UserProfile } from "../../types";
+import { ROUTES } from "../../router";
 
 export function CollectionListItem({
   collection,
 }: {
   collection: UserProfile["collections"][number];
 }) {
-  const { userId } = useParams();
   const [isHovering, setIsHovering] = useState(false);
   const hoveringProps: SxProps = isHovering
     ? {
@@ -23,7 +23,7 @@ export function CollectionListItem({
     <>
       <Grid xs={12} md={4}>
         <Link
-          to={`/users/${userId}/collections/${collection.id}`}
+          to={ROUTES.COLLECTION({ id: collection.id })}
           style={{ textDecoration: "none" }}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
