@@ -1,9 +1,27 @@
 import { Avatar, Box, Container, Typography } from "@mui/material";
 import { UserActions } from "../components/user/UserActions";
 import { CollectionList } from "../components/user/CollectionList";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../api";
+import { useParams } from "react-router-dom";
+import { NotFoundPage } from "./NotFoundPage";
+import { useContext } from "react";
+import { UserContext } from "../components/UserProvider";
 
 export function UserPage() {
-  const USER_NAME = "@username-123";
+  const { userId } = useParams();
+  const { user } = useContext(UserContext);
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => api.getUserProfile(parseInt(userId!)),
+    retry: false,
+  });
+
+  if (isPending) return null;
+  if (isError) {
+    console.error(error);
+    return <NotFoundPage />;
+  }
 
   return (
     <Container maxWidth="md">
@@ -18,12 +36,12 @@ export function UserPage() {
       >
         <Avatar sx={{ height: "5rem", width: "5rem" }} />
         <Typography variant="h5" component="h1">
-          {USER_NAME}
+          {"@" + data.userProfile.username}
         </Typography>
       </Box>
-      <UserActions />
+      {user && user.id === parseInt(userId!) && <UserActions />}
       <h2>Personal collections:</h2>
-      <CollectionList />
+      <CollectionList collections={data.userProfile.collections} />
     </Container>
   );
 }

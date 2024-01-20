@@ -1,12 +1,12 @@
 import { MyApi } from "../types";
-import { responseWithErrorSchema, userSchema } from "../zod/responses";
+import { responseWithErrorSchema, userProfileSchema, userSchema } from "../zod/responses";
 
 class Api implements MyApi {
   readonly BASE_URL: string = import.meta.env.DEV ? "http://127.0.0.1:8080/api/" : "/api/";
 
-  async fetch(url: string, options: RequestInit = {}) {
+  async fetch(subUrl: string, options: RequestInit = {}) {
     let data;
-    const response = await fetch(url, { ...options, credentials: "include" });
+    const response = await fetch(this.BASE_URL + subUrl, { ...options, credentials: "include" });
     if (response.headers.get("Content-Type")?.includes("application/json")) {
       data = (await response.json()) as unknown;
     } else {
@@ -19,7 +19,7 @@ class Api implements MyApi {
   }
 
   async logIn(input: { loginValue: string; password: string }) {
-    const { data, error } = await this.fetch(this.BASE_URL + "auth/login", {
+    const { data, error } = await this.fetch("auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +31,7 @@ class Api implements MyApi {
   }
 
   async signUp(input: { email: string; username: string; password: string }) {
-    const { data, error } = await this.fetch(this.BASE_URL + "auth/signup", {
+    const { data, error } = await this.fetch("auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,13 +43,19 @@ class Api implements MyApi {
   }
 
   async relogIn() {
-    const { data, error } = await this.fetch(this.BASE_URL + "auth/whoami");
+    const { data, error } = await this.fetch("auth/whoami");
     if (error) return { error };
     return { user: userSchema.parse(data) };
   }
 
   async logOut() {
-    return await this.fetch(this.BASE_URL + "auth/logout");
+    return await this.fetch("auth/logout");
+  }
+
+  async getUserProfile(id: number) {
+    const { data, error } = await this.fetch(`users/${id}`);
+    if (error) throw error;
+    return { userProfile: userProfileSchema.parse(data) };
   }
 }
 
