@@ -28,3 +28,18 @@ export async function findUserById({ id }: { id: number }) {
   }
   return { user: foundUser };
 }
+
+export async function changeUserPermissions({
+  id,
+  input,
+}: {
+  id: number;
+  input: { isBlocked?: boolean; isAdmin?: boolean };
+}) {
+  await db.update(users).set(input).where(eq(users.id, id));
+}
+
+export async function deleteUser({ id }: { id: number }) {
+  const { rowsAffected } = await db.delete(users).where(eq(users.id, id));
+  if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted", 400);
+}

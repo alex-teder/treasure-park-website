@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
-import { getUserHandler } from "./users.handler";
+import { changePermissionsHandler, deleteUserHandler, getUserHandler } from "./users.handler";
 import toJson from "zod-to-json-schema";
-import { usersParamsSchema } from "./users.schema";
+import { permissionsBodySchema, usersParamsSchema } from "./users.schema";
 
 export async function userRoutes(server: FastifyInstance) {
   server.get(
@@ -10,5 +10,21 @@ export async function userRoutes(server: FastifyInstance) {
       schema: { params: toJson(usersParamsSchema) },
     },
     getUserHandler
+  );
+  server.patch(
+    "/:userId",
+    {
+      config: { protected: true, adminOnly: true },
+      schema: { params: toJson(usersParamsSchema), body: toJson(permissionsBodySchema) },
+    },
+    changePermissionsHandler
+  );
+  server.delete(
+    "/:userId",
+    {
+      config: { protected: true, adminOnly: true },
+      schema: { params: toJson(usersParamsSchema) },
+    },
+    deleteUserHandler
   );
 }

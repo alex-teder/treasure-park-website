@@ -1,6 +1,9 @@
 import fastifyJwt from "@fastify/jwt";
 import fastifyPlugin from "fastify-plugin";
 import { env } from "../config/env";
+import { FastifyReply, FastifyRequest } from "fastify";
+import { ErrorWithCode } from "./errors";
+import { MaybeAdmin } from "../types";
 
 export const myJwtPlugin = fastifyPlugin(async function (fastify) {
   fastify.register(fastifyJwt, {
@@ -14,10 +17,24 @@ export const myJwtPlugin = fastifyPlugin(async function (fastify) {
     },
   });
   fastify.addHook("onRoute", (routeOptions) => {
-    if (routeOptions.config && routeOptions.config.protected === true) {
-      routeOptions.onRequest = async function authenticate(request, reply) {
-        await request.jwtVerify();
-      };
+    if (!routeOptions.config) return;
+    if (routeOptions.config.protected === true) {
+      routeOptions.onRequest = authenticate;
+    }
+    if (routeOptions.config.adminOnly === true) {
+      routeOptions.onRequest = authenticateAdmin;
     }
   });
 });
+
+async function authenticate(request: FastifyRequest, reply: FastifyReply) {
+  await request.jwtVerify();
+}
+
+async function authenticateAdmin(request: FastifyRequest, reply: FastifyReply) {
+  await request.jwtVerify();
+  const user = (await request.jwtDecode()) as MaybeAdmin;
+  if (user.isAdmin !== true) {
+    throw new ErrorWithCode("Administrators only.", 403);
+  }
+}

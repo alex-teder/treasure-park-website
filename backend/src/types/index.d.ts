@@ -11,6 +11,7 @@ import "@fastify/jwt";
 declare module "fastify" {
   export interface FastifyContextConfig {
     protected?: boolean;
+    adminOnly?: boolean;
   }
 }
 
@@ -19,6 +20,10 @@ type AuthenticatedUser = {
   email: string;
   isAdmin: boolean;
 };
+
+interface MaybeAdmin {
+  isAdmin: boolean;
+}
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
