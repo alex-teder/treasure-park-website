@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { AppBar, Toolbar, Drawer, Box, IconButton } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
+import { AppBar, Box, Drawer, IconButton,Toolbar } from "@mui/material";
+import { useState } from "react";
+
 import { NavBar } from "./NavBar";
 import { RightSideToolbar } from "./RightSideToolbar";
 

@@ -1,7 +1,8 @@
 import { ArrowDownward, Search } from "@mui/icons-material";
-import { Autocomplete, TextField, Container, Button, Box } from "@mui/material";
+import { Autocomplete, Box,Button, Container, TextField } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { ReactNode, useState } from "react";
+
 import { SearchList } from "../components/search/SearchList";
 
 export function SearchPage() {

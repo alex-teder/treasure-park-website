@@ -1,24 +1,26 @@
 import { Avatar, Box, Container, Typography } from "@mui/material";
-import { UserActions } from "../components/user/UserActions";
-import { CollectionList } from "../components/user/CollectionList";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "../api";
-import { useParams } from "react-router-dom";
-import { NotFoundPage } from "./NotFoundPage";
 import { useContext } from "react";
+import { useParams } from "react-router-dom";
+
+import { api } from "../api";
+import { CollectionList } from "../components/user/CollectionList";
+import { UserActions } from "../components/user/UserActions";
 import { UserContext } from "../components/UserProvider";
+import { NotFoundPage } from "./NotFoundPage";
 
 export function UserPage() {
   const { userId } = useParams();
   const { user } = useContext(UserContext);
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["user"],
+  const { data, isPending, isFetching, isError, error } = useQuery({
+    queryKey: [userId],
     queryFn: () => api.getUserProfile(parseInt(userId!)),
     retry: false,
   });
 
-  if (isPending) return null;
+  if (isPending || isFetching) return null;
   if (isError) {
+    console.error(error);
     return <NotFoundPage />;
   }
 

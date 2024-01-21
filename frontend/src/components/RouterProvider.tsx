@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { RouterProvider as RRProvider } from "react-router-dom";
-import { UserContext } from "./UserProvider";
+
 import { router } from "../router";
+import { UserContext } from "./UserProvider";
 
 export function RouterProvider() {
   const { isAuthReady } = useContext(UserContext);

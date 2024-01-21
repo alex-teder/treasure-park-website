@@ -1,10 +1,11 @@
-import { Container, useTheme, useMediaQuery } from "@mui/material";
+import { Container, useMediaQuery,useTheme } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import { TopCollections } from "../components/home/TopCollections";
+import { useContext } from "react";
+
+import { NoAuthBanner } from "../components/home/NoAuthBanner";
 import { PopularTags } from "../components/home/PopularTags";
 import { PostList } from "../components/home/PostList";
-import { NoAuthBanner } from "../components/home/NoAuthBanner";
-import { useContext } from "react";
+import { TopCollections } from "../components/home/TopCollections";
 import { UserContext } from "../components/UserProvider";
 
 export function HomePage() {
@@ -18,7 +19,7 @@ export function HomePage() {
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           <Grid xs={12} md={7} order={isScreenSmall ? 1 : 0}>
-            <h2>Latest posts:</h2>
+            {/* <h2>Latest posts:</h2> */}
             <PostList />
           </Grid>
           <Grid xs={12} md={5}>

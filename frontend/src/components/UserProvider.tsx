@@ -1,6 +1,7 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
-import { User, UserCtx } from "../types";
+import { createContext, ReactNode, useEffect, useState } from "react";
+
 import { api } from "../api";
+import { User, UserCtx } from "../types";
 
 export const UserContext = createContext<UserCtx>({
   user: null,

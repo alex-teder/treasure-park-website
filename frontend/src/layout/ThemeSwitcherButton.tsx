@@ -1,6 +1,7 @@
-import { useContext } from "react";
+import { LightModeRounded as LightIcon,NightlightRound as DarkIcon } from "@mui/icons-material";
 import { IconButton, useTheme } from "@mui/material";
-import { NightlightRound as DarkIcon, LightModeRounded as LightIcon } from "@mui/icons-material";
+import { useContext } from "react";
+
 import { ThemeSwitcherContext } from "../components/ThemeProvider";
 
 export function ThemeSwitcherButton() {

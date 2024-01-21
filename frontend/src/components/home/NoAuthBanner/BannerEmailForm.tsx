@@ -1,8 +1,9 @@
+import { ArrowRight as ArrowRightIcon } from "@mui/icons-material";
+import { Box, Button, Card, TextField } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { ROUTES } from "../../../router";
-import { Box, Button, Card, TextField } from "@mui/material";
-import { ArrowRight as ArrowRightIcon } from "@mui/icons-material";
 import { SignUpRouteState } from "../../../types";
 
 export function BannerEmailForm() {

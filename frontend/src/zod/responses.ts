@@ -22,6 +22,11 @@ export const userProfileSchema = z.object({
       id: z.number(),
       title: z.string(),
       items: z.array(z.unknown()),
+      category: z
+        .object({
+          title: z.string(),
+        })
+        .nullable(),
     })
   ),
 });
@@ -32,6 +37,12 @@ export const collectionSchema = z.object({
   description: z.string().nullable(),
   userId: z.number(),
   title: z.string(),
+  category: z
+    .object({
+      title: z.string(),
+      id: z.number(),
+    })
+    .nullable(),
   user: z.object({
     username: z.string(),
     avatar: z.string().nullable(),

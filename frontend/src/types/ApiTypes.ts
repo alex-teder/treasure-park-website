@@ -1,7 +1,8 @@
 import { z } from "zod";
+
 import { responseWithErrorSchema } from "../zod/responses";
-import { User } from "./UserTypes";
 import { Collection, UserProfile } from "./DomainTypes";
+import { User } from "./UserTypes";
 
 type ResponseWithError = z.infer<typeof responseWithErrorSchema>;
 

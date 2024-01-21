@@ -1,14 +1,16 @@
 import {
   Box,
   Container,
+  createTheme,
+  PaletteOptions,
   ThemeProvider as MuiThemeProvider,
   useTheme,
-  PaletteOptions,
-  createTheme,
 } from "@mui/material";
+
 import bannerImg from "/src/assets/banner.jpg";
-import { BannerText } from "./BannerText";
+
 import { BannerEmailForm } from "./BannerEmailForm";
+import { BannerText } from "./BannerText";
 
 export function NoAuthBanner() {
   const theme = useTheme();

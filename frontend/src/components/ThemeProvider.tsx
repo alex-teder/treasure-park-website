@@ -1,11 +1,11 @@
-import { createContext, ReactElement, useEffect, useState } from "react";
+import { CssBaseline, PaletteMode } from "@mui/material/";
 import {
   createTheme,
-  ThemeProvider as MuiThemeProvider,
   PaletteOptions,
   ThemeOptions,
+  ThemeProvider as MuiThemeProvider,
 } from "@mui/material/styles";
-import { CssBaseline, PaletteMode } from "@mui/material/";
+import { createContext, ReactElement, useEffect, useState } from "react";
 
 const baseThemeOptions: ThemeOptions = {
   shape: {

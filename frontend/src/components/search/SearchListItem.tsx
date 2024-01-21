@@ -1,6 +1,7 @@
 import { Image, OpenInNew } from "@mui/icons-material";
 import { Avatar, Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+
 import { ROUTES } from "../../router";
 
 export function SearchListItem() {

@@ -1,5 +1,4 @@
-import { SyntheticEvent, useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Alert,
   Button,
@@ -10,11 +9,13 @@ import {
   TextFieldProps,
   Typography,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { SyntheticEvent, useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import { api } from "../../api";
-import { UserContext } from "../UserProvider";
 import { ROUTES } from "../../router";
 import { signupFormSchema } from "../../zod/forms";
+import { UserContext } from "../UserProvider";
 
 export function SignupForm() {
   const { state } = useLocation();

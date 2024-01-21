@@ -1,21 +1,22 @@
+import { Add, Image as ImageIcon } from "@mui/icons-material";
 import {
-  // Avatar,
+  Avatar,
   Button,
-  InputAdornment,
   Table,
   TableBody,
   TableCell,
   TablePagination,
   TableRow,
-  TextField,
-  TextFieldProps,
   Typography,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { Add, Image as ImageIcon, Search as SearchIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../router";
-import { Collection } from "../../types";
+
+import { ROUTES } from "../../../router";
+import { Collection } from "../../../types";
+import { EmptyPadding } from "./EmptyPadding";
+import { NoItemsPlaceholder } from "./NoItemsPlaceholder";
+import { SearchField } from "./SearchField";
 
 export function CollectionItemList({
   items,
@@ -51,9 +52,8 @@ export function CollectionItemList({
 
   return (
     <>
-      <Typography fontWeight={700} sx={{ mt: 4 }}>
-        Total items: {items.length}
-      </Typography>
+      <Typography fontWeight={700}>Total items: {items.length}</Typography>
+
       {isOwner && (
         <Button
           variant="contained"
@@ -80,16 +80,15 @@ export function CollectionItemList({
               <TableCell width={1}>{item.index}.</TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell width={1}>
-                {/* <Avatar variant="square" src={IMAGE_HREF}> */}
-                <ImageIcon />
-                {/* </Avatar> */}
+                <Avatar variant="square">
+                  {/* src */}
+                  <ImageIcon />
+                </Avatar>
               </TableCell>
             </TableRow>
           ))}
-
           {!visibleItems.length && <NoItemsPlaceholder />}
-
-          <EmptyPadding emptyRows={emptyRows} />
+          <EmptyPadding emptyRows={items.length >= ITEMS_PER_PAGE ? emptyRows : 0} />
         </TableBody>
       </Table>
 
@@ -104,46 +103,4 @@ export function CollectionItemList({
       />
     </>
   );
-}
-
-function SearchField({ value, onChange }: TextFieldProps) {
-  return (
-    <TextField
-      size="small"
-      placeholder="Quick search"
-      autoComplete="false"
-      sx={{ display: "block", my: 2 }}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <SearchIcon />
-          </InputAdornment>
-        ),
-      }}
-      value={value}
-      onChange={onChange}
-    />
-  );
-}
-
-function NoItemsPlaceholder() {
-  return (
-    <TableRow>
-      <Typography component="td" sx={{ color: "grey", textAlign: "center", p: 2 }}>
-        no items...
-      </Typography>
-    </TableRow>
-  );
-}
-
-function EmptyPadding({ emptyRows }: { emptyRows: number }) {
-  return emptyRows ? (
-    <TableRow
-      style={{
-        height: 53 * emptyRows,
-      }}
-    >
-      <TableCell colSpan={6} />
-    </TableRow>
-  ) : null;
 }

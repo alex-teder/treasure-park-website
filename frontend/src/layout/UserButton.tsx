@@ -1,16 +1,17 @@
-import { IconButton, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import {
   Login as LoginIcon,
-  PersonAdd as SignupIcon,
-  Person as PersonIcon,
   Logout as LogoutIcon,
+  Person as PersonIcon,
+  PersonAdd as SignupIcon,
   Shield as AdminIcon,
 } from "@mui/icons-material";
+import { IconButton, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { SyntheticEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../router";
+
 import { api } from "../api/";
 import { UserContext } from "../components/UserProvider";
+import { ROUTES } from "../router";
 
 export function UserButton() {
   const navigate = useNavigate();

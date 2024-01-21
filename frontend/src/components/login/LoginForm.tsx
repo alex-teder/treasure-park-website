@@ -1,5 +1,3 @@
-import { SyntheticEvent, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Alert,
@@ -11,10 +9,13 @@ import {
   TextFieldProps,
   Typography,
 } from "@mui/material";
+import { SyntheticEvent, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { api } from "../../api";
-import { UserContext } from "../UserProvider";
 import { ROUTES } from "../../router";
 import { loginFormSchema } from "../../zod/forms";
+import { UserContext } from "../UserProvider";
 
 export function LoginForm() {
   const [loginValue, setLoginValue] = useState("");

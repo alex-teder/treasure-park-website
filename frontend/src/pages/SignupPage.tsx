@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
 import { Container } from "@mui/material";
-import { ROUTES } from "../router";
+import { Link } from "react-router-dom";
+
 import { SignupForm } from "../components/signup/SignupForm";
+import { ROUTES } from "../router";
 
 export function SignupPage() {
   return (

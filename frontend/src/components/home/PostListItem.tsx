@@ -1,18 +1,19 @@
 import {
-  Avatar,
-  Card,
-  CardHeader,
-  CardActions,
-  CardMedia,
-  Typography,
-  IconButton,
-  CardContent,
-} from "@mui/material";
-import {
   FavoriteBorder as LikeIcon,
   ModeCommentOutlined as CommentIcon,
 } from "@mui/icons-material";
+import {
+  Avatar,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+
 import { ROUTES } from "../../router";
 
 export function PostListItem() {

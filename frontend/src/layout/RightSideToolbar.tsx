@@ -1,5 +1,6 @@
-import { Box, IconButton } from "@mui/material";
 import { Language as LanguageIcon } from "@mui/icons-material";
+import { Box, IconButton } from "@mui/material";
+
 import { ThemeSwitcherButton } from "./ThemeSwitcherButton";
 import { UserButton } from "./UserButton";
 

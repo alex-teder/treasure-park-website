@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
-import { Avatar, Container } from "@mui/material";
-import { ROUTES } from "../router";
 import { Close as CloseIcon } from "@mui/icons-material";
+import { Avatar, Container } from "@mui/material";
+import { Link } from "react-router-dom";
+
+import { ROUTES } from "../router";
 
 export function NotFoundPage() {
   return (

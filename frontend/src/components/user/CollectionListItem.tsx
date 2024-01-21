@@ -1,10 +1,11 @@
 import { Inventory } from "@mui/icons-material";
-import { Avatar, SxProps, Box, Typography } from "@mui/material";
+import { Avatar, Box, SxProps, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { UserProfile } from "../../types";
+
 import { ROUTES } from "../../router";
+import { UserProfile } from "../../types";
 
 export function CollectionListItem({
   collection,
@@ -18,6 +19,8 @@ export function CollectionListItem({
         boxShadow: "3px 3px 15px rgba(0, 0, 0, 0.3)",
       }
     : {};
+
+  const category = collection.category ? collection.category.title : "Other";
 
   return (
     <>
@@ -44,7 +47,7 @@ export function CollectionListItem({
               {collection.title}
             </Typography>
             <Typography variant="caption">{collection.items.length} items</Typography>
-            <Typography variant="body2">Category: Books</Typography>
+            <Typography variant="body2">Category: {category}</Typography>
           </Box>
         </Link>
       </Grid>

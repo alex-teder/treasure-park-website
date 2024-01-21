@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+
 import { PostListItem } from "./PostListItem";
 
 export function PostList() {

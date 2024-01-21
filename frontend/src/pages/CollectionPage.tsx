@@ -1,30 +1,33 @@
+import { Card, Container, Typography } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import MuiMarkdown from "mui-markdown";
 import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { Card, Container, Typography } from "@mui/material";
-import MuiMarkdown from "mui-markdown";
-import { CollectionTagList } from "../components/collection/CollectionTagList";
-import { CollectionItemList } from "../components/collection/CollectionItemList";
-import { CollectionActions } from "../components/collection/CollectionActions";
-import { ROUTES } from "../router";
-import { UserContext } from "../components/UserProvider";
+
 import { api } from "../api";
+import { CollectionActions } from "../components/collection/CollectionActions";
+import { CollectionItemList } from "../components/collection/CollectionItemList";
+import { CollectionTagList } from "../components/collection/CollectionTagList";
+import { UserContext } from "../components/UserProvider";
+import { ROUTES } from "../router";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function CollectionPage() {
   const { collectionId } = useParams();
   const { user } = useContext(UserContext);
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["collection"],
+  const { data, isPending, isFetching, isError, error } = useQuery({
+    queryKey: [collectionId],
     queryFn: () => api.getCollection(parseInt(collectionId!)),
     retry: false,
   });
 
-  if (isPending) return null;
+  if (isPending || isFetching) return null;
   if (isError) {
+    console.error(error);
     return <NotFoundPage />;
   }
 
+  const category = data.collection.category ? data.collection.category.title : "Other";
   const isOwner = Boolean(user?.id === data.collection.userId || user?.isAdmin);
 
   return (
@@ -44,21 +47,24 @@ export function CollectionPage() {
       <Typography mb={2}>
         Category:{" "}
         <Link to={ROUTES.SEARCH} style={{ textDecoration: "underline" }}>
-          Books
+          {category}
         </Link>
       </Typography>
       <CollectionTagList />
+
       {isOwner && <CollectionActions />}
-      <Card sx={{ mb: 2, p: 2, fontSize: "0.875rem" }}>
-        <MuiMarkdown
-          overrides={{
-            h1: {
-              component: "h1",
-            },
-          }}
-        >
-          {data.collection.description}
-        </MuiMarkdown>
+
+      <MuiMarkdown
+        overrides={{
+          h1: {
+            component: "h1",
+          },
+        }}
+      >
+        {data.collection.description}
+      </MuiMarkdown>
+
+      <Card sx={{ my: 2, p: 2, fontSize: "0.875rem" }}>
         <CollectionItemList items={data.collection.items} isOwner={isOwner} />
       </Card>
     </Container>

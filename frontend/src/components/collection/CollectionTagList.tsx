@@ -1,5 +1,5 @@
-import { Chip } from "@mui/material";
 import { Tag as TagIcon } from "@mui/icons-material";
+import { Chip } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export function CollectionTagList() {

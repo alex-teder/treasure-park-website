@@ -1,6 +1,7 @@
-import { TagCloud } from "react-tagcloud";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { TagCloud } from "react-tagcloud";
+
 import { ROUTES } from "../../../router";
 
 const mockData = [

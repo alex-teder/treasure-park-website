@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+
 import { SearchListItem } from "./SearchListItem";
 
 export function SearchList() {

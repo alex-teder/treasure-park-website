@@ -1,8 +1,9 @@
 import { Box, Button } from "@mui/material";
-import { ROUTES } from "../router";
-import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import { UserContext } from "../components/UserProvider";
+import { ROUTES } from "../router";
 
 export function NavBar({ closeDrawer }: { closeDrawer: () => void }) {
   const { user } = useContext(UserContext);

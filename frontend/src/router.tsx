@@ -1,16 +1,17 @@
 import { FC } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
-import { SearchPage } from "./pages/SearchPage";
+
 import Layout from "./layout";
-import { LoginPage } from "./pages/LoginPage";
-import { SignupPage } from "./pages/SignupPage";
-import { UserPage } from "./pages/UserPage";
 import { CollectionPage } from "./pages/CollectionPage";
-import { ItemPage } from "./pages/ItemPage";
-import { NotFoundPage } from "./pages/NotFoundPage";
 import { EditCollectionPage } from "./pages/EditCollectionPage";
 import { EditItemPage } from "./pages/EditItemPage";
+import { HomePage } from "./pages/HomePage";
+import { ItemPage } from "./pages/ItemPage";
+import { LoginPage } from "./pages/LoginPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
+import { SearchPage } from "./pages/SearchPage";
+import { SignupPage } from "./pages/SignupPage";
+import { UserPage } from "./pages/UserPage";
 
 export const ROUTES = {
   ROOT: "/",
