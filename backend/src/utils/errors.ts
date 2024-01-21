@@ -14,6 +14,7 @@ export function myErrorHandler(server: FastifyInstance) {
       return reply.code(error.statusCode).send(error);
     }
     server.log.error(error);
+    console.error(error);
     return reply.code(500).send(new Error("Something went wrong."));
   };
 }

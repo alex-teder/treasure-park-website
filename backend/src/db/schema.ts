@@ -60,8 +60,7 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
 }));
 
 export const tags = mysqlTable("tags", {
-  id: int("id").autoincrement().primaryKey(),
-  title: varchar("title", { length: 50 }).notNull().unique(),
+  title: varchar("title", { length: 50 }).primaryKey(),
 });
 
 export const tagsRelations = relations(tags, ({ many }) => ({
@@ -74,19 +73,19 @@ export const collectionTags = mysqlTable(
     collectionId: int("collectionId")
       .notNull()
       .references(() => collections.id, { onDelete: "cascade" }),
-    tagId: int("tagId")
+    tag: varchar("tag", { length: 50 })
       .notNull()
-      .references(() => tags.id, { onDelete: "cascade" }),
+      .references(() => tags.title, { onDelete: "cascade" }),
   },
   (t) => ({
-    pk: primaryKey({ columns: [t.collectionId, t.tagId] }),
+    pk: primaryKey({ columns: [t.collectionId, t.tag] }),
   })
 );
 
 export const collectionTagsRelations = relations(collectionTags, ({ one }) => ({
   tag: one(tags, {
-    fields: [collectionTags.tagId],
-    references: [tags.id],
+    fields: [collectionTags.tag],
+    references: [tags.title],
   }),
   collection: one(collections, {
     fields: [collectionTags.collectionId],
