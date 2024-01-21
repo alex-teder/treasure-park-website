@@ -4,11 +4,13 @@ export const createCollectionBodySchema = z.object({
   userId: z.number().optional(),
   title: z.string().min(1).max(150),
   description: z.string().max(10000).optional(),
+  categoryId: z.number().optional(),
 });
 
 export const collectionsBodySchema = z.object({
   title: z.string().min(1).max(150),
   description: z.string().max(10000).optional(),
+  categoryId: z.number().optional(),
 });
 
 export const collectionsParamsSchema = z.object({

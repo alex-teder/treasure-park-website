@@ -1,5 +1,14 @@
 import { relations } from "drizzle-orm";
-import { boolean, char, int, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  boolean,
+  char,
+  int,
+  mysqlTable,
+  primaryKey,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -21,7 +30,8 @@ export const collections = mysqlTable("collections", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
+  categoryId: int("categoryId").references(() => categories.id, { onDelete: "set null" }),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
   createdAt: timestamp("createdAt").defaultNow(),
@@ -32,35 +42,73 @@ export const collectionsRelations = relations(collections, ({ one, many }) => ({
     fields: [collections.userId],
     references: [users.id],
   }),
+  category: one(categories, {
+    fields: [collections.categoryId],
+    references: [categories.id],
+  }),
+  collectionTags: many(collectionTags),
   items: many(items),
+}));
+
+export const categories = mysqlTable("categories", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 50 }).notNull().unique(),
+});
+
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  collections: many(collections),
+}));
+
+export const tags = mysqlTable("tags", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 50 }).notNull().unique(),
+});
+
+export const tagsRelations = relations(tags, ({ many }) => ({
+  collectionTags: many(collectionTags),
+}));
+
+export const collectionTags = mysqlTable(
+  "collection_tags",
+  {
+    collectionId: int("collectionId")
+      .notNull()
+      .references(() => collections.id, { onDelete: "cascade" }),
+    tagId: int("tagId")
+      .notNull()
+      .references(() => tags.id, { onDelete: "cascade" }),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.collectionId, t.tagId] }),
+  })
+);
+
+export const collectionTagsRelations = relations(collectionTags, ({ one }) => ({
+  tag: one(tags, {
+    fields: [collectionTags.tagId],
+    references: [tags.id],
+  }),
+  collection: one(collections, {
+    fields: [collectionTags.collectionId],
+    references: [collections.id],
+  }),
 }));
 
 export const items = mysqlTable("items", {
   id: int("id").autoincrement().primaryKey(),
   collectionId: int("collectionId")
     .notNull()
-    .references(() => collections.id),
+    .references(() => collections.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 255 }).notNull(),
   description: varchar("description", { length: 2000 }),
   createdAt: timestamp("createdAt").defaultNow(),
 });
-
 export const itemsRelations = relations(items, ({ one }) => ({
   collection: one(collections, {
     fields: [items.collectionId],
     references: [collections.id],
   }),
 }));
-
-// export const categories = mysqlTable("categories", {
-//   id: int("id").autoincrement().primaryKey(),
-//   title: varchar("title", { length: 50 }).notNull().unique(),
-// });
-
-// export const tags = mysqlTable("tags", {
-//   id: int("id").autoincrement().primaryKey(),
-//   title: varchar("title", { length: 50 }).notNull().unique(),
-// });
 
 // export const attributes = mysqlTable("attributes", {
 //   id: int("id").autoincrement().primaryKey(),

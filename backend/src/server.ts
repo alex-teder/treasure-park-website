@@ -10,6 +10,7 @@ import { myErrorHandler } from "./utils/errors";
 import { userRoutes } from "./modules/users/users.route";
 import { collectionsRoutes } from "./modules/collections/collections.route";
 import { itemsRoutes } from "./modules/items/items.route";
+import { categoriesRoutes } from "./modules/categories/categories.route";
 
 export async function buildServer() {
   const server = Fastify({
@@ -45,5 +46,6 @@ export async function buildServer() {
   server.register(userRoutes, { prefix: "/api/users" });
   server.register(collectionsRoutes, { prefix: "/api/collections" });
   server.register(itemsRoutes, { prefix: "/api/items" });
+  server.register(categoriesRoutes, { prefix: "/api/categories" });
   return server;
 }

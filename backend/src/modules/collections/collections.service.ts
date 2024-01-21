@@ -7,6 +7,7 @@ export async function getCollection({ id }: { id: number }) {
   const foundCollection = await db.query.collections.findFirst({
     where: eq(collections.id, id),
     with: {
+      category: true,
       user: {
         columns: {
           username: true,
@@ -31,6 +32,7 @@ export async function createCollection(input: {
   userId: number;
   title: string;
   description?: string;
+  categoryId?: number;
 }) {
   const { insertId } = await db.insert(collections).values(input);
   return { id: parseInt(insertId) };
@@ -41,7 +43,7 @@ export async function updateCollection({
   actorId,
   input,
 }: {
-  input: { title: string; description?: string };
+  input: { title: string; description?: string; categoryId?: number };
   id: number;
   actorId?: number;
 }) {

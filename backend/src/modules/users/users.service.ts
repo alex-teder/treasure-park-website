@@ -18,7 +18,12 @@ export async function findUserById({ id }: { id: number }) {
           title: true,
         },
         with: {
-          items: { extras: {} }, // what is this?
+          category: true,
+          items: {
+            columns: {
+              id: true,
+            },
+          },
         },
       },
     },
