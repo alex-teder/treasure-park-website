@@ -16,6 +16,11 @@ import { tagsRoutes } from "./modules/tags/tags.route";
 export async function buildServer() {
   const server = Fastify({
     connectionTimeout: 3000,
+    ajv: {
+      customOptions: {
+        allowUnionTypes: true,
+      },
+    },
     logger: {
       transport: {
         target: "@fastify/one-line-logger",

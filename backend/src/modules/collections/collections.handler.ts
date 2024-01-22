@@ -29,7 +29,7 @@ export async function createCollectionHandler(
   }
   const userId = request.body.userId || request.user.id;
   await createCollection({ ...request.body, userId });
-  return reply.send("ok");
+  return reply.code(201).send("ok");
 }
 
 export async function updateCollectionHandler(

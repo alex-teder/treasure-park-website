@@ -3,11 +3,18 @@ import { db } from "../../db";
 import { items } from "../../db/schema";
 import { ErrorWithCode } from "../../utils/errors";
 import { getCollection } from "../collections/collections.service";
+import { CustomAttributeValue } from "../../types";
+import { createItemAttributes } from "../attributes/attributes.service";
 
 export async function getItem({ id }: { id: number }) {
   const foundItem = await db.query.items.findFirst({
     where: eq(items.id, id),
     with: {
+      itemAttributes: {
+        with: {
+          attribute: true,
+        },
+      },
       collection: {
         columns: {
           id: true,
@@ -40,6 +47,7 @@ export async function createItem({
     collectionId: number;
     title: string;
     description?: string;
+    attributes: { id: number; value: CustomAttributeValue }[];
   };
   actorId?: number;
 }) {
@@ -47,9 +55,10 @@ export async function createItem({
   if (actorId && collection.userId !== actorId) {
     throw new ErrorWithCode("Not allowed.", 403);
   }
-
   const { insertId } = await db.insert(items).values(input);
-  return { id: parseInt(insertId) };
+  const id = parseInt(insertId);
+  await createItemAttributes({ itemId: id, attributesToCreate: input.attributes });
+  return { id };
 }
 
 export async function updateItem({
@@ -61,6 +70,7 @@ export async function updateItem({
   input: {
     title: string;
     description?: string | null;
+    attributes: { id: number; value: CustomAttributeValue }[];
   };
   actorId?: number;
 }) {
@@ -68,12 +78,12 @@ export async function updateItem({
   if (actorId && item.collection.userId !== actorId) {
     throw new ErrorWithCode("Not allowed.", 403);
   }
-
   const { rowsAffected } = await db
     .update(items)
     .set({ title: input.title, description: input.description || null })
     .where(eq(items.id, id));
   if (!rowsAffected) throw new ErrorWithCode("Nothing was updated", 403);
+  await createItemAttributes({ itemId: id, attributesToCreate: input.attributes });
 }
 
 export async function deleteItem({ id, actorId }: { id: number; actorId?: number }) {
@@ -81,7 +91,6 @@ export async function deleteItem({ id, actorId }: { id: number; actorId?: number
   if (actorId && item.collection.userId !== actorId) {
     throw new ErrorWithCode("Not allowed.", 403);
   }
-
   const { rowsAffected } = await db.delete(items).where(eq(items.id, id));
   if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted", 403);
 }

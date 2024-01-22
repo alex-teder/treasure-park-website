@@ -16,7 +16,7 @@ export async function createItemHandler(
 ) {
   const isAdminAction = request.user.isAdmin;
   await createItem({ input: request.body, actorId: isAdminAction ? undefined : request.user.id });
-  return reply.send("ok");
+  return reply.code(201).send("ok");
 }
 
 export async function updateItemHandler(
