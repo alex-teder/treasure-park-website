@@ -25,6 +25,9 @@ interface MaybeAdmin {
   isAdmin: boolean;
 }
 
+type CustomAttributeType = "smallText" | "bigText" | "number" | "checkbox" | "date";
+type CustomAttributeValue = string | number | boolean;
+
 declare module "@fastify/jwt" {
   interface FastifyJWT {
     payload: AuthenticatedUser;

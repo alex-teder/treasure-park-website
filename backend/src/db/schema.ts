@@ -3,10 +3,12 @@ import {
   boolean,
   char,
   int,
+  json,
+  mysqlEnum,
   mysqlTable,
-  primaryKey,
   text,
   timestamp,
+  uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
 
@@ -48,6 +50,7 @@ export const collectionsRelations = relations(collections, ({ one, many }) => ({
   }),
   collectionTags: many(collectionTags),
   items: many(items),
+  attributes: many(attributes),
 }));
 
 export const categories = mysqlTable("categories", {
@@ -70,6 +73,7 @@ export const tagsRelations = relations(tags, ({ many }) => ({
 export const collectionTags = mysqlTable(
   "collection_tags",
   {
+    id: int("id").autoincrement().primaryKey(),
     collectionId: int("collectionId")
       .notNull()
       .references(() => collections.id, { onDelete: "cascade" }),
@@ -78,7 +82,8 @@ export const collectionTags = mysqlTable(
       .references(() => tags.title, { onDelete: "cascade" }),
   },
   (t) => ({
-    pk: primaryKey({ columns: [t.collectionId, t.tag] }),
+    // pk: primaryKey({ columns: [t.collectionId, t.tag] }),
+    idx: uniqueIndex("idx").on(t.collectionId, t.tag),
   })
 );
 
@@ -102,59 +107,57 @@ export const items = mysqlTable("items", {
   description: varchar("description", { length: 2000 }),
   createdAt: timestamp("createdAt").defaultNow(),
 });
-export const itemsRelations = relations(items, ({ one }) => ({
+
+export const itemsRelations = relations(items, ({ one, many }) => ({
   collection: one(collections, {
     fields: [items.collectionId],
     references: [collections.id],
   }),
+  itemAttributes: many(itemAttributes),
 }));
 
-// export const attributes = mysqlTable("attributes", {
-//   id: int("id").autoincrement().primaryKey(),
-//   collectionId: int("collectionId")
-//     .references(() => collections.id)
-//     .notNull(),
-//   title: varchar("title", { length: 100 }),
-//   type: mysqlEnum("type", ["smallText", "bigText", "number", "checkbox", "date"]),
-// });
+export const attributes = mysqlTable("attributes", {
+  id: int("id").autoincrement().primaryKey(),
+  collectionId: int("collectionId")
+    .notNull()
+    .references(() => collections.id, { onDelete: "cascade" }),
+  title: varchar("title", { length: 50 }).notNull(),
+  type: mysqlEnum("type", ["smallText", "bigText", "number", "checkbox", "date"]).notNull(),
+});
 
-// export const itemAttributes = mysqlTable(
-//   "item_attributes",
-//   {
-//     attributeId: int("attributeId")
-//       .notNull()
-//       .references(() => attributes.id),
-//     itemId: int("itemId")
-//       .notNull()
-//       .references(() => items.id),
-//     value: json("value").$type<{ value: string | number | boolean }>().notNull(),
-//   },
-//   (table) => ({
-//     pk: primaryKey({ columns: [table.itemId, table.attributeId] }),
-//   })
-// );
+export const attributesRelations = relations(attributes, ({ one, many }) => ({
+  colleciton: one(collections, {
+    fields: [attributes.collectionId],
+    references: [collections.id],
+  }),
+  items: many(items),
+}));
 
-// export const likes = mysqlTable(
-//   "likes",
-//   {
-//     userId: int("userId")
-//       .references(() => users.id)
-//       .notNull(),
-//     itemId: int("itemId")
-//       .references(() => items.id)
-//       .notNull(),
-//   },
-//   (likes) => ({
-//     pk: primaryKey({ columns: [likes.itemId, likes.userId] }),
-//   })
-// );
+export const itemAttributes = mysqlTable(
+  "item_attributes",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    attributeId: int("attributeId")
+      .notNull()
+      .references(() => attributes.id),
+    itemId: int("itemId")
+      .notNull()
+      .references(() => items.id),
+    value: json("value").$type<{ value: string | number | boolean }>(),
+  },
+  (t) => ({
+    // pk: primaryKey({ columns: [t.attributeId, t.itemId] }),
+    idx: uniqueIndex("idx").on(t.attributeId, t.itemId),
+  })
+);
 
-// export const comments = mysqlTable("comments", {
-//   id: int("id").autoincrement().primaryKey(),
-//   userId: int("userId").references(() => users.id),
-//   itemId: int("itemId")
-//     .references(() => items.id)
-//     .notNull(),
-//   text: varchar("text", { length: 2000 }),
-//   createdAt: timestamp("createdAt").defaultNow(),
-// });
+export const itemAttributesRelations = relations(itemAttributes, ({ one }) => ({
+  attribute: one(attributes, {
+    fields: [itemAttributes.attributeId],
+    references: [attributes.id],
+  }),
+  item: one(items, {
+    fields: [itemAttributes.itemId],
+    references: [items.id],
+  }),
+}));

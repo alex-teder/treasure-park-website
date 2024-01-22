@@ -5,7 +5,11 @@ import {
   getCollection,
   updateCollection,
 } from "./collections.service";
-import { CollectionsBody, CollectionsParams, CreateCollectionBody } from "./collections.schema";
+import {
+  UpdateCollectionBody,
+  CreateCollectionBody,
+  CollectionsParams,
+} from "./collections.schema";
 import { ErrorWithCode } from "../../utils/errors";
 
 export async function getCollectionHandler(
@@ -21,7 +25,7 @@ export async function createCollectionHandler(
   reply: FastifyReply
 ) {
   if (request.body.userId && !request.user.isAdmin) {
-    throw new ErrorWithCode("Not allowed", 403);
+    throw new ErrorWithCode("Not allowed.", 403);
   }
   const userId = request.body.userId || request.user.id;
   await createCollection({ ...request.body, userId });
@@ -29,7 +33,7 @@ export async function createCollectionHandler(
 }
 
 export async function updateCollectionHandler(
-  request: FastifyRequest<{ Body: CollectionsBody; Params: CollectionsParams }>,
+  request: FastifyRequest<{ Body: UpdateCollectionBody; Params: CollectionsParams }>,
   reply: FastifyReply
 ) {
   const isAdminAction = request.user.isAdmin;

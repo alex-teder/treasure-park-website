@@ -7,7 +7,7 @@ import {
   updateCollectionHandler,
 } from "./collections.handler";
 import {
-  collectionsBodySchema,
+  updateCollecitonBodySchema,
   collectionsParamsSchema,
   createCollectionBodySchema,
 } from "./collections.schema";
@@ -38,7 +38,7 @@ export async function collectionsRoutes(server: FastifyInstance) {
       config: { protected: true },
       schema: {
         params: toJson(collectionsParamsSchema),
-        body: toJson(collectionsBodySchema),
+        body: toJson(updateCollecitonBodySchema),
       },
     },
     updateCollectionHandler

@@ -35,6 +35,7 @@ export async function cleanUpUnusedTags() {
   const tagsToDelete: string[] = (
     await db.select().from(tags).where(notInArray(tags.title, usedTags))
   ).map(({ title }) => title);
+  if (!tagsToDelete.length) return;
   const { rowsAffected } = await db.delete(tags).where(inArray(tags.title, tagsToDelete));
   return rowsAffected;
 }
