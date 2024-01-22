@@ -43,6 +43,11 @@ export const collectionSchema = z.object({
       id: z.number(),
     })
     .nullable(),
+  collectionTags: z.array(
+    z.object({
+      tag: z.string(),
+    })
+  ),
   user: z.object({
     username: z.string(),
     avatar: z.string().nullable(),

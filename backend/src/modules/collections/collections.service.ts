@@ -1,6 +1,6 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "../../db";
-import { collections } from "../../db/schema";
+import { collectionTags, collections } from "../../db/schema";
 import { ErrorWithCode } from "../../utils/errors";
 import { cleanUpUnusedTags, createCollectionTags } from "../tags/tags.service";
 

@@ -50,7 +50,7 @@ export function CollectionPage() {
           {category}
         </Link>
       </Typography>
-      <CollectionTagList />
+      <CollectionTagList tags={data.collection.collectionTags} />
 
       {isOwner && <CollectionActions />}
 
