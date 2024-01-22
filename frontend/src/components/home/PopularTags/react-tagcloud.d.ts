@@ -11,8 +11,8 @@ declare module "react-tagcloud" {
     maxSize: number;
     renderer?: (tag: Tag, size: number, key: number) => React.ReactNode;
     onClick?: (tag: Tag) => unknown;
-    onMouseOver?: (tag: Tag, event: React.SyntheticEvent) => unknown;
-    onMouseOut?: (tag: Tag, event: React.SyntheticEvent) => unknown;
+    onMouseOver?: (tag: Tag, event: React.SyntheticEvent<HTMLElement, MouseEvent>) => unknown;
+    onMouseOut?: (tag: Tag, event: React.SyntheticEvent<HTMLElement, MouseEvent>) => unknown;
     style?: React.CSSProperties;
   }
 

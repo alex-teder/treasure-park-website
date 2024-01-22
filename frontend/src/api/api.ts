@@ -1,6 +1,7 @@
 import { MyApi } from "../types";
 import {
   collectionSchema,
+  popularTagsSchema,
   responseWithErrorSchema,
   userProfileSchema,
   userSchema,
@@ -67,6 +68,12 @@ class Api implements MyApi {
     const { data, error } = await this.fetch(`collections/${id}`);
     if (error) throw error;
     return { collection: collectionSchema.parse(data) };
+  }
+
+  async getPopularTags() {
+    const { data, error } = await this.fetch("tags");
+    if (error) throw error;
+    return popularTagsSchema.parse(data);
   }
 }
 

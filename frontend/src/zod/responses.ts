@@ -59,3 +59,10 @@ export const collectionSchema = z.object({
     })
   ),
 });
+
+export const popularTagsSchema = z.array(
+  z.object({
+    value: z.string(),
+    count: z.number(),
+  })
+);

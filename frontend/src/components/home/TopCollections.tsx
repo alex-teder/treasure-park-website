@@ -5,7 +5,7 @@ export function TopCollections() {
   return (
     <section>
       <Box mb={2}>
-        <h2>Top collections:</h2>
+        <h3>Top collections:</h3>
         <ol style={{ padding: 0, listStyle: "none" }}>
           <li>
             <Link to={"/"}>
