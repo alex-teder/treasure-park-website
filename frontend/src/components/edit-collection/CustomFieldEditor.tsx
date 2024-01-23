@@ -38,6 +38,7 @@ export function CustomFieldEditor({ attributes, setAttributes, mode }: CustomFie
         Custom fields
         <Tooltip
           disableFocusListener
+          enterTouchDelay={0}
           title={
             <Typography variant="caption">
               You can choose the fields to be showcased on every item in your collection.
