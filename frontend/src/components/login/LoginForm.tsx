@@ -34,7 +34,7 @@ export function LoginForm() {
     setError("");
     const { user, error } = await api.logIn({ loginValue, password });
     if (error) {
-      setError(error.message);
+      setError(error.message!);
       return;
     }
     setUser(user);

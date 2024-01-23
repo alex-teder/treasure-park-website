@@ -11,6 +11,7 @@ export async function getTags() {
     .from(tags)
     .leftJoin(collectionTags, eq(tags.title, collectionTags.tag))
     .groupBy(tags.title)
+    .limit(25)
     .orderBy(desc(sql`count`));
   return result;
 }
@@ -24,6 +25,7 @@ export async function createCollectionTags({
 }) {
   await createTags(tagTitles);
   await db.delete(collectionTags).where(eq(collectionTags.collectionId, collectionId));
+  if (!tagTitles.length) return;
   await db
     .insert(collectionTags)
     .values(tagTitles.map((tag) => ({ tag, collectionId })))
@@ -41,6 +43,7 @@ export async function cleanUpUnusedTags() {
 }
 
 async function createTags(tagTitles: string[]) {
+  if (!tagTitles.length) return;
   await db
     .insert(tags)
     .values(tagTitles.map((title) => ({ title })))

@@ -9,7 +9,7 @@ export const userSchema = z.object({
 export const responseWithErrorSchema = z.object({
   error: z.string(),
   statusCode: z.number().optional(),
-  message: z.string(),
+  message: z.string().optional(),
   code: z.string().optional(),
 });
 
@@ -48,6 +48,13 @@ export const collectionSchema = z.object({
       tag: z.string(),
     })
   ),
+  attributes: z.array(
+    z.object({
+      id: z.number(),
+      title: z.string(),
+      type: z.enum(["smallText", "bigText", "number", "checkbox", "date"]),
+    })
+  ),
   user: z.object({
     username: z.string(),
     avatar: z.string().nullable(),
@@ -64,5 +71,12 @@ export const popularTagsSchema = z.array(
   z.object({
     value: z.string(),
     count: z.number(),
+  })
+);
+
+export const categoriesSchema = z.array(
+  z.object({
+    id: z.number(),
+    title: z.string(),
   })
 );

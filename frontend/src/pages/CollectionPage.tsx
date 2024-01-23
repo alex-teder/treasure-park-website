@@ -52,7 +52,7 @@ export function CollectionPage() {
       </Typography>
       <CollectionTagList tags={data.collection.collectionTags} />
 
-      {isOwner && <CollectionActions />}
+      {isOwner && <CollectionActions collection={data.collection} />}
 
       <MuiMarkdown
         overrides={{

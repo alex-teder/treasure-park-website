@@ -1,5 +1,6 @@
 import { MyApi } from "../types";
 import {
+  categoriesSchema,
   collectionSchema,
   popularTagsSchema,
   responseWithErrorSchema,
@@ -74,6 +75,38 @@ class Api implements MyApi {
     const { data, error } = await this.fetch("tags");
     if (error) throw error;
     return popularTagsSchema.parse(data);
+  }
+
+  async getCategories() {
+    const { data, error } = await this.fetch("categories");
+    if (error) throw error;
+    return categoriesSchema.parse(data);
+  }
+
+  async postCollection(data: unknown) {
+    return await this.fetch("collections", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateCollection(id: number, data: unknown) {
+    return await this.fetch(`collections/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteCollection(id: number) {
+    return await this.fetch(`collections/${id}`, {
+      method: "DELETE",
+    });
   }
 }
 

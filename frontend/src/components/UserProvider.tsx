@@ -31,7 +31,6 @@ export function UserProvider({ children }: { children?: ReactNode | ReactNode[] 
 
   useEffect(() => {
     if (!user) return;
-
     const interval = setInterval(async () => {
       const { user, error } = await api.relogIn();
       if (error) {

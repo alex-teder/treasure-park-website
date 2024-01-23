@@ -10,6 +10,7 @@ export async function createAttributes({
   collectionId: number;
   attributesToCreate: { title: string; type: CustomAttributeType }[];
 }) {
+  if (!attributesToCreate.length) return;
   await db.insert(attributes).values(attributesToCreate.map((attr) => ({ ...attr, collectionId })));
 }
 
@@ -31,6 +32,7 @@ export async function createItemAttributes({
   itemId: number;
   attributesToCreate: { id: number; value: CustomAttributeValue }[];
 }) {
+  if (!attributesToCreate.length) return;
   const valuesToInsert = attributesToCreate.map(({ id: attributeId, value }) => ({
     itemId,
     attributeId,

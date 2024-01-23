@@ -37,7 +37,7 @@ export function SignupForm() {
     setError("");
     const { user, error } = await api.signUp({ email, username, password });
     if (error) {
-      setError(error.message);
+      setError(error.message!);
       return;
     }
     setUser(user);
