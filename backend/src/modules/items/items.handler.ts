@@ -15,8 +15,11 @@ export async function createItemHandler(
   reply: FastifyReply
 ) {
   const isAdminAction = request.user.isAdmin;
-  await createItem({ input: request.body, actorId: isAdminAction ? undefined : request.user.id });
-  return reply.code(201).send("ok");
+  const insertId = await createItem({
+    input: request.body,
+    actorId: isAdminAction ? undefined : request.user.id,
+  });
+  return reply.code(201).send({ id: insertId });
 }
 
 export async function updateItemHandler(
@@ -24,12 +27,12 @@ export async function updateItemHandler(
   reply: FastifyReply
 ) {
   const isAdminAction = request.user.isAdmin;
-  await updateItem({
+  const insertId = await updateItem({
     id: request.params.itemId,
     input: request.body,
     actorId: isAdminAction ? undefined : request.user.id,
   });
-  return reply.send("ok");
+  return reply.send({ id: insertId });
 }
 
 export async function deleteItemHandler(

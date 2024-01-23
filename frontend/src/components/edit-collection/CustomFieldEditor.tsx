@@ -9,7 +9,7 @@ import {
 } from "@mui/icons-material";
 import { Box, IconButton, TextField, Tooltip, Typography } from "@mui/material";
 
-import { Collection, CustomFieldType } from "../../types";
+import { Collection, CustomAttributeType } from "../../types";
 import { findLastIndex } from "../../utils/findLast";
 import { getRandomNumber } from "../../utils/getRandomNumber";
 
@@ -56,8 +56,8 @@ export function CustomFieldEditor({ attributes, setAttributes, mode }: CustomFie
         <Box key={key}>
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Typography fontWeight={700} display="flex" alignItems="center" gap={1} py={1}>
-              {customFields[key as CustomFieldType].icon}
-              {customFields[key as CustomFieldType].label}
+              {customFields[key as CustomAttributeType].icon}
+              {customFields[key as CustomAttributeType].label}
             </Typography>
             {mode === "creating" && (
               <Box
@@ -77,10 +77,10 @@ export function CustomFieldEditor({ attributes, setAttributes, mode }: CustomFie
                 >
                   <MinusIcon />
                 </IconButton>
-                {attributes.filter(({ type }) => type === (key as CustomFieldType)).length}
+                {attributes.filter(({ type }) => type === (key as CustomAttributeType)).length}
                 <IconButton
                   disabled={
-                    attributes.filter(({ type }) => type === (key as CustomFieldType)).length >=
+                    attributes.filter(({ type }) => type === (key as CustomAttributeType)).length >=
                     MAX_FIELDS_OF_TYPE
                   }
                   onClick={() =>
@@ -88,7 +88,7 @@ export function CustomFieldEditor({ attributes, setAttributes, mode }: CustomFie
                       [...attributes].concat({
                         id: getRandomNumber(),
                         title: "",
-                        type: key as CustomFieldType,
+                        type: key as CustomAttributeType,
                       })
                     )
                   }
@@ -106,7 +106,7 @@ export function CustomFieldEditor({ attributes, setAttributes, mode }: CustomFie
                 key={idx}
                 fullWidth
                 label={
-                  customFields[key as CustomFieldType].label + " field " + (idx + 1) + " title"
+                  customFields[key as CustomAttributeType].label + " field " + (idx + 1) + " title"
                 }
                 sx={{ my: 1 }}
                 value={title}

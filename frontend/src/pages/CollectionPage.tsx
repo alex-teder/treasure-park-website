@@ -65,7 +65,11 @@ export function CollectionPage() {
       </MuiMarkdown>
 
       <Card sx={{ my: 2, p: 2, fontSize: "0.875rem" }}>
-        <CollectionItemList items={data.collection.items} isOwner={isOwner} />
+        <CollectionItemList
+          collection={data.collection}
+          items={data.collection.items}
+          isOwner={isOwner}
+        />
       </Card>
     </Container>
   );

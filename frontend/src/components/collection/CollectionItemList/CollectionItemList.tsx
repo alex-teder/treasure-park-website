@@ -19,9 +19,11 @@ import { NoItemsPlaceholder } from "./NoItemsPlaceholder";
 import { SearchField } from "./SearchField";
 
 export function CollectionItemList({
+  collection,
   items,
   isOwner,
 }: {
+  collection: Collection;
   items: Collection["items"];
   isOwner: boolean;
 }) {
@@ -59,7 +61,7 @@ export function CollectionItemList({
           variant="contained"
           startIcon={<Add />}
           sx={{ mt: 1 }}
-          onClick={() => navigate(ROUTES.EDIT_ITEM)}
+          onClick={() => navigate(ROUTES.EDIT_ITEM, { state: { collection } })}
         >
           Add item
         </Button>

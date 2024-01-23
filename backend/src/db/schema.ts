@@ -82,7 +82,6 @@ export const collectionTags = mysqlTable(
       .references(() => tags.title, { onDelete: "cascade" }),
   },
   (t) => ({
-    // pk: primaryKey({ columns: [t.collectionId, t.tag] }),
     idx: uniqueIndex("idx").on(t.collectionId, t.tag),
   })
 );
@@ -139,14 +138,13 @@ export const itemAttributes = mysqlTable(
     id: int("id").autoincrement().primaryKey(),
     attributeId: int("attributeId")
       .notNull()
-      .references(() => attributes.id),
+      .references(() => attributes.id, { onDelete: "cascade" }),
     itemId: int("itemId")
       .notNull()
-      .references(() => items.id),
+      .references(() => items.id, { onDelete: "cascade" }),
     value: json("value").$type<{ value: string | number | boolean }>(),
   },
   (t) => ({
-    // pk: primaryKey({ columns: [t.attributeId, t.itemId] }),
     idx: uniqueIndex("idx").on(t.attributeId, t.itemId),
   })
 );

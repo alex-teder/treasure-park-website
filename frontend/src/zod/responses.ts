@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { customAttributeTypeSchema, customAttributeValueSchema } from "./reused";
+
 export const userSchema = z.object({
   id: z.number(),
   email: z.string(),
@@ -52,7 +54,7 @@ export const collectionSchema = z.object({
     z.object({
       id: z.number(),
       title: z.string(),
-      type: z.enum(["smallText", "bigText", "number", "checkbox", "date"]),
+      type: customAttributeTypeSchema,
     })
   ),
   user: z.object({
@@ -80,3 +82,38 @@ export const categoriesSchema = z.array(
     title: z.string(),
   })
 );
+
+export const itemSchema = z.object({
+  id: z.number(),
+  collectionId: z.number(),
+  title: z.string(),
+  description: z.string().nullish(),
+  attachments: z.unknown().optional(),
+  createdAt: z.string().transform((str) => new Date(str)), // format (date-fns??)
+  itemAttributes: z.array(
+    z.object({
+      value: z
+        .object({
+          value: customAttributeValueSchema,
+        })
+        .transform(({ value }) => value),
+      attribute: z.object({
+        id: z.number(),
+        title: z.string(),
+        type: customAttributeTypeSchema,
+      }),
+    })
+  ),
+  collection: z.object({
+    title: z.string(),
+    user: z.object({
+      avatar: z.string().nullable(),
+      username: z.string(),
+      id: z.number(),
+    }),
+  }),
+});
+
+export const createItemResponseSchema = z.object({
+  id: z.number(),
+});

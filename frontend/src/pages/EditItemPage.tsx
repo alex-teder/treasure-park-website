@@ -1,11 +1,16 @@
 import { Check, FileUpload } from "@mui/icons-material";
 import { Button, Checkbox, Container, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import { ChangeEventHandler, FC, useState } from "react";
+import { ChangeEventHandler, FC, FormEventHandler, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { api } from "../api";
+import { ROUTES } from "../router";
+import { Collection, CustomAttributeType, CustomAttributeValue, Item } from "../types";
 
 interface CustomFieldProps {
   title: string;
-  value: string | boolean;
+  value: CustomAttributeValue;
   onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
@@ -45,76 +50,89 @@ function CustomCheckbox({ title, value, onChange }: CustomFieldProps) {
   );
 }
 
-type FieldType = "smallText" | "bigText" | "number" | "checkbox" | "date";
-type CustomFieldValue = string | boolean;
+function CustomDate({ title, value, onChange }: CustomFieldProps) {
+  return (
+    <label>
+      <Typography>{title}</Typography>
+      <TextField fullWidth value={value} onChange={onChange} />
+    </label>
+  );
+}
+// const mockCustomFields: CustomField[] = [
+//   { title: "sm1", type: "smallText", value: "" },
+//   {
+//     title: "sm2",
+//     type: "smallText",
+//     value: "HellO!",
+//   },
+// ];
 
-type CustomField = {
-  title: string;
-  type: FieldType;
-  value: CustomFieldValue;
+const templates: Record<CustomAttributeType, FC<CustomFieldProps>> = {
+  smallText: CustomSmallText,
+  bigText: CustomBigText,
+  number: CustomNumber,
+  checkbox: CustomCheckbox,
+  date: CustomDate,
 };
 
-const mockCustomFields: CustomField[] = [
-  { title: "sm1", type: "smallText", value: "" },
-  {
-    title: "sm2",
-    type: "smallText",
-    value: "HellO!",
-  },
-  {
-    title: "bt",
-    type: "bigText",
-    value: "hi!!!!!!!!!!!",
-  },
-  {
-    title: "cb1",
-    type: "checkbox",
-    value: true,
-  },
-  {
-    title: "cb2",
-    type: "checkbox",
-    value: false,
-  },
-];
-
-type CustomFieldState = Record<string, { type: FieldType; value: CustomFieldValue }>;
+const defaultValues = {
+  smallText: "",
+  bigText: "",
+  number: 0,
+  checkbox: false,
+  date: "",
+};
 
 export function EditItemPage() {
-  const templates: Record<FieldType, FC<CustomFieldProps>> = {
-    smallText: CustomSmallText,
-    bigText: CustomBigText,
-    number: CustomNumber,
-    checkbox: CustomCheckbox,
-    date: () => null,
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const itemToEdit = state.item as Item | undefined;
+  const collection = state.collection as Collection | undefined;
+  const attributesWithValue = itemToEdit && itemToEdit.itemAttributes;
+  const collectionAttributes = collection && collection.attributes;
+
+  const initialState = {
+    title: itemToEdit?.title || "",
+    description: itemToEdit?.description || "",
+    attributes:
+      attributesWithValue ||
+      collectionAttributes?.map((attribute) => ({
+        attribute,
+        value: defaultValues[attribute.type],
+      })) ||
+      [],
   };
 
-  const initialState = mockCustomFields.reduce<CustomFieldState>((map, field) => {
-    const { type, value } = field;
-    map[field.title] = { type, value };
-    return map;
-  }, {});
+  const [item, setItem] = useState<{
+    title: string;
+    description: string;
+    attributes: Item["itemAttributes"];
+  }>(initialState);
 
-  const [customFields, setCustomFields] = useState<CustomFieldState>(initialState);
-
-  const handleChange = (fieldTitle: string, newValue: CustomFieldValue) => {
-    setCustomFields((state) => {
-      const newState = { ...state };
-      newState[fieldTitle].value = newValue;
-      return newState;
-    });
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    const formData = {
+      collectionId: itemToEdit ? itemToEdit.collectionId : collection?.id,
+      title: item.title,
+      description: item.description || undefined,
+      attributes: item.attributes.map(({ value, attribute }) => ({ id: attribute.id, value })),
+    };
+    const apiMethod = itemToEdit ? api.updateItem.bind(api, itemToEdit.id) : api.postItem.bind(api);
+    const { id, error } = await apiMethod(formData);
+    if (error) {
+      console.error(error);
+      return;
+    }
+    navigate(ROUTES.ITEM({ id }));
   };
 
   return (
     <Container maxWidth="md">
-      <h1>Edit item</h1>
-      <Grid
-        container
-        rowGap={2}
-        columnSpacing={1}
-        component="form"
-        onSubmit={(e) => e.preventDefault()}
-      >
+      <h1 style={{ marginBottom: 0 }}>{itemToEdit ? "Edit" : "New"} item</h1>
+      <Typography variant="body2" color="InactiveCaptionText" mt={0} mb={2}>
+        {itemToEdit ? itemToEdit.collection.title : collection?.title}
+      </Typography>
+      <Grid container rowGap={2} columnSpacing={1} component="form" onSubmit={handleSubmit}>
         <Grid xs={12}>
           <TextField
             fullWidth
@@ -123,11 +141,23 @@ export function EditItemPage() {
                 Title: <em>(required)</em>
               </span>
             }
+            value={item.title}
+            onChange={(e) => setItem((state) => ({ ...state, title: e.target.value }))}
           />
         </Grid>
+
         <Grid xs={12}>
-          <TextField multiline minRows={8} size="small" label="Description:" fullWidth />
+          <TextField
+            multiline
+            minRows={8}
+            size="small"
+            label="Description:"
+            fullWidth
+            value={item.description}
+            onChange={(e) => setItem((state) => ({ ...state, description: e.target.value }))}
+          />
         </Grid>
+
         <Grid xs={12}>
           <h3 style={{ marginBlock: "0.5rem" }}>Attachments:</h3>
           <Button variant="contained" component="label" endIcon={<FileUpload />}>
@@ -136,16 +166,22 @@ export function EditItemPage() {
           </Button>
         </Grid>
 
-        {Object.entries(customFields).map(([key, { type, value }]) => {
-          const Component = templates[type];
+        {item.attributes.map(({ value, attribute }) => {
+          const Component = templates[attribute.type];
           return (
-            <Grid xs={12} key={key}>
+            <Grid xs={12} key={attribute.id}>
               <Component
-                title={key}
+                title={attribute.title + ":"}
                 value={value}
-                onChange={(e) =>
-                  handleChange(key, type === "checkbox" ? e.target.checked : e.target.value)
-                }
+                onChange={(e) => {
+                  const newAttributes = [...item.attributes];
+                  const attrToChange = newAttributes.find(
+                    (itemAttribute) => itemAttribute.attribute.id === attribute.id
+                  );
+                  attrToChange!.value =
+                    attribute.type === "checkbox" ? e.target.checked : e.target.value;
+                  setItem((state) => ({ ...state, attributes: newAttributes }));
+                }}
               />
             </Grid>
           );

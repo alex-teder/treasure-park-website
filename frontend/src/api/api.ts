@@ -2,6 +2,8 @@ import { MyApi } from "../types";
 import {
   categoriesSchema,
   collectionSchema,
+  createItemResponseSchema,
+  itemSchema,
   popularTagsSchema,
   responseWithErrorSchema,
   userProfileSchema,
@@ -65,12 +67,6 @@ class Api implements MyApi {
     return { userProfile: userProfileSchema.parse(data) };
   }
 
-  async getCollection(id: number) {
-    const { data, error } = await this.fetch(`collections/${id}`);
-    if (error) throw error;
-    return { collection: collectionSchema.parse(data) };
-  }
-
   async getPopularTags() {
     const { data, error } = await this.fetch("tags");
     if (error) throw error;
@@ -81,6 +77,12 @@ class Api implements MyApi {
     const { data, error } = await this.fetch("categories");
     if (error) throw error;
     return categoriesSchema.parse(data);
+  }
+
+  async getCollection(id: number) {
+    const { data, error } = await this.fetch(`collections/${id}`);
+    if (error) throw error;
+    return { collection: collectionSchema.parse(data) };
   }
 
   async postCollection(data: unknown) {
@@ -105,6 +107,42 @@ class Api implements MyApi {
 
   async deleteCollection(id: number) {
     return await this.fetch(`collections/${id}`, {
+      method: "DELETE",
+    });
+  }
+
+  async getItem(id: number) {
+    const { data, error } = await this.fetch(`items/${id}`);
+    if (error) throw error;
+    return { item: itemSchema.parse(data) };
+  }
+
+  async postItem(data: unknown) {
+    const { data: resWithInsertId, error } = await this.fetch("items", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (error) return { error };
+    return { id: createItemResponseSchema.parse(resWithInsertId).id };
+  }
+
+  async updateItem(id: number, data: unknown) {
+    const { error } = await this.fetch(`items/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (error) return { error };
+    return { id };
+  }
+
+  async deleteItem(id: number) {
+    return await this.fetch(`items/${id}`, {
       method: "DELETE",
     });
   }

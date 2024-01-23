@@ -58,7 +58,7 @@ export async function createItem({
   const { insertId } = await db.insert(items).values(input);
   const id = parseInt(insertId);
   await createItemAttributes({ itemId: id, attributesToCreate: input.attributes });
-  return { id };
+  return id;
 }
 
 export async function updateItem({
@@ -84,6 +84,7 @@ export async function updateItem({
     .where(eq(items.id, id));
   if (!rowsAffected) throw new ErrorWithCode("Nothing was updated", 403);
   await createItemAttributes({ itemId: id, attributesToCreate: input.attributes });
+  return id;
 }
 
 export async function deleteItem({ id, actorId }: { id: number; actorId?: number }) {

@@ -1,12 +1,9 @@
 import {
-  Delete,
-  Edit,
   FavoriteBorder as LikeIcon,
   ModeCommentOutlined as CommentIcon,
 } from "@mui/icons-material";
 import {
   Avatar,
-  ButtonGroup,
   Card,
   CardActions,
   CardContent,
@@ -16,43 +13,94 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useContext } from "react";
+import { Link, useParams } from "react-router-dom";
 
+import { api } from "../api";
 import { CommentSection } from "../components/item/CommentSection";
+import { OwnerActions } from "../components/item/OwnerActions";
+import { UserContext } from "../components/UserProvider";
 import { ROUTES } from "../router";
+import { CustomAttributeValue } from "../types";
+import { NotFoundPage } from "./NotFoundPage";
 
 export function ItemPage() {
+  const { itemId } = useParams();
+  const { user } = useContext(UserContext);
+  const { data, isPending, isFetching, isError, error } = useQuery({
+    queryKey: [itemId],
+    queryFn: () => api.getItem(parseInt(itemId!)),
+    retry: false,
+  });
+
+  if (isPending || isFetching) return null;
+  if (isError) {
+    console.error(error);
+    return <NotFoundPage />;
+  }
+
+  const isOwner = Boolean(user?.id === data.item.collection.user.id || user?.isAdmin);
+
+  const customValueRenderMethods = {
+    smallText: (value: CustomAttributeValue) => <span>{value}</span>,
+    bigText: (value: CustomAttributeValue) => (
+      <p style={{ whiteSpace: "pre-line", marginTop: 0, padding: "1rem" }}>{value}</p>
+    ),
+    number: (value: CustomAttributeValue) => <span>{String(value)}</span>,
+    checkbox: (value: CustomAttributeValue) => <span>{String(value)}</span>,
+    date: (value: CustomAttributeValue) => <span>{value}</span>,
+  };
+
   return (
     <Container maxWidth="md">
       <Card sx={{ my: 2 }}>
         <CardHeader
           avatar={<Avatar sx={{ color: "white", bgcolor: "indigo" }}>U</Avatar>}
-          title={<Link to="/users/123/collections/7654">My Awesome Collection</Link>}
-          subheader={<Link to="/users/123">@username</Link>}
-          action={true && <OwnerActions />}
+          title={
+            <Link to={ROUTES.COLLECTION({ id: data.item.collectionId })}>
+              {data.item.collection.title}
+            </Link>
+          }
+          subheader={
+            <Link to={ROUTES.USER({ id: data.item.collection.user.id })}>
+              {"@" + data.item.collection.user.username}
+            </Link>
+          }
+          action={isOwner && <OwnerActions item={data.item} />}
         />
+
         <Typography variant="h5" fontWeight="700" component="h5" sx={{ mx: 2 }}>
-          My new item
+          {data.item.title}
         </Typography>
-        <CardMedia
-          component="img"
-          image="https://source.unsplash.com/featured/"
-          sx={{
-            px: 2,
-            py: 1,
-            mx: "auto",
-            display: "block",
-            maxHeight: "650px",
-            maxWidth: "100%",
-            width: "auto",
-            height: "auto",
-          }}
-        />
+
+        {data.item.attachments !== undefined && (
+          <CardMedia
+            component="img"
+            image="https://source.unsplash.com/featured/"
+            sx={{
+              px: 2,
+              py: 1,
+              mx: "auto",
+              display: "block",
+              maxHeight: "650px",
+              maxWidth: "100%",
+              width: "auto",
+              height: "auto",
+            }}
+          />
+        )}
+
         <CardContent>
-          <Typography>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. At, libero.
-          </Typography>
+          <Typography mb={1}>{data.item.description}</Typography>
+          {data.item.itemAttributes.map(({ attribute, value }) => (
+            <Typography key={attribute.id} component="div">
+              <span style={{ fontWeight: 700 }}>{attribute.title}</span>:{" "}
+              {customValueRenderMethods[attribute.type](value)}
+            </Typography>
+          ))}
         </CardContent>
+
         <CardActions sx={{ mb: 1 }}>
           <IconButton color="inherit">
             <LikeIcon />
@@ -63,26 +111,11 @@ export function ItemPage() {
           </IconButton>
           3<div style={{ flexGrow: 1 }}></div>
           <Typography variant="caption" mr={2}>
-            Yesterday, 17:45
+            {data.item.createdAt.toLocaleString()}
           </Typography>
         </CardActions>
         <CommentSection />
       </Card>
     </Container>
-  );
-}
-
-function OwnerActions() {
-  const navigate = useNavigate();
-
-  return (
-    <ButtonGroup>
-      <IconButton>
-        <Delete />
-      </IconButton>
-      <IconButton onClick={() => navigate(ROUTES.EDIT_ITEM)}>
-        <Edit />
-      </IconButton>
-    </ButtonGroup>
   );
 }

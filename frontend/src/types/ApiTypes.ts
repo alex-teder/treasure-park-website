@@ -6,6 +6,7 @@ import { User } from "./UserTypes";
 
 type ResponseWithError = z.infer<typeof responseWithErrorSchema>;
 
+// TO-DO: delete this
 export interface MyApi {
   readonly BASE_URL: string;
 
