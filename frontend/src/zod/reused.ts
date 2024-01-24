@@ -7,4 +7,4 @@ export const customAttributeTypeSchema = z.enum([
   "checkbox",
   "date",
 ]);
-export const customAttributeValueSchema = z.union([z.string(), z.number(), z.boolean()]);
+export const customAttributeValueSchema = z.union([z.string().min(1), z.number(), z.boolean()]);

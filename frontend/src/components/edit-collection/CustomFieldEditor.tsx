@@ -107,7 +107,13 @@ export function CustomFieldEditor({ attributes, setAttributes, mode }: CustomFie
                 key={idx}
                 fullWidth
                 label={
-                  customFields[key as CustomAttributeType].label + " field " + (idx + 1) + " title"
+                  <span>
+                    {customFields[key as CustomAttributeType].label +
+                      " field " +
+                      (idx + 1) +
+                      " title "}
+                    <em style={{ fontSize: "0.8rem" }}>(required)</em>
+                  </span>
                 }
                 sx={{ my: 1 }}
                 value={title}

@@ -1,5 +1,5 @@
 import { Check, FileUpload } from "@mui/icons-material";
-import { Button, Checkbox, Container, TextField, Typography } from "@mui/material";
+import { Alert, Button, Checkbox, Container, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { ROUTES } from "../router";
 import { Collection, CustomAttributeType, CustomAttributeValue, Item } from "../types";
+import { itemFormSchema } from "../zod/forms";
 
 interface CustomFieldProps {
   title: string;
@@ -114,6 +115,8 @@ export function EditItemPage() {
     attributes: Item["itemAttributes"];
   }>(initialState);
 
+  const [error, setError] = useState("");
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const formData = {
@@ -122,10 +125,17 @@ export function EditItemPage() {
       description: item.description || undefined,
       attributes: item.attributes.map(({ value, attribute }) => ({ id: attribute.id, value })),
     };
+    const validation = itemFormSchema.safeParse(formData);
+    if (!validation.success) {
+      setError("Please fill all required fields.");
+      return;
+    }
     const apiMethod = itemToEdit ? api.updateItem.bind(api, itemToEdit.id) : api.postItem.bind(api);
+    setError("");
     const { id, error } = await apiMethod(formData);
     if (error) {
       console.error(error);
+      setError("An error occured.");
       return;
     }
     navigate(ROUTES.ITEM({ id }));
@@ -192,7 +202,7 @@ export function EditItemPage() {
                     bigText: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
                     number: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
                     checkbox: (e: ChangeEvent<HTMLInputElement>) => e.target.checked,
-                    date: (v: Dayjs | null) => v?.format("YYYY-MM-DD") || "",
+                    date: (v: Dayjs | null) => (!v || !v.isValid() ? "" : v.format("YYYY-MM-DD")),
                   };
                   attrToChange!.value = valueParsers[attribute.type](event);
                   setItem((state) => ({ ...state, attributes: newAttributes }));
@@ -201,6 +211,14 @@ export function EditItemPage() {
             </Grid>
           );
         })}
+
+        {error && (
+          <Grid xs={12} mt={2}>
+            <Alert severity="error" variant="outlined">
+              {error}
+            </Alert>
+          </Grid>
+        )}
 
         <Grid xs={12} mt={2} mb={8} display="flex" justifyContent="flex-end">
           <Button type="submit" variant="contained" endIcon={<Check />}>

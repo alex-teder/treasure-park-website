@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { customAttributeTypeSchema, customAttributeValueSchema } from "./reused";
+
 export const signupFormSchema = z.object({
   email: z
     .string()
@@ -20,4 +22,45 @@ export const signupFormSchema = z.object({
 export const loginFormSchema = z.object({
   loginValue: z.string().min(1).max(100),
   password: z.string().min(1).max(150),
+});
+
+const baseCollectionSchema = z.object({
+  title: z.string().min(1, "Please enter a title"),
+  description: z.string(),
+  categoryId: z.number().optional(),
+  tags: z.array(z.string()),
+});
+
+export const newCollectionSchema = baseCollectionSchema.merge(
+  z.object({
+    attributes: z.array(
+      z.object({
+        type: customAttributeTypeSchema,
+        title: z.string().min(1),
+      })
+    ),
+  })
+);
+
+export const editCollectionSchema = baseCollectionSchema.merge(
+  z.object({
+    attributes: z.array(
+      z.object({
+        id: z.number(),
+        title: z.string().min(1),
+      })
+    ),
+  })
+);
+
+export const itemFormSchema = z.object({
+  collectionId: z.number(),
+  title: z.string().min(1),
+  description: z.string().optional(),
+  attributes: z.array(
+    z.object({
+      id: z.number(),
+      value: customAttributeValueSchema,
+    })
+  ),
 });

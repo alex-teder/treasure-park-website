@@ -1,5 +1,5 @@
 import { Check } from "@mui/icons-material";
-import { Autocomplete, Button, Container, TextField } from "@mui/material";
+import { Alert, Autocomplete, Button, Container, TextField } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useQuery } from "@tanstack/react-query";
 import { FormEventHandler, useContext, useState } from "react";
@@ -10,6 +10,7 @@ import { CustomFieldEditor } from "../components/edit-collection/CustomFieldEdit
 import { UserContext } from "../components/UserProvider";
 import { ROUTES } from "../router";
 import { Collection } from "../types";
+import { editCollectionSchema, newCollectionSchema } from "../zod/forms";
 
 export function EditCollectionPage() {
   const location = useLocation();
@@ -35,6 +36,8 @@ export function EditCollectionPage() {
     attributes: Collection["attributes"];
   }>(initialCollectionState);
 
+  const [error, setError] = useState("");
+
   const { data: categories } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -57,12 +60,20 @@ export function EditCollectionPage() {
         return { type, title };
       }),
     };
+    const schema = collectionToEdit ? editCollectionSchema : newCollectionSchema;
+    const validation = schema.safeParse(formData);
+    if (!validation.success) {
+      setError("Please fill all required fields.");
+      return;
+    }
     const apiMethod = collectionToEdit
       ? api.updateCollection.bind(api, collectionToEdit.id)
       : api.postCollection.bind(api);
+    setError("");
     const { error } = await apiMethod(formData);
     if (error) {
       console.error(error);
+      setError("An error occured.");
       return;
     }
     navigate(ROUTES.USER({ id: collectionToEdit ? collectionToEdit.userId : user!.id }));
@@ -142,6 +153,14 @@ export function EditCollectionPage() {
             }
           />
         </Grid>
+
+        {error && (
+          <Grid xs={12} mt={2}>
+            <Alert severity="error" variant="outlined">
+              {error}
+            </Alert>
+          </Grid>
+        )}
 
         <Grid xs={12} mt={2} mb={8} display="flex" justifyContent="flex-end">
           <Button type="submit" variant="contained" endIcon={<Check />}>
