@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -23,6 +24,7 @@ import { OwnerActions } from "../components/item/OwnerActions";
 import { UserContext } from "../components/UserProvider";
 import { ROUTES } from "../router";
 import { CustomAttributeValue } from "../types";
+import { formatDate } from "../utils/formatDate";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function ItemPage() {
@@ -49,7 +51,9 @@ export function ItemPage() {
     ),
     number: (value: CustomAttributeValue) => <span>{String(value)}</span>,
     checkbox: (value: CustomAttributeValue) => <span>{String(value)}</span>,
-    date: (value: CustomAttributeValue) => <span>{value}</span>,
+    date: (value: CustomAttributeValue) => (
+      <span>{dayjs(value as string, "YYYY-MM-DD").format("DD MMM YYYY")}</span>
+    ),
   };
 
   return (
@@ -111,7 +115,7 @@ export function ItemPage() {
           </IconButton>
           3<div style={{ flexGrow: 1 }}></div>
           <Typography variant="caption" mr={2}>
-            {data.item.createdAt.toLocaleString()}
+            {formatDate(data.item.createdAt)}
           </Typography>
         </CardActions>
         <CommentSection />

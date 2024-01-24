@@ -1,7 +1,10 @@
 import { Check, FileUpload } from "@mui/icons-material";
 import { Button, Checkbox, Container, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import { ChangeEventHandler, FC, FormEventHandler, useState } from "react";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
+import { ChangeEvent, ChangeEventHandler, FC, FormEventHandler, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { api } from "../api";
@@ -50,24 +53,26 @@ function CustomCheckbox({ title, value, onChange }: CustomFieldProps) {
   );
 }
 
-function CustomDate({ title, value, onChange }: CustomFieldProps) {
+type CustomDateFieldProps = {
+  title: string;
+  value: CustomAttributeValue;
+  onChange: (value: Dayjs | null) => void;
+};
+
+function CustomDate({ title, value, onChange }: CustomDateFieldProps) {
+  const date = dayjs(value as string, "YYYY-MM-DD");
+
   return (
     <label>
       <Typography>{title}</Typography>
-      <TextField fullWidth value={value} onChange={onChange} />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker format="DD MMM YYYY" value={date} onChange={onChange} />
+      </LocalizationProvider>
     </label>
   );
 }
-// const mockCustomFields: CustomField[] = [
-//   { title: "sm1", type: "smallText", value: "" },
-//   {
-//     title: "sm2",
-//     type: "smallText",
-//     value: "HellO!",
-//   },
-// ];
 
-const templates: Record<CustomAttributeType, FC<CustomFieldProps>> = {
+const templates: Record<CustomAttributeType, FC<CustomFieldProps> | FC<CustomDateFieldProps>> = {
   smallText: CustomSmallText,
   bigText: CustomBigText,
   number: CustomNumber,
@@ -173,13 +178,23 @@ export function EditItemPage() {
               <Component
                 title={attribute.title + ":"}
                 value={value}
-                onChange={(e) => {
+                onChange={(event) => {
                   const newAttributes = [...item.attributes];
                   const attrToChange = newAttributes.find(
                     (itemAttribute) => itemAttribute.attribute.id === attribute.id
                   );
-                  attrToChange!.value =
-                    attribute.type === "checkbox" ? e.target.checked : e.target.value;
+                  const valueParsers: Record<
+                    CustomAttributeType,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (e: any) => CustomAttributeValue
+                  > = {
+                    smallText: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
+                    bigText: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
+                    number: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
+                    checkbox: (e: ChangeEvent<HTMLInputElement>) => e.target.checked,
+                    date: (v: Dayjs | null) => v?.format("YYYY-MM-DD") || "",
+                  };
+                  attrToChange!.value = valueParsers[attribute.type](event);
                   setItem((state) => ({ ...state, attributes: newAttributes }));
                 }}
               />
