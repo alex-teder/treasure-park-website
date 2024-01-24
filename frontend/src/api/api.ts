@@ -2,6 +2,7 @@ import { MyApi } from "../types";
 import {
   categoriesSchema,
   collectionSchema,
+  commentsCountResponseSchema,
   createItemResponseSchema,
   itemSchema,
   popularTagsSchema,
@@ -161,6 +162,12 @@ class Api implements MyApi {
     return await this.fetch(`comments/${id}`, {
       method: "DELETE",
     });
+  }
+
+  async checkCommentCount(itemId: number) {
+    const { error, data } = await this.fetch(`comments/count?itemId=${itemId}`);
+    if (error) throw error;
+    return commentsCountResponseSchema.parse(data).count;
   }
 }
 

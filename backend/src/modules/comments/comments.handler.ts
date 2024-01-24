@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CommentsBody, CommentsParams } from "./comments.schema";
-import { createComment, deleteComment } from "./comments.service";
+import { CommentsBody, CommentsCountQuery, CommentsParams } from "./comments.schema";
+import { createComment, deleteComment, getCommentsCount } from "./comments.service";
 
 export async function createCommentHandler(
   request: FastifyRequest<{ Body: CommentsBody }>,
@@ -24,4 +24,12 @@ export async function deleteCommentHandler(
     id: request.params.commentId,
   });
   return reply.send("ok");
+}
+
+export async function getCommentsCountHandler(
+  request: FastifyRequest<{ Querystring: CommentsCountQuery }>,
+  reply: FastifyReply
+) {
+  const result = await getCommentsCount({ itemId: request.query.itemId });
+  return reply.send(result);
 }

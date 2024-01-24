@@ -1,7 +1,15 @@
 import { FastifyInstance } from "fastify";
 import toJson from "zod-to-json-schema";
-import { commentsBodySchema, commentsParamsSchema } from "./comments.schema";
-import { createCommentHandler, deleteCommentHandler } from "./comments.handler";
+import {
+  commentsBodySchema,
+  commentsCountQuerySchema,
+  commentsParamsSchema,
+} from "./comments.schema";
+import {
+  createCommentHandler,
+  deleteCommentHandler,
+  getCommentsCountHandler,
+} from "./comments.handler";
 
 export async function commentsRoutes(server: FastifyInstance) {
   server.post(
@@ -16,5 +24,10 @@ export async function commentsRoutes(server: FastifyInstance) {
       schema: { params: toJson(commentsParamsSchema) },
     },
     deleteCommentHandler
+  );
+  server.get(
+    "/count",
+    { schema: { querystring: toJson(commentsCountQuerySchema) } },
+    getCommentsCountHandler
   );
 }

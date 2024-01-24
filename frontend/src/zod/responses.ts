@@ -130,3 +130,7 @@ export const itemSchema = z.object({
 export const createItemResponseSchema = z.object({
   id: z.number(),
 });
+
+export const commentsCountResponseSchema = z.object({
+  count: z.number(),
+});

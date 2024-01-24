@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "../../db";
 import { comments } from "../../db/schema";
 import { ErrorWithCode } from "../../utils/errors";
@@ -14,4 +14,12 @@ export async function deleteComment({ id, actorId }: { id: number; actorId?: num
     .delete(comments)
     .where(and(eq(comments.id, id), isAdminAction ? undefined : eq(comments.authorId, actorId)));
   if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted", 403);
+}
+
+export async function getCommentsCount({ itemId }: { itemId: number }) {
+  const [result] = await db
+    .select({ count: sql<number>`count(*)`.mapWith(Number).as("count") })
+    .from(comments)
+    .where(eq(comments.itemId, itemId));
+  return result;
 }
