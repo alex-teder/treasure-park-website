@@ -12,6 +12,7 @@ import { collectionsRoutes } from "./modules/collections/collections.route";
 import { itemsRoutes } from "./modules/items/items.route";
 import { categoriesRoutes } from "./modules/categories/categories.route";
 import { tagsRoutes } from "./modules/tags/tags.route";
+import { commentsRoutes } from "./modules/comments/comments.route";
 
 export async function buildServer() {
   const server = Fastify({
@@ -54,5 +55,6 @@ export async function buildServer() {
   server.register(itemsRoutes, { prefix: "/api/items" });
   server.register(categoriesRoutes, { prefix: "/api/categories" });
   server.register(tagsRoutes, { prefix: "/api/tags" });
+  server.register(commentsRoutes, { prefix: "/api/comments" });
   return server;
 }

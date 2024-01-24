@@ -113,12 +113,13 @@ export function ItemPage() {
           <IconButton color="inherit">
             <CommentIcon />
           </IconButton>
-          3<div style={{ flexGrow: 1 }}></div>
+          {data.item.comments.length}
+          <div style={{ flexGrow: 1 }}></div>
           <Typography variant="caption" mr={2}>
             {formatDate(data.item.createdAt)}
           </Typography>
         </CardActions>
-        <CommentSection />
+        <CommentSection comments={data.item.comments} itemId={data.item.id} />
       </Card>
     </Container>
   );

@@ -1,14 +1,29 @@
 import { useTheme } from "@mui/material";
 import { Container, Divider } from "@mui/material";
-import { UIEventHandler, useState } from "react";
+import { UIEventHandler, useEffect, useState } from "react";
 
+import { Item } from "../../../types";
 import { NewCommentField } from "./NewCommentField";
 import { SingleComment } from "./SingleComment";
 
-export function CommentSection() {
+export function CommentSection({
+  comments,
+  itemId,
+}: {
+  comments: Item["comments"];
+  itemId: number;
+}) {
   const OVERLAY_HEIGHT = 150;
   const [isAtBottom, setIsAtBottom] = useState(false);
   const { mode } = useTheme().palette;
+
+  useEffect(() => {
+    const element = document.querySelector("#scrollable")!;
+    if (element.scrollHeight - element.scrollTop - element.clientHeight < 32) {
+      setIsAtBottom(true);
+    }
+  }, []);
+
   const handleScroll: UIEventHandler = (e) => {
     const element = e.target as HTMLDivElement;
     if (element.scrollHeight - element.scrollTop - element.clientHeight < 32) {
@@ -23,19 +38,13 @@ export function CommentSection() {
       <Divider />
       <div
         style={{ maxHeight: 450, overflow: "auto", position: "relative" }}
+        id="scrollable"
         onScroll={handleScroll}
       >
-        <div style={{ marginBottom: `${-OVERLAY_HEIGHT}px` }}>
-          <SingleComment />
-          <SingleComment />
-          <SingleComment />
-          <SingleComment />
-          <SingleComment />
-          <SingleComment />
-          <SingleComment />
-          <SingleComment />
-          <SingleComment />
-          <SingleComment />
+        <div style={{ marginBottom: isAtBottom ? 0 : `${-OVERLAY_HEIGHT}px` }}>
+          {comments.map((comment) => (
+            <SingleComment key={comment.id} comment={comment} />
+          ))}
         </div>
         <div
           style={{
@@ -51,7 +60,7 @@ export function CommentSection() {
           }}
         />
       </div>
-      <NewCommentField />
+      <NewCommentField itemId={itemId} />
     </Container>
   );
 }

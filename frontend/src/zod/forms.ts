@@ -64,3 +64,8 @@ export const itemFormSchema = z.object({
     })
   ),
 });
+
+export const commentSchema = z.object({
+  text: z.string().min(1).max(2000),
+  itemId: z.number(),
+});

@@ -1,29 +1,31 @@
 import { Avatar, CardContent, CardHeader, Divider } from "@mui/material";
-// import { useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 
-// import { UserContext } from "../../UserProvider";
+import { ROUTES } from "../../../router";
+import { Item } from "../../../types";
+import { formatDate } from "../../../utils/formatDate";
+import { UserContext } from "../../UserProvider";
 import { SingleCommentActions } from "./SingleCommentActions";
 
-export function SingleComment() {
-  // const { user } = useContext(UserContext);
+export function SingleComment({ comment }: { comment: Item["comments"][number] }) {
+  const { user } = useContext(UserContext);
+
+  const isOwner = Boolean(user?.isAdmin || user?.id === comment.author.id);
 
   return (
     <>
       <CardHeader
         avatar={<Avatar>U</Avatar>}
         title={
-          <Link to="/users/123">
-            <b>@username</b>
+          <Link to={ROUTES.USER({ id: comment.author.id })}>
+            <b>@{comment.author.username}</b>
           </Link>
         }
-        subheader="Today, 13:31"
-        action={true && <SingleCommentActions />}
+        subheader={formatDate(comment.createdAt)}
+        action={isOwner && <SingleCommentActions comment={comment} />}
       />
-      <CardContent sx={{ fontSize: "0.875rem", pt: 0 }}>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe cum vitae doloremque
-        reiciendis id perspiciatis exercitationem odit impedit corrupti necessitatibus!
-      </CardContent>
+      <CardContent sx={{ fontSize: "0.875rem", pt: 0 }}>{comment.text}</CardContent>
       <Divider />
     </>
   );

@@ -146,6 +146,22 @@ class Api implements MyApi {
       method: "DELETE",
     });
   }
+
+  async postComment(data: unknown) {
+    return await this.fetch("comments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteComment(id: number) {
+    return await this.fetch(`comments/${id}`, {
+      method: "DELETE",
+    });
+  }
 }
 
 export const api = new Api();

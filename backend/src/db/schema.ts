@@ -26,6 +26,8 @@ export const users = mysqlTable("users", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   collections: many(collections),
+  comments: many(comments),
+  likes: many(likes),
 }));
 
 export const collections = mysqlTable("collections", {
@@ -113,6 +115,8 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
     references: [collections.id],
   }),
   itemAttributes: many(itemAttributes),
+  comments: many(comments),
+  likes: many(likes),
 }));
 
 export const attributes = mysqlTable("attributes", {
@@ -156,6 +160,56 @@ export const itemAttributesRelations = relations(itemAttributes, ({ one }) => ({
   }),
   item: one(items, {
     fields: [itemAttributes.itemId],
+    references: [items.id],
+  }),
+}));
+
+export const comments = mysqlTable("comments", {
+  id: int("id").autoincrement().primaryKey(),
+  authorId: int("authorId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  itemId: int("itemId")
+    .notNull()
+    .references(() => items.id, { onDelete: "cascade" }),
+  text: varchar("text", { length: 2500 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export const commentsRelations = relations(comments, ({ one }) => ({
+  author: one(users, {
+    fields: [comments.authorId],
+    references: [users.id],
+  }),
+  item: one(items, {
+    fields: [comments.itemId],
+    references: [items.id],
+  }),
+}));
+
+export const likes = mysqlTable(
+  "likes",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    itemId: int("itemId")
+      .notNull()
+      .references(() => items.id, { onDelete: "cascade" }),
+  },
+  (t) => ({
+    idx: uniqueIndex("idx").on(t.userId, t.itemId),
+  })
+);
+
+export const likesRelations = relations(likes, ({ one }) => ({
+  user: one(users, {
+    fields: [likes.userId],
+    references: [users.id],
+  }),
+  item: one(items, {
+    fields: [likes.itemId],
     references: [items.id],
   }),
 }));

@@ -112,6 +112,19 @@ export const itemSchema = z.object({
       id: z.number(),
     }),
   }),
+  comments: z.array(
+    z.object({
+      id: z.number(),
+      text: z.string(),
+      createdAt: z.string(),
+      itemId: z.number(),
+      author: z.object({
+        avatar: z.string().nullable(),
+        username: z.string(),
+        id: z.number(),
+      }),
+    })
+  ),
 });
 
 export const createItemResponseSchema = z.object({

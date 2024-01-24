@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { db } from "../../db";
-import { items } from "../../db/schema";
+import { comments, items } from "../../db/schema";
 import { ErrorWithCode } from "../../utils/errors";
 import { getCollection } from "../collections/collections.service";
 import { CustomAttributeValue } from "../../types";
@@ -10,6 +10,22 @@ export async function getItem({ id }: { id: number }) {
   const foundItem = await db.query.items.findFirst({
     where: eq(items.id, id),
     with: {
+      comments: {
+        columns: {
+          authorId: false,
+        },
+        with: {
+          author: {
+            columns: {
+              avatar: true,
+              username: true,
+              id: true,
+            },
+          },
+        },
+        orderBy: [asc(comments.createdAt)], // test
+      },
+      likes: true,
       itemAttributes: {
         with: {
           attribute: true,
