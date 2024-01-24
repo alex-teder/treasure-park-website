@@ -34,7 +34,9 @@ export function NewCommentField({ itemId }: { itemId: number }) {
   if (!user)
     return (
       <Box
-        p={2}
+        py={2}
+        mx={{ sm: "auto" }}
+        width={{ sm: "fit-content" }}
         my={2}
         display={{ xs: "flex", sm: "block" }}
         flexDirection="column"

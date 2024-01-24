@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
   collectionSchema,
+  feedSchema,
   itemSchema,
   popularTagsSchema,
   userProfileSchema,
@@ -14,3 +15,4 @@ export type UserProfile = z.infer<typeof userProfileSchema>;
 export type Collection = z.infer<typeof collectionSchema>;
 export type PopularTags = z.infer<typeof popularTagsSchema>;
 export type Item = z.infer<typeof itemSchema>;
+export type FeedPost = z.infer<typeof feedSchema>[number];

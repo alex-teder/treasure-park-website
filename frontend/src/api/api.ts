@@ -4,6 +4,7 @@ import {
   collectionSchema,
   commentsCountResponseSchema,
   createItemResponseSchema,
+  feedSchema,
   itemSchema,
   popularTagsSchema,
   responseWithErrorSchema,
@@ -168,6 +169,12 @@ class Api implements MyApi {
     const { error, data } = await this.fetch(`comments/count?itemId=${itemId}`);
     if (error) throw error;
     return commentsCountResponseSchema.parse(data).count;
+  }
+
+  async getFeed() {
+    const { data, error } = await this.fetch("feed");
+    if (error) throw error;
+    return feedSchema.parse(data);
   }
 }
 

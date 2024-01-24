@@ -18,7 +18,7 @@ export async function deleteComment({ id, actorId }: { id: number; actorId?: num
 
 export async function getCommentsCount({ itemId }: { itemId: number }) {
   const [result] = await db
-    .select({ count: sql<number>`count(*)`.mapWith(Number).as("count") })
+    .select({ count: sql<number>`COUNT(*)`.mapWith(Number).as("count") })
     .from(comments)
     .where(eq(comments.itemId, itemId));
   return result;

@@ -1,26 +1,30 @@
 import { Box } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
+import { api } from "../../api";
 import { PostListItem } from "./PostListItem";
 
 export function PostList() {
+  const { data, isPending, isFetching, isError, error } = useQuery({
+    queryKey: ["feed"],
+    queryFn: () => api.getFeed(),
+    retry: false,
+  });
+
+  if (isPending || isFetching) return null;
+  if (isError) {
+    console.error(error);
+    return null;
+  }
+
   return (
     <ul style={{ padding: 0, listStyle: "none" }}>
       <Box mt={2} display="flex" flexDirection="column" gap="2rem">
-        <li>
-          <PostListItem />
-        </li>
-        <li>
-          <PostListItem />
-        </li>
-        <li>
-          <PostListItem />
-        </li>
-        <li>
-          <PostListItem />
-        </li>
-        <li>
-          <PostListItem />
-        </li>
+        {data.map((item) => (
+          <li key={item.id}>
+            <PostListItem item={item} />
+          </li>
+        ))}
       </Box>
     </ul>
   );

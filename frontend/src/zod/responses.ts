@@ -134,3 +134,23 @@ export const createItemResponseSchema = z.object({
 export const commentsCountResponseSchema = z.object({
   count: z.number(),
 });
+
+export const feedSchema = z.array(
+  z.object({
+    id: z.number(),
+    title: z.string(),
+    description: z.string().nullable(),
+    createdAt: z.string(),
+    collection: z.object({
+      id: z.number(),
+      title: z.string(),
+      user: z.object({
+        id: z.number(),
+        avatar: z.string().nullable(),
+        username: z.string(),
+      }),
+    }),
+    comments: z.array(z.unknown()),
+    likes: z.array(z.unknown()),
+  })
+);

@@ -8,42 +8,38 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CardMedia,
+  // CardMedia,
   IconButton,
   Typography,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
 import { ROUTES } from "../../router";
+import { FeedPost } from "../../types";
+import { formatDate } from "../../utils/formatDate";
 
-export function PostListItem() {
+export function PostListItem({ item }: { item: FeedPost }) {
   const navigate = useNavigate();
-
-  const COLLECTION_NAME = "My Awesome Collection";
-  const COLLECTION_LINK = ROUTES.COLLECTION({ id: 123 });
-  const USER_NAME = "@username";
-  const USER_LINK = ROUTES.USER({ id: 123 });
-  const ITEM_NAME = "My new item";
-  const ITEM_LINK = ROUTES.ITEM({ id: 123 });
-  const IMAGE_HREF = "https://source.unsplash.com/featured/";
-  const DESCRIPTION = "Lorem ipsum dolor sit amet consectetur adipisicing elit. At, libero.";
-  const LIKE_COUNT = "5";
-  const COMMENT_COUNT = "1";
-  const CREATED_AT_CAPTION = "Yesterday, 17:45";
 
   return (
     <Card>
       <CardHeader
         avatar={<Avatar sx={{ color: "white", bgcolor: "indigo" }}>U</Avatar>}
-        title={<Link to={COLLECTION_LINK}>{COLLECTION_NAME}</Link>}
-        subheader={<Link to={USER_LINK}>{USER_NAME}</Link>}
+        title={
+          <Link to={ROUTES.COLLECTION({ id: item.collection.id })}>{item.collection.title}</Link>
+        }
+        subheader={
+          <Link to={ROUTES.USER({ id: item.collection.user.id })}>
+            {"@" + item.collection.user.username}
+          </Link>
+        }
       />
-      <Link to={ITEM_LINK}>
+      <Link to={ROUTES.ITEM({ id: item.id })}>
         <Typography variant="h6" fontWeight="700" component="h5" sx={{ mx: 2 }}>
-          {ITEM_NAME}
+          {item.title}
         </Typography>
       </Link>
-      <CardMedia
+      {/* <CardMedia
         component="img"
         image={IMAGE_HREF}
         sx={{
@@ -58,22 +54,22 @@ export function PostListItem() {
           cursor: "pointer",
         }}
         onClick={() => navigate(ITEM_LINK)}
-      />
+      /> */}
       <CardContent>
-        <Typography variant="body2">{DESCRIPTION}</Typography>
+        <Typography variant="body2">{item.description}</Typography>
       </CardContent>
       <CardActions sx={{ mb: 1 }}>
         <IconButton color="inherit">
           <LikeIcon />
         </IconButton>
-        {LIKE_COUNT}
-        <IconButton color="inherit" onClick={() => navigate(ITEM_LINK)}>
+        {item.likes.length}
+        <IconButton color="inherit" onClick={() => navigate(ROUTES.ITEM({ id: item.id }))}>
           <CommentIcon />
         </IconButton>
-        {COMMENT_COUNT}
+        {item.comments.length}
         <div style={{ flexGrow: 1 }}></div>
         <Typography variant="caption" mr={2}>
-          {CREATED_AT_CAPTION}
+          {formatDate(item.createdAt)}
         </Typography>
       </CardActions>
     </Card>
