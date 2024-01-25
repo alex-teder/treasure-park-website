@@ -15,6 +15,7 @@ import { tagsRoutes } from "./modules/tags/tags.route";
 import { commentsRoutes } from "./modules/comments/comments.route";
 import { feedRoutes } from "./modules/feed/feed.route";
 import { likesRoutes } from "./modules/likes/likes.route";
+import { searchRoutes } from "./modules/search/search.route";
 
 export async function buildServer() {
   const server = Fastify({
@@ -60,5 +61,6 @@ export async function buildServer() {
   server.register(commentsRoutes, { prefix: "/api/comments" });
   server.register(likesRoutes, { prefix: "/api/likes" });
   server.register(feedRoutes, { prefix: "/api/feed" });
+  server.register(searchRoutes, { prefix: "/api/search" });
   return server;
 }
