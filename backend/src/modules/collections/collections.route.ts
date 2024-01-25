@@ -4,6 +4,7 @@ import {
   createCollectionHandler,
   deleteCollectionHandler,
   getCollectionHandler,
+  topCollectionsHandler,
   updateCollectionHandler,
 } from "./collections.handler";
 import {
@@ -53,4 +54,5 @@ export async function collectionsRoutes(server: FastifyInstance) {
     },
     deleteCollectionHandler
   );
+  server.get("/top", topCollectionsHandler);
 }

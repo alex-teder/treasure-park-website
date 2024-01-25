@@ -3,6 +3,7 @@ import {
   createCollection,
   deleteCollection,
   getCollection,
+  getTopCollections,
   updateCollection,
 } from "./collections.service";
 import {
@@ -55,4 +56,9 @@ export async function deleteCollectionHandler(
     actorId: isAdminAction ? undefined : request.user.id,
   });
   return reply.send("ok");
+}
+
+export async function topCollectionsHandler(request: FastifyRequest, reply: FastifyReply) {
+  const result = await getTopCollections();
+  return reply.send(result);
 }

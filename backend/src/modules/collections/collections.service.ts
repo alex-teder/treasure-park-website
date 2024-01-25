@@ -1,6 +1,6 @@
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq, gt, gte, sql } from "drizzle-orm";
 import { db } from "../../db";
-import { collections } from "../../db/schema";
+import { collections, items, users } from "../../db/schema";
 import { ErrorWithCode } from "../../utils/errors";
 import { cleanUpUnusedTags, createCollectionTags } from "../tags/tags.service";
 import { CustomAttributeType } from "../../types";
@@ -81,4 +81,23 @@ export async function deleteCollection({ id, actorId }: { id: number; actorId?: 
     .where(and(eq(collections.id, id), actorId ? eq(collections.userId, actorId) : undefined));
   if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted", 403);
   await cleanUpUnusedTags();
+}
+
+export async function getTopCollections(length: number = 5) {
+  const result = await db
+    .select({
+      id: collections.id,
+      title: collections.title,
+      userId: collections.userId,
+      count: sql`COUNT(${items.id})`.mapWith(Number).as("item_count"),
+      username: users.username,
+    })
+    .from(collections)
+    .leftJoin(items, eq(collections.id, items.collectionId))
+    .leftJoin(users, eq(collections.userId, users.id))
+    .groupBy(collections.id)
+    .having(gt(sql`item_count`, 0))
+    .orderBy(desc(sql`item_count`))
+    .limit(length);
+  return result;
 }

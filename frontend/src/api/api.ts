@@ -8,6 +8,7 @@ import {
   itemSchema,
   popularTagsSchema,
   responseWithErrorSchema,
+  topCollectionsSchema,
   userProfileSchema,
   userSchema,
 } from "../zod/responses";
@@ -185,6 +186,12 @@ class Api implements MyApi {
   async unlikeItem(itemId: number) {
     const { error } = await this.fetch(`likes?itemId=${itemId}`, { method: "DELETE" });
     return { error };
+  }
+
+  async getTopCollections() {
+    const { data, error } = await this.fetch("collections/top");
+    if (error) throw error;
+    return topCollectionsSchema.parse(data);
   }
 }
 

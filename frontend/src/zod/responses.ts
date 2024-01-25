@@ -168,3 +168,12 @@ export const feedSchema = z.array(
     ),
   })
 );
+
+export const topCollectionsSchema = z.array(
+  z.object({
+    id: z.number(),
+    title: z.string(),
+    userId: z.number(),
+    username: z.string(),
+  })
+);
