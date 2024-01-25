@@ -31,11 +31,7 @@ export async function getFeed() {
         },
         extras: {},
       },
-      likes: {
-        columns: {
-          id: true,
-        },
-      },
+      likes: true,
     },
   });
 }

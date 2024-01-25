@@ -125,6 +125,11 @@ export const itemSchema = z.object({
       }),
     })
   ),
+  likes: z.array(
+    z.object({
+      userId: z.number(),
+    })
+  ),
 });
 
 export const createItemResponseSchema = z.object({
@@ -151,6 +156,10 @@ export const feedSchema = z.array(
       }),
     }),
     comments: z.array(z.unknown()),
-    likes: z.array(z.unknown()),
+    likes: z.array(
+      z.object({
+        userId: z.number(),
+      })
+    ),
   })
 );

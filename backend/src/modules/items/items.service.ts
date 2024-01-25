@@ -23,7 +23,7 @@ export async function getItem({ id }: { id: number }) {
             },
           },
         },
-        orderBy: [asc(comments.createdAt)], // test
+        orderBy: [asc(comments.createdAt)],
       },
       likes: true,
       itemAttributes: {

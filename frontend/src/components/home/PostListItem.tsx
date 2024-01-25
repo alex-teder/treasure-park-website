@@ -1,7 +1,4 @@
-import {
-  FavoriteBorder as LikeIcon,
-  ModeCommentOutlined as CommentIcon,
-} from "@mui/icons-material";
+import { ModeCommentOutlined as CommentIcon } from "@mui/icons-material";
 import {
   Avatar,
   Card,
@@ -12,14 +9,18 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { ROUTES } from "../../router";
 import { FeedPost } from "../../types";
 import { formatDate } from "../../utils/formatDate";
+import { LikeButton } from "../LikeButton";
+import { UserContext } from "../UserProvider";
 
 export function PostListItem({ item }: { item: FeedPost }) {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   return (
     <Card>
@@ -59,10 +60,12 @@ export function PostListItem({ item }: { item: FeedPost }) {
         <Typography variant="body2">{item.description}</Typography>
       </CardContent>
       <CardActions sx={{ mb: 1 }}>
-        <IconButton color="inherit">
-          <LikeIcon />
-        </IconButton>
-        {item.likes.length}
+        <LikeButton
+          initialLike={item.likes.some(({ userId }) => userId === user?.id)}
+          initialCount={item.likes.length}
+          itemId={item.id}
+        />
+
         <IconButton color="inherit" onClick={() => navigate(ROUTES.ITEM({ id: item.id }))}>
           <CommentIcon />
         </IconButton>

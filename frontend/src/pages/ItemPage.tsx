@@ -1,7 +1,4 @@
-import {
-  FavoriteBorder as LikeIcon,
-  ModeCommentOutlined as CommentIcon,
-} from "@mui/icons-material";
+import { ModeCommentOutlined as CommentIcon } from "@mui/icons-material";
 import {
   Avatar,
   Card,
@@ -21,6 +18,7 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../api";
 import { CommentSection } from "../components/item/CommentSection";
 import { OwnerActions } from "../components/item/OwnerActions";
+import { LikeButton } from "../components/LikeButton";
 import { UserContext } from "../components/UserProvider";
 import { ROUTES } from "../router";
 import { CustomAttributeValue } from "../types";
@@ -106,10 +104,11 @@ export function ItemPage() {
         </CardContent>
 
         <CardActions sx={{ mb: 1 }}>
-          <IconButton color="inherit">
-            <LikeIcon />
-          </IconButton>
-          5
+          <LikeButton
+            initialLike={data.item.likes.some(({ userId }) => userId === user?.id)}
+            initialCount={data.item.likes.length}
+            itemId={data.item.id}
+          />
           <IconButton color="inherit">
             <CommentIcon />
           </IconButton>

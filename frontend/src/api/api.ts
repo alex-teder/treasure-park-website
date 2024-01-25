@@ -176,6 +176,16 @@ class Api implements MyApi {
     if (error) throw error;
     return feedSchema.parse(data);
   }
+
+  async likeItem(itemId: number) {
+    const { error } = await this.fetch(`likes?itemId=${itemId}`, { method: "POST" });
+    return { error };
+  }
+
+  async unlikeItem(itemId: number) {
+    const { error } = await this.fetch(`likes?itemId=${itemId}`, { method: "DELETE" });
+    return { error };
+  }
 }
 
 export const api = new Api();
