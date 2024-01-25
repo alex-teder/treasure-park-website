@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  CardMedia,
   // CardMedia,
   IconButton,
   Typography,
@@ -40,22 +41,27 @@ export function PostListItem({ item }: { item: FeedPost }) {
           {item.title}
         </Typography>
       </Link>
-      {/* <CardMedia
-        component="img"
-        image={IMAGE_HREF}
-        sx={{
-          px: 2,
-          py: 1,
-          mx: "auto",
-          display: "block",
-          maxHeight: "450px",
-          maxWidth: "100%",
-          width: "auto",
-          height: "auto",
-          cursor: "pointer",
-        }}
-        onClick={() => navigate(ITEM_LINK)}
-      /> */}
+
+      {item.attachments[0] && (
+        <CardMedia
+          component="img"
+          image={item.attachments[0].url}
+          sx={{
+            px: 2,
+            py: 1,
+            mx: "auto",
+            display: "block",
+            maxHeight: "450px",
+            maxWidth: "100%",
+            width: "auto",
+            height: "auto",
+            minHeight: "250px",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate(ROUTES.ITEM({ id: item.id }))}
+        />
+      )}
+
       <CardContent>
         <Typography variant="body2">{item.description}</Typography>
       </CardContent>

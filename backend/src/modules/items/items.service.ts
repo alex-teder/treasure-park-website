@@ -5,6 +5,7 @@ import { ErrorWithCode } from "../../utils/errors";
 import { getCollection } from "../collections/collections.service";
 import { CustomAttributeValue } from "../../types";
 import { createItemAttributes } from "../attributes/attributes.service";
+import { createAttachments } from "../attachments/attachments.service";
 
 export async function getItem({ id }: { id: number }) {
   const foundItem = await db.query.items.findFirst({
@@ -47,6 +48,7 @@ export async function getItem({ id }: { id: number }) {
           },
         },
       },
+      attachments: true,
     },
   });
   if (!foundItem) {
@@ -64,6 +66,7 @@ export async function createItem({
     title: string;
     description?: string;
     attributes: { id: number; value: CustomAttributeValue }[];
+    attachments: string[];
   };
   actorId?: number;
 }) {
@@ -74,6 +77,7 @@ export async function createItem({
   const { insertId } = await db.insert(items).values(input);
   const id = parseInt(insertId);
   await createItemAttributes({ itemId: id, attributesToCreate: input.attributes });
+  await createAttachments({ itemId: id, urls: input.attachments });
   return id;
 }
 
@@ -87,6 +91,7 @@ export async function updateItem({
     title: string;
     description?: string | null;
     attributes: { id: number; value: CustomAttributeValue }[];
+    attachments: string[];
   };
   actorId?: number;
 }) {
@@ -100,6 +105,7 @@ export async function updateItem({
     .where(eq(items.id, id));
   if (!rowsAffected) throw new ErrorWithCode("Nothing was updated", 403);
   await createItemAttributes({ itemId: id, attributesToCreate: input.attributes });
+  await createAttachments({ itemId: id, urls: input.attachments });
   return id;
 }
 

@@ -117,6 +117,7 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
   itemAttributes: many(itemAttributes),
   comments: many(comments),
   likes: many(likes),
+  attachments: many(attachments),
 }));
 
 export const attributes = mysqlTable("attributes", {
@@ -210,6 +211,21 @@ export const likesRelations = relations(likes, ({ one }) => ({
   }),
   item: one(items, {
     fields: [likes.itemId],
+    references: [items.id],
+  }),
+}));
+
+export const attachments = mysqlTable("attachments", {
+  id: int("id").autoincrement().primaryKey(),
+  itemId: int("itemId")
+    .notNull()
+    .references(() => items.id, { onDelete: "cascade" }),
+  url: varchar("url", { length: 255 }).notNull(),
+});
+
+export const attachmentsRelations = relations(attachments, ({ one }) => ({
+  item: one(items, {
+    fields: [attachments.itemId],
     references: [items.id],
   }),
 }));

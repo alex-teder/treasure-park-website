@@ -32,6 +32,11 @@ export async function getFeed() {
         extras: {},
       },
       likes: true,
+      attachments: {
+        columns: {
+          url: true,
+        },
+      },
     },
   });
 }

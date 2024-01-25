@@ -1,4 +1,4 @@
-import { Check, FileUpload } from "@mui/icons-material";
+import { Check } from "@mui/icons-material";
 import { Alert, Button, Checkbox, Container, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -8,6 +8,7 @@ import { ChangeEvent, ChangeEventHandler, FC, FormEventHandler, useState } from 
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { api } from "../api";
+import { ImageUploader } from "../components/edit-item/ImageUploader";
 import { ROUTES } from "../router";
 import { Collection, CustomAttributeType, CustomAttributeValue, Item } from "../types";
 import { itemFormSchema } from "../zod/forms";
@@ -107,12 +108,14 @@ export function EditItemPage() {
         value: defaultValues[attribute.type],
       })) ||
       [],
+    attachments: itemToEdit?.attachments.map(({ url }) => url) || [],
   };
 
   const [item, setItem] = useState<{
     title: string;
     description: string;
     attributes: Item["itemAttributes"];
+    attachments: string[];
   }>(initialState);
 
   const [error, setError] = useState("");
@@ -124,6 +127,7 @@ export function EditItemPage() {
       title: item.title,
       description: item.description || undefined,
       attributes: item.attributes.map(({ value, attribute }) => ({ id: attribute.id, value })),
+      attachments: item.attachments,
     };
     const validation = itemFormSchema.safeParse(formData);
     if (!validation.success) {
@@ -174,11 +178,10 @@ export function EditItemPage() {
         </Grid>
 
         <Grid xs={12}>
-          <h3 style={{ marginBlock: "0.5rem" }}>Attachments:</h3>
-          <Button variant="contained" component="label" endIcon={<FileUpload />}>
-            Upload File
-            <input type="file" hidden />
-          </Button>
+          <ImageUploader
+            attachments={item.attachments}
+            setAttachments={(urls) => setItem((state) => ({ ...state, attachments: urls }))}
+          />
         </Grid>
 
         {item.attributes.map(({ value, attribute }) => {

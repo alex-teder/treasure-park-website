@@ -88,7 +88,7 @@ export const itemSchema = z.object({
   collectionId: z.number(),
   title: z.string(),
   description: z.string().nullish(),
-  attachments: z.unknown().optional(),
+  attachments: z.array(z.object({ id: z.number(), url: z.string() })),
   createdAt: z.string().transform((str) => new Date(str)), // format (date-fns??)
   itemAttributes: z.array(
     z.object({
@@ -159,6 +159,11 @@ export const feedSchema = z.array(
     likes: z.array(
       z.object({
         userId: z.number(),
+      })
+    ),
+    attachments: z.array(
+      z.object({
+        url: z.string(),
       })
     ),
   })

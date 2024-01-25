@@ -9,6 +9,7 @@ export const itemsBodySchema = z.object({
       value: z.union([z.number(), z.string(), z.boolean()]),
     })
   ),
+  attachments: z.array(z.string()),
 });
 
 export const createItemBodySchema = itemsBodySchema.merge(

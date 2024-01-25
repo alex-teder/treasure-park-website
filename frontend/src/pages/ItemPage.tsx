@@ -76,10 +76,10 @@ export function ItemPage() {
           {data.item.title}
         </Typography>
 
-        {data.item.attachments !== undefined && (
+        {data.item.attachments[0] && (
           <CardMedia
             component="img"
-            image="https://source.unsplash.com/featured/"
+            image={data.item.attachments[0].url}
             sx={{
               px: 2,
               py: 1,

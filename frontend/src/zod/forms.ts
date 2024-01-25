@@ -63,6 +63,7 @@ export const itemFormSchema = z.object({
       value: customAttributeValueSchema,
     })
   ),
+  attachments: z.array(z.string()),
 });
 
 export const commentSchema = z.object({
