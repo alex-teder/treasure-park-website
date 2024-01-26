@@ -29,7 +29,7 @@ export function PopularTags() {
           disableRandomColor
           minSize={15}
           maxSize={30}
-          onClick={() => navigate(ROUTES.SEARCH)}
+          onClick={(tag) => navigate(ROUTES.SEARCH, { state: { q: tag.value } })}
           onMouseOver={(_, e) => {
             const tagElement = e.target as HTMLElement;
             tagElement.style.textDecoration = "underline";

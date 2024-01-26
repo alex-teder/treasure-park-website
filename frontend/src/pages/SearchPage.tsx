@@ -3,18 +3,22 @@ import { Autocomplete, Box, Button, Container, TextField } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useQuery } from "@tanstack/react-query";
 import { ReactNode, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import { api } from "../api";
 import { SearchList } from "../components/search/SearchList";
 
 export function SearchPage() {
+  const { state } = useLocation();
+  const initialInputValue = state ? state.q : "";
+
   const [searchState, setSearchState] = useState<{
     q?: string;
     category?: number;
     sort?: "newest" | "oldest";
   }>({});
 
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(initialInputValue);
 
   const { data: categories } = useQuery({
     queryKey: ["categories"],
@@ -48,6 +52,7 @@ export function SearchPage() {
         <TextField
           fullWidth
           placeholder="Type a keyword..."
+          value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
         <Button type="submit" variant="contained" disableElevation>

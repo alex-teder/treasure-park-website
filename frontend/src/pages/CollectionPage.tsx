@@ -45,10 +45,7 @@ export function CollectionPage() {
         </Link>
       </Typography>
       <Typography mb={2}>
-        Category:{" "}
-        <Link to={ROUTES.SEARCH} style={{ textDecoration: "underline" }}>
-          {category}
-        </Link>
+        Category: <Link to={ROUTES.SEARCH}>{category}</Link>
       </Typography>
       <CollectionTagList tags={data.collection.collectionTags} />
 

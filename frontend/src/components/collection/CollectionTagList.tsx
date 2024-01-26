@@ -16,7 +16,7 @@ export function CollectionTagList({ tags }: CollectionTagListProps) {
     <ul style={{ padding: 0, listStyle: "none", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
       {tags.map(({ tag }) => (
         <li key={tag}>
-          <Link to={ROUTES.SEARCH}>
+          <Link to={ROUTES.SEARCH} state={{ q: tag }}>
             <Chip icon={<TagIcon />} label={tag} sx={{ borderRadius: 1 }} />
           </Link>
         </li>
