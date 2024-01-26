@@ -28,8 +28,6 @@ function getMatchClause(param: string | undefined) {
 }
 
 function getCategoryClause(param: number | undefined) {
-  console.log({ param });
-
   if (param === undefined) return undefined;
   return eq(collections.categoryId, param);
 }

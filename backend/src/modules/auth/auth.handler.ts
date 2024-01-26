@@ -7,7 +7,7 @@ const myCookieOptions: CookieSerializeOptions = {
   secure: true,
   httpOnly: true,
   sameSite: "none",
-  maxAge: 300,
+  maxAge: 7 * 24 * 60 * 60,
   path: "/",
 };
 
