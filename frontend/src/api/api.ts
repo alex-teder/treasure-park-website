@@ -8,6 +8,7 @@ import {
   itemSchema,
   popularTagsSchema,
   responseWithErrorSchema,
+  searchResultsSchema,
   topCollectionsSchema,
   userProfileSchema,
   userSchema,
@@ -192,6 +193,12 @@ class Api implements MyApi {
     const { data, error } = await this.fetch("collections/top");
     if (error) throw error;
     return topCollectionsSchema.parse(data);
+  }
+
+  async getSearchResults(querystring: string) {
+    const { data, error } = await this.fetch(`search?${querystring}`);
+    if (error) throw error;
+    return searchResultsSchema.parse(data);
   }
 }
 

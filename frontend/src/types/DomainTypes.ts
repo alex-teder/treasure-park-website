@@ -5,6 +5,7 @@ import {
   feedSchema,
   itemSchema,
   popularTagsSchema,
+  searchResultsSchema,
   userProfileSchema,
 } from "../zod/responses";
 import { customAttributeTypeSchema, customAttributeValueSchema } from "../zod/reused";
@@ -16,3 +17,4 @@ export type Collection = z.infer<typeof collectionSchema>;
 export type PopularTags = z.infer<typeof popularTagsSchema>;
 export type Item = z.infer<typeof itemSchema>;
 export type FeedPost = z.infer<typeof feedSchema>[number];
+export type SearchResult = z.infer<typeof searchResultsSchema>[number];

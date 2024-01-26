@@ -3,33 +3,6 @@ import { db } from "../../db";
 import { collectionTags, collections, items, likes, users } from "../../db/schema";
 import { SortingOptions } from "./search.schema";
 
-export async function getSearchResults(input: {
-  q?: string;
-  categoryId?: number;
-  sort?: SortingOptions;
-}) {
-  const results = await db
-    .select({
-      itemId: items.id,
-      title: items.title,
-      createdAt: items.createdAt,
-      collectionId: items.collectionId,
-      collectionTitle: collections.title,
-      userId: collections.userId,
-      username: users.username,
-      likesCount: sql<number>`COUNT(${likes.id})`.mapWith(Number).as("likes_count"),
-    })
-    .from(items)
-    .leftJoin(collections, eq(items.collectionId, collections.id))
-    .leftJoin(users, eq(collections.userId, users.id))
-    .leftJoin(likes, eq(items.id, likes.itemId))
-    .leftJoin(collectionTags, eq(collections.id, collectionTags.collectionId))
-    .where(and(getMatchClause(input.q), getCategoryClause(input.categoryId)))
-    .groupBy(items.id)
-    .orderBy(getSortingOrder(input.sort));
-  return results;
-}
-
 function getSortingOrder(param: "newest" | "oldest" | undefined) {
   switch (param) {
     case "newest":
@@ -55,6 +28,35 @@ function getMatchClause(param: string | undefined) {
 }
 
 function getCategoryClause(param: number | undefined) {
+  console.log({ param });
+
   if (param === undefined) return undefined;
   return eq(collections.categoryId, param);
+}
+
+export async function getSearchResults(input: {
+  q?: string;
+  categoryId?: number;
+  sort?: SortingOptions;
+}) {
+  const results = await db
+    .select({
+      itemId: items.id,
+      title: items.title,
+      createdAt: items.createdAt,
+      collectionId: items.collectionId,
+      collectionTitle: collections.title,
+      userId: collections.userId,
+      username: users.username,
+      likesCount: sql<number>`COUNT(${likes.id})`.mapWith(Number).as("likes_count"),
+    })
+    .from(items)
+    .leftJoin(collections, eq(items.collectionId, collections.id))
+    .leftJoin(users, eq(collections.userId, users.id))
+    .leftJoin(likes, eq(items.id, likes.itemId))
+    .leftJoin(collectionTags, eq(collections.id, collectionTags.collectionId))
+    .where(and(getMatchClause(input.q), getCategoryClause(input.categoryId)))
+    .groupBy(items.id)
+    .orderBy(getSortingOrder(input.sort));
+  return results;
 }

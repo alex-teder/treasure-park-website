@@ -17,6 +17,10 @@ export function PostList() {
     return null;
   }
 
+  if (!data.length) {
+    return <p style={{ color: "grey" }}>No posts here yet...</p>;
+  }
+
   return (
     <ul style={{ padding: 0, listStyle: "none" }}>
       <Box mt={2} display="flex" flexDirection="column" gap="2rem">

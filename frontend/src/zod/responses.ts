@@ -177,3 +177,15 @@ export const topCollectionsSchema = z.array(
     username: z.string(),
   })
 );
+
+export const searchResultsSchema = z.array(
+  z.object({
+    itemId: z.number(),
+    title: z.string(),
+    createdAt: z.string(),
+    collectionId: z.number(),
+    collectionTitle: z.string(),
+    userId: z.number(),
+    username: z.string(),
+  })
+);
