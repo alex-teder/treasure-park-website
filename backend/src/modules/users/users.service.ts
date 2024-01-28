@@ -41,10 +41,13 @@ export async function changeUserPermissions({
   id: number;
   input: { isBlocked?: boolean; isAdmin?: boolean };
 }) {
+  if (input.isBlocked === undefined && input.isAdmin === undefined) {
+    throw new ErrorWithCode("Nothing to update.", 400);
+  }
   await db.update(users).set(input).where(eq(users.id, id));
 }
 
 export async function deleteUser({ id }: { id: number }) {
   const { rowsAffected } = await db.delete(users).where(eq(users.id, id));
-  if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted", 400);
+  if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted.", 400);
 }

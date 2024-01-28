@@ -1,4 +1,4 @@
-import { and, desc, eq, gt, gte, sql } from "drizzle-orm";
+import { and, desc, eq, gt, sql } from "drizzle-orm";
 import { db } from "../../db";
 import { collections, items, users } from "../../db/schema";
 import { ErrorWithCode } from "../../utils/errors";

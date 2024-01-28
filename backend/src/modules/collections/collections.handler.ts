@@ -26,7 +26,7 @@ export async function createCollectionHandler(
   reply: FastifyReply
 ) {
   if (request.body.userId && !request.user.isAdmin) {
-    throw new ErrorWithCode("Not allowed.", 403);
+    throw new ErrorWithCode("Administrators only.", 403);
   }
   const userId = request.body.userId || request.user.id;
   await createCollection({ ...request.body, userId });

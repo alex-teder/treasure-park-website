@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
-const saltRounds = 7;
+
+const SALT_ROUNDS = 7;
 
 export async function hashPassword(password: string) {
-  return await bcrypt.hash(password, saltRounds);
+  return await bcrypt.hash(password, SALT_ROUNDS);
 }
 
 export async function verifyPassword(password: string, hashedPassword: string) {

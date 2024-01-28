@@ -3,11 +3,13 @@ import type { LogInBody, SignUpBody } from "./auth.schema";
 import { logIn, relogIn, signUp } from "./auth.service";
 import { CookieSerializeOptions } from "@fastify/cookie";
 
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+
 const myCookieOptions: CookieSerializeOptions = {
   secure: true,
   httpOnly: true,
   sameSite: "none",
-  maxAge: 7 * 24 * 60 * 60,
+  maxAge: COOKIE_MAX_AGE,
   path: "/",
 };
 

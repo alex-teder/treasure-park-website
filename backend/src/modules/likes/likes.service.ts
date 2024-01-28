@@ -1,8 +1,8 @@
+import { DatabaseError } from "@planetscale/database";
 import { and, eq } from "drizzle-orm";
 import { db } from "../../db";
 import { likes } from "../../db/schema";
 import { ErrorWithCode } from "../../utils/errors";
-import { DatabaseError } from "@planetscale/database";
 
 export async function likeItem(input: { userId: number; itemId: number }) {
   try {

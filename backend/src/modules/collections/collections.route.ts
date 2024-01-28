@@ -23,6 +23,7 @@ export async function collectionsRoutes(server: FastifyInstance) {
     },
     getCollectionHandler
   );
+
   server.post(
     "/",
     {
@@ -33,6 +34,7 @@ export async function collectionsRoutes(server: FastifyInstance) {
     },
     createCollectionHandler
   );
+
   server.put(
     "/:collectionId",
     {
@@ -44,6 +46,7 @@ export async function collectionsRoutes(server: FastifyInstance) {
     },
     updateCollectionHandler
   );
+
   server.delete(
     "/:collectionId",
     {
@@ -54,5 +57,6 @@ export async function collectionsRoutes(server: FastifyInstance) {
     },
     deleteCollectionHandler
   );
+
   server.get("/top", topCollectionsHandler);
 }

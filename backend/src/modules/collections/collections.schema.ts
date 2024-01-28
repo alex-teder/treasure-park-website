@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const baseBodySchema = z.object({
   title: z.string().min(1).max(150),
-  description: z.string().max(10000).optional(),
+  description: z.string().max(5000).optional(),
   categoryId: z.number().optional(),
   tags: z.array(z.string()),
 });

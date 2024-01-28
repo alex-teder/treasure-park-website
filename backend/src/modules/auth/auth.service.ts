@@ -3,7 +3,7 @@ import { DatabaseError } from "@planetscale/database";
 import { db } from "../../db";
 import { users } from "../../db/schema";
 import { hashPassword, verifyPassword } from "../../utils/hash";
-import { parseDatabaseError } from "../../utils/parseDatabaseError";
+import { parseAuthError } from "../../utils/parseAuthError";
 import { issueToken } from "../../utils/issueToken";
 import { ErrorWithCode } from "../../utils/errors";
 
@@ -27,7 +27,7 @@ export async function signUp({
     return { user: { id, email, isAdmin }, accessToken };
   } catch (err) {
     if (err instanceof DatabaseError) {
-      throw new ErrorWithCode(parseDatabaseError(err), 409);
+      throw new ErrorWithCode(parseAuthError(err), 409);
     } else {
       throw err;
     }
@@ -39,11 +39,11 @@ export async function logIn({ loginValue, password }: { loginValue: string; pass
     where: or(eq(users.email, loginValue), eq(users.username, loginValue)),
   });
   if (!foundUser) {
-    throw new ErrorWithCode("Wrong login or password.", 400);
+    throw new ErrorWithCode("Wrong login or password.", 401);
   }
   const isPassValid = await verifyPassword(password, foundUser.password);
   if (!isPassValid) {
-    throw new ErrorWithCode("Wrong login or password.", 400);
+    throw new ErrorWithCode("Wrong login or password.", 401);
   }
   if (foundUser.isBlocked) {
     throw new ErrorWithCode("User is blocked by admin.", 403);

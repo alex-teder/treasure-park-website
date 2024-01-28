@@ -9,6 +9,7 @@ export async function likesRoutes(server: FastifyInstance) {
     { config: { protected: true }, schema: { querystring: toJson(likeQuerySchema) } },
     likeItemHandler
   );
+
   server.delete(
     "/",
     { config: { protected: true }, schema: { querystring: toJson(likeQuerySchema) } },

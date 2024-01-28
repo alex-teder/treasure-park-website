@@ -14,9 +14,13 @@ import {
 export async function commentsRoutes(server: FastifyInstance) {
   server.post(
     "/",
-    { config: { protected: true }, schema: { body: toJson(commentsBodySchema) } },
+    {
+      config: { protected: true },
+      schema: { body: toJson(commentsBodySchema) },
+    },
     createCommentHandler
   );
+
   server.delete(
     "/:commentId",
     {
@@ -25,6 +29,7 @@ export async function commentsRoutes(server: FastifyInstance) {
     },
     deleteCommentHandler
   );
+
   server.get(
     "/count",
     { schema: { querystring: toJson(commentsCountQuerySchema) } },

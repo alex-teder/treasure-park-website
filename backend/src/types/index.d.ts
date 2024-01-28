@@ -21,10 +21,6 @@ type AuthenticatedUser = {
   isAdmin: boolean;
 };
 
-interface MaybeAdmin {
-  isAdmin: boolean;
-}
-
 type CustomAttributeType = "smallText" | "bigText" | "number" | "checkbox" | "date";
 type CustomAttributeValue = string | number | boolean;
 

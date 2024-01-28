@@ -9,7 +9,6 @@ export const envSchema = z.object({
     .transform((port) => parseInt(port))
     .optional(),
   DATABASE_URL: z.string(),
-  PW_SALT: z.string(),
   JWT_SECRET: z.string(),
 });
 

@@ -2,9 +2,11 @@ import { desc } from "drizzle-orm";
 import { db } from "../../db";
 import { items } from "../../db/schema";
 
+const POSTS_TO_LOAD = 10;
+
 export async function getFeed() {
   return await db.query.items.findMany({
-    limit: 10,
+    limit: POSTS_TO_LOAD,
     orderBy: [desc(items.createdAt)],
     columns: {
       collectionId: false,

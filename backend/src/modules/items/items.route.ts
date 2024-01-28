@@ -1,11 +1,11 @@
 import { FastifyInstance } from "fastify";
+import toJson from "zod-to-json-schema";
 import {
   createItemHandler,
   deleteItemHandler,
   getItemHandler,
   updateItemHandler,
 } from "./items.handler";
-import toJson from "zod-to-json-schema";
 import { createItemBodySchema, itemsBodySchema, itemsParamsSchema } from "./items.schema";
 
 export async function itemsRoutes(server: FastifyInstance) {
@@ -18,6 +18,7 @@ export async function itemsRoutes(server: FastifyInstance) {
     },
     getItemHandler
   );
+
   server.post(
     "/",
     {
@@ -28,6 +29,7 @@ export async function itemsRoutes(server: FastifyInstance) {
     },
     createItemHandler
   );
+
   server.put(
     "/:itemId",
     {
@@ -39,6 +41,7 @@ export async function itemsRoutes(server: FastifyInstance) {
     },
     updateItemHandler
   );
+
   server.delete(
     "/:itemId",
     {

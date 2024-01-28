@@ -6,6 +6,7 @@ export async function categoriesRoutes(server: FastifyInstance) {
     const result = await getAllCategories();
     reply.send(result);
   });
+
   server.post(
     "/",
     { config: { protected: true, adminOnly: true } },
@@ -14,6 +15,7 @@ export async function categoriesRoutes(server: FastifyInstance) {
       return reply.code(201).send(id);
     }
   );
+
   server.delete(
     "/:categoryId",
     { config: { protected: true, adminOnly: true } },

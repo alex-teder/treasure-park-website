@@ -1,6 +1,6 @@
 import { DatabaseError } from "@planetscale/database";
 
-export function parseDatabaseError(error: DatabaseError) {
+export function parseAuthError(error: DatabaseError) {
   if (error.body.message.includes("code = AlreadyExists")) {
     if (error.body.message.includes("for key 'users.users_email_unique'")) {
       return "This email is already taken.";

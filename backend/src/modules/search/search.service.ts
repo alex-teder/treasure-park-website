@@ -17,14 +17,14 @@ function getSortingOrder(param: "newest" | "oldest" | undefined) {
 function getMatchClause(param: string | undefined) {
   if (!param) return sql`1`;
   return sql`MATCH (items.title, items.description)
-  AGAINST (${param + "*"} IN BOOLEAN MODE)
-  OR
-  MATCH (collections.title, collections.description)
-  AGAINST (${param + "*"} IN BOOLEAN MODE)
-  OR
-  users.username LIKE ${"%" + param + "%"}
-  OR
-  collection_tags.tag LIKE ${"%" + param + "%"}`;
+    AGAINST (${param + "*"} IN BOOLEAN MODE)
+    OR
+    MATCH (collections.title, collections.description)
+    AGAINST (${param + "*"} IN BOOLEAN MODE)
+    OR
+    users.username LIKE ${"%" + param + "%"}
+    OR
+    collection_tags.tag LIKE ${"%" + param + "%"}`;
 }
 
 function getCategoryClause(param: number | undefined) {
