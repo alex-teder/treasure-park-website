@@ -85,7 +85,6 @@ export function CollectionItemList({
               <TableCell>{item.title}</TableCell>
               <TableCell width={1}>
                 <Avatar variant="square">
-                  {/* src */}
                   <ImageIcon />
                 </Avatar>
               </TableCell>
