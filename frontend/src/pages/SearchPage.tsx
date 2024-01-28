@@ -3,23 +3,17 @@ import { Autocomplete, Box, Button, Container, TextField } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 import { api } from "@/api";
 import { SearchList } from "@/components/search/SearchList";
 import { SortingOptionButton } from "@/components/search/SortingOptionButton";
 
+const INPUT_DEBOUNCE_TIME = 500;
+
 export function SearchPage() {
-  const { state } = useLocation();
-  const initialInputValue = state ? state.q : "";
-
-  const [searchState, setSearchState] = useState<{
-    q?: string;
-    category?: number;
-    sort?: "newest" | "oldest";
-  }>({});
-
-  const [inputValue, setInputValue] = useState(initialInputValue);
+  const [params, setParams] = useSearchParams();
+  const [inputValue, setInputValue] = useState("");
 
   const { data: categories } = useQuery({
     queryKey: ["categories"],
@@ -27,24 +21,37 @@ export function SearchPage() {
     retry: false,
   });
 
-  const { data: searchResults } = useQuery({
-    queryKey: [searchState],
+  const {
+    data: searchResults,
+    isPending,
+    isFetching,
+    isError,
+  } = useQuery({
+    queryKey: [params.toString()],
     queryFn: () => {
-      const newParams = new URLSearchParams();
-      if (searchState.q) newParams.append("q", searchState.q);
-      if (searchState.category) newParams.append("category", String(searchState.category));
-      if (searchState.sort) newParams.append("sort", searchState.sort);
-      return api.getSearchResults(newParams.toString());
+      return api.getSearchResults(params.toString());
     },
     retry: false,
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => setInputValue(params.get("q") || ""), []);
+
+  const initialCategory = categories?.find(({ id }) => id.toString() === params.get("category"));
+
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setSearchState((state) => ({ ...state, q: inputValue }));
-    }, 500);
+      setParams((state) => {
+        if (inputValue) {
+          state.set("q", inputValue);
+        } else {
+          state.delete("q");
+        }
+        return state;
+      });
+    }, INPUT_DEBOUNCE_TIME);
     return () => clearTimeout(timeout);
-  }, [inputValue]);
+  }, [inputValue, setParams]);
 
   return (
     <Container maxWidth="md">
@@ -66,7 +73,19 @@ export function SearchPage() {
           <Autocomplete
             options={categories?.map(({ title, id }) => ({ label: title, id })) || []}
             isOptionEqualToValue={({ id: id1 }, { id: id2 }) => id1 === id2}
-            onChange={(_, value) => setSearchState((state) => ({ ...state, category: value?.id }))}
+            onChange={(_, value) =>
+              setParams((state) => {
+                if (value?.id) {
+                  state.set("category", value.id.toString());
+                } else {
+                  state.delete("category");
+                }
+                return state;
+              })
+            }
+            defaultValue={
+              initialCategory ? { label: initialCategory.title, id: initialCategory.id } : null
+            }
             renderInput={(params) => (
               <TextField {...params} size="small" label="Filter by category" />
             )}
@@ -83,27 +102,42 @@ export function SearchPage() {
           gap={{ xs: 1, md: 0 }}
         >
           <SortingOptionButton
-            selected={searchState.sort === undefined}
-            onClick={() => setSearchState((state) => ({ ...state, sort: undefined }))}
+            selected={params.get("sort") === null}
+            onClick={() =>
+              setParams((state) => {
+                state.delete("sort");
+                return state;
+              })
+            }
           >
             Most popular
           </SortingOptionButton>
           <SortingOptionButton
-            selected={searchState.sort === "newest"}
-            onClick={() => setSearchState((state) => ({ ...state, sort: "newest" }))}
+            selected={params.get("sort") === "newest"}
+            onClick={() =>
+              setParams((state) => {
+                state.set("sort", "newest");
+                return state;
+              })
+            }
           >
             Newest
           </SortingOptionButton>
           <SortingOptionButton
-            selected={searchState.sort === "oldest"}
-            onClick={() => setSearchState((state) => ({ ...state, sort: "oldest" }))}
+            selected={params.get("sort") === "oldest"}
+            onClick={() =>
+              setParams((state) => {
+                state.set("sort", "oldest");
+                return state;
+              })
+            }
           >
             Oldest
           </SortingOptionButton>
         </Grid>
       </Grid>
 
-      <SearchList searchResults={searchResults || []} />
+      {!isPending && !isFetching && !isError && <SearchList searchResults={searchResults || []} />}
     </Container>
   );
 }
