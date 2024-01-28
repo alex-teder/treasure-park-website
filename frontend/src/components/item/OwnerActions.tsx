@@ -3,10 +3,10 @@ import { ButtonGroup, IconButton } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { api } from "../../api";
-import { ROUTES } from "../../router";
-import { Item } from "../../types";
-import { DangerDialog } from "../DangerDialog";
+import { api } from "@/api";
+import { DangerDialog } from "@/components/reused/DangerDialog";
+import { ROUTES } from "@/router";
+import { Item } from "@/types";
 
 export function OwnerActions({ item }: { item: Item }) {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export function OwnerActions({ item }: { item: Item }) {
       console.error(error);
       return;
     }
-    navigate(ROUTES.COLLECTION({ id: item.collectionId }));
+    navigate(ROUTES.COLLECTION(item.collectionId));
   };
 
   return (

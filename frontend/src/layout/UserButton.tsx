@@ -9,9 +9,9 @@ import { IconButton, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { SyntheticEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { api } from "../api/";
-import { UserContext } from "../components/UserProvider";
-import { ROUTES } from "../router";
+import { api } from "@/api/";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
 
 export function UserButton() {
   const navigate = useNavigate();
@@ -25,6 +25,12 @@ export function UserButton() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogOut = async () => {
+    await api.logOut();
+    setUser(null);
+    navigate(ROUTES.ROOT);
   };
 
   const noAuthMenuOptions = [
@@ -44,12 +50,7 @@ export function UserButton() {
     {
       label: "Log out",
       icon: <LogoutIcon fontSize="small" color="primary" />,
-      action: () => {
-        api.logOut().then(() => {
-          setUser(null);
-          navigate(ROUTES.ROOT);
-        });
-      },
+      action: handleLogOut,
     },
   ];
 

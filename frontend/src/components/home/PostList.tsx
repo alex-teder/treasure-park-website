@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
-import { api } from "../../api";
+import { api } from "@/api";
+
 import { PostListItem } from "./PostListItem";
 
 export function PostList() {

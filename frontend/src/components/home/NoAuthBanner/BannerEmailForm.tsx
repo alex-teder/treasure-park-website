@@ -3,8 +3,8 @@ import { Box, Button, Card, TextField } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ROUTES } from "../../../router";
-import { SignUpRouteState } from "../../../types";
+import { ROUTES } from "@/router";
+import { SignUpRouteState } from "@/types";
 
 export function BannerEmailForm() {
   const navigate = useNavigate();

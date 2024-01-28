@@ -12,10 +12,10 @@ import {
 import { SyntheticEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { api } from "../../api";
-import { ROUTES } from "../../router";
-import { loginFormSchema } from "../../zod/forms";
-import { UserContext } from "../UserProvider";
+import { api } from "@/api";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
+import { loginFormSchema } from "@/zod/forms";
 
 export function LoginForm() {
   const [loginValue, setLoginValue] = useState("");

@@ -1,9 +1,10 @@
+import { EmojiEvents as CupIcon } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 
-import { api } from "../../api";
-import { ROUTES } from "../../router";
+import { api } from "@/api";
+import { ROUTES } from "@/router";
 
 export function TopCollections() {
   const { data, isPending, isFetching, isError, error } = useQuery({
@@ -25,8 +26,9 @@ export function TopCollections() {
         <ol style={{ padding: 0, listStyle: "none" }}>
           {data.map((collection, idx) => (
             <li key={collection.id}>
-              <Link to={ROUTES.COLLECTION({ id: collection.id })}>
-                <Typography variant="body2">
+              {idx === 0 && <CupIcon color="warning" sx={{ fontSize: "0.8rem", mr: 0.5 }} />}
+              <Link to={ROUTES.COLLECTION(collection.id)}>
+                <Typography variant="body2" display="inline">
                   {idx + 1}. {collection.title} - @{collection.username}
                 </Typography>
               </Link>

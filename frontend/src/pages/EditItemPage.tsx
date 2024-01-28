@@ -1,78 +1,25 @@
 import { Check } from "@mui/icons-material";
-import { Alert, Button, Checkbox, Container, TextField, Typography } from "@mui/material";
+import { Alert, Button, Container, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs, { Dayjs } from "dayjs";
-import { ChangeEvent, ChangeEventHandler, FC, FormEventHandler, useState } from "react";
+import { Dayjs } from "dayjs";
+import { ChangeEvent, FC, FormEventHandler, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { api } from "../api";
-import { ImageUploader } from "../components/edit-item/ImageUploader";
-import { ROUTES } from "../router";
-import { Collection, CustomAttributeType, CustomAttributeValue, Item } from "../types";
-import { itemFormSchema } from "../zod/forms";
-
-interface CustomFieldProps {
-  title: string;
-  value: CustomAttributeValue;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-}
-
-function CustomSmallText({ title, value, onChange }: CustomFieldProps) {
-  return (
-    <label>
-      <Typography>{title}</Typography>
-      <TextField fullWidth value={value} onChange={onChange} />
-    </label>
-  );
-}
-
-function CustomBigText({ title, value, onChange }: CustomFieldProps) {
-  return (
-    <label>
-      <Typography>{title}</Typography>
-      <TextField multiline minRows={8} size="small" fullWidth value={value} onChange={onChange} />
-    </label>
-  );
-}
-
-function CustomNumber({ title, value, onChange }: CustomFieldProps) {
-  return (
-    <label>
-      <Typography>{title}</Typography>
-      <TextField type="number" sx={{ width: "8rem" }} value={value} onChange={onChange} />
-    </label>
-  );
-}
-
-function CustomCheckbox({ title, value, onChange }: CustomFieldProps) {
-  return (
-    <label>
-      <Typography display="inline-block">{title}</Typography>
-      <Checkbox checked={value as boolean} onChange={onChange} />
-    </label>
-  );
-}
-
-type CustomDateFieldProps = {
-  title: string;
-  value: CustomAttributeValue;
-  onChange: (value: Dayjs | null) => void;
-};
-
-function CustomDate({ title, value, onChange }: CustomDateFieldProps) {
-  const date = dayjs(value as string, "YYYY-MM-DD");
-
-  return (
-    <label>
-      <Typography>{title}</Typography>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker format="DD MMM YYYY" value={date} onChange={onChange} />
-      </LocalizationProvider>
-    </label>
-  );
-}
+import { api } from "@/api";
+import { CustomBigText } from "@/components/edit-item/custom-fields/CustomBigText";
+import { CustomCheckbox } from "@/components/edit-item/custom-fields/CustomCheckbox";
+import { CustomDate } from "@/components/edit-item/custom-fields/CustomDate";
+import { CustomNumber } from "@/components/edit-item/custom-fields/CustomNumber";
+import { CustomSmallText } from "@/components/edit-item/custom-fields/CustomSmallText";
+import {
+  CustomDateFieldProps,
+  CustomFieldProps,
+  DATE_STORING_FORMAT,
+} from "@/components/edit-item/custom-fields/types";
+import { ImageUploader } from "@/components/edit-item/ImageUploader";
+import { ROUTES } from "@/router";
+import { Collection, CustomAttributeType, CustomAttributeValue, Item } from "@/types";
+import { itemFormSchema } from "@/zod/forms";
 
 const templates: Record<CustomAttributeType, FC<CustomFieldProps> | FC<CustomDateFieldProps>> = {
   smallText: CustomSmallText,
@@ -96,14 +43,14 @@ export function EditItemPage() {
   const itemToEdit = state.item as Item | undefined;
   const collection = state.collection as Collection | undefined;
   const attributesWithValue = itemToEdit && itemToEdit.itemAttributes;
-  const collectionAttributes = collection && collection.attributes;
+  const emptyCollectionAttributes = collection && collection.attributes;
 
   const initialState = {
     title: itemToEdit?.title || "",
     description: itemToEdit?.description || "",
     attributes:
       attributesWithValue ||
-      collectionAttributes?.map((attribute) => ({
+      emptyCollectionAttributes?.map((attribute) => ({
         attribute,
         value: defaultValues[attribute.type],
       })) ||
@@ -119,6 +66,15 @@ export function EditItemPage() {
   }>(initialState);
 
   const [error, setError] = useState("");
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const valueParsers: Record<CustomAttributeType, (e: any) => CustomAttributeValue> = {
+    smallText: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
+    bigText: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
+    number: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
+    checkbox: (e: ChangeEvent<HTMLInputElement>) => e.target.checked,
+    date: (v: Dayjs | null) => (!v || !v.isValid() ? "" : v.format(DATE_STORING_FORMAT)),
+  };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -142,7 +98,7 @@ export function EditItemPage() {
       setError("An error occured.");
       return;
     }
-    navigate(ROUTES.ITEM({ id }));
+    navigate(ROUTES.ITEM(id));
   };
 
   return (
@@ -196,17 +152,6 @@ export function EditItemPage() {
                   const attrToChange = newAttributes.find(
                     (itemAttribute) => itemAttribute.attribute.id === attribute.id
                   );
-                  const valueParsers: Record<
-                    CustomAttributeType,
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    (e: any) => CustomAttributeValue
-                  > = {
-                    smallText: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
-                    bigText: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
-                    number: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
-                    checkbox: (e: ChangeEvent<HTMLInputElement>) => e.target.checked,
-                    date: (v: Dayjs | null) => (!v || !v.isValid() ? "" : v.format("YYYY-MM-DD")),
-                  };
                   attrToChange!.value = valueParsers[attribute.type](event);
                   setItem((state) => ({ ...state, attributes: newAttributes }));
                 }}

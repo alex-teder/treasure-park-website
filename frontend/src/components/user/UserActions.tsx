@@ -2,7 +2,7 @@ import { Add } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import { ROUTES } from "../../router";
+import { ROUTES } from "@/router";
 
 export function UserActions() {
   const navigate = useNavigate();

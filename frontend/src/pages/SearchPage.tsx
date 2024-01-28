@@ -1,12 +1,13 @@
-import { ArrowDownward, Search } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import { Autocomplete, Box, Button, Container, TextField } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useQuery } from "@tanstack/react-query";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import { api } from "../api";
-import { SearchList } from "../components/search/SearchList";
+import { api } from "@/api";
+import { SearchList } from "@/components/search/SearchList";
+import { SortingOptionButton } from "@/components/search/SortingOptionButton";
 
 export function SearchPage() {
   const { state } = useLocation();
@@ -59,6 +60,7 @@ export function SearchPage() {
           <Search />
         </Button>
       </Box>
+
       <Grid container columnSpacing={2} my={2}>
         <Grid xs={12} md={6}>
           <Autocomplete
@@ -70,6 +72,7 @@ export function SearchPage() {
             )}
           />
         </Grid>
+
         <Grid
           xs={12}
           md={6}
@@ -102,25 +105,5 @@ export function SearchPage() {
 
       <SearchList searchResults={searchResults || []} />
     </Container>
-  );
-}
-
-function SortingOptionButton({
-  selected,
-  onClick,
-  children,
-}: {
-  selected?: boolean;
-  onClick: () => void;
-  children?: ReactNode | ReactNode[];
-}) {
-  return (
-    <Button
-      variant={selected ? "contained" : "outlined"}
-      endIcon={selected ? <ArrowDownward /> : null}
-      onClick={onClick}
-    >
-      {children}
-    </Button>
   );
 }

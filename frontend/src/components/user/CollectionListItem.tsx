@@ -4,8 +4,8 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { ROUTES } from "../../router";
-import { UserProfile } from "../../types";
+import { ROUTES } from "@/router";
+import { UserProfile } from "@/types";
 
 export function CollectionListItem({
   collection,
@@ -26,7 +26,7 @@ export function CollectionListItem({
     <>
       <Grid xs={12} md={4}>
         <Link
-          to={ROUTES.COLLECTION({ id: collection.id })}
+          to={ROUTES.COLLECTION(collection.id)}
           style={{ textDecoration: "none" }}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { userSchema } from "../zod/responses";
+import { userSchema } from "@/zod/responses";
 
 export type User = z.infer<typeof userSchema>;
 

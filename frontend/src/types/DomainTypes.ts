@@ -7,8 +7,8 @@ import {
   popularTagsSchema,
   searchResultsSchema,
   userProfileSchema,
-} from "../zod/responses";
-import { customAttributeTypeSchema, customAttributeValueSchema } from "../zod/reused";
+} from "@/zod/responses";
+import { customAttributeTypeSchema, customAttributeValueSchema } from "@/zod/reused";
 
 export type CustomAttributeType = z.infer<typeof customAttributeTypeSchema>;
 export type CustomAttributeValue = z.infer<typeof customAttributeValueSchema>;

@@ -3,9 +3,9 @@ import { IconButton } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { api } from "../../../api";
-import { Item } from "../../../types";
-import { DangerDialog } from "../../DangerDialog";
+import { api } from "@/api";
+import { DangerDialog } from "@/components/reused/DangerDialog";
+import { Item } from "@/types";
 
 export function SingleCommentActions({ comment }: { comment: Item["comments"][number] }) {
   const queryClient = useQueryClient();

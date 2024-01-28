@@ -4,17 +4,19 @@ import MuiMarkdown from "mui-markdown";
 import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { api } from "../api";
-import { CollectionActions } from "../components/collection/CollectionActions";
-import { CollectionItemList } from "../components/collection/CollectionItemList";
-import { CollectionTagList } from "../components/collection/CollectionTagList";
-import { UserContext } from "../components/UserProvider";
-import { ROUTES } from "../router";
+import { api } from "@/api";
+import { CollectionActions } from "@/components/collection/CollectionActions";
+import { CollectionItemList } from "@/components/collection/CollectionItemList";
+import { CollectionTagList } from "@/components/collection/CollectionTagList";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
+
 import { NotFoundPage } from "./NotFoundPage";
 
 export function CollectionPage() {
   const { collectionId } = useParams();
   const { user } = useContext(UserContext);
+
   const { data, isPending, isFetching, isError, error } = useQuery({
     queryKey: [collectionId],
     queryFn: () => api.getCollection(parseInt(collectionId!)),
@@ -27,7 +29,8 @@ export function CollectionPage() {
     return <NotFoundPage />;
   }
 
-  const category = data.collection.category ? data.collection.category.title : "Other";
+  const categoryTitle = data.collection.category ? data.collection.category.title : "Other";
+  const categoryId = data.collection.category?.id || null;
   const isOwner = Boolean(user?.id === data.collection.userId || user?.isAdmin);
 
   return (
@@ -35,18 +38,24 @@ export function CollectionPage() {
       <Typography my={2} variant="h5" fontWeight={700} component="p">
         {data.collection.title}
       </Typography>
+
       <Typography mb={2}>
         Author:{" "}
-        <Link
-          to={ROUTES.USER({ id: data.collection.userId })}
-          style={{ textDecoration: "underline" }}
-        >
+        <Link to={ROUTES.USER(data.collection.userId)} style={{ textDecoration: "underline" }}>
           {"@" + data.collection.user.username}
         </Link>
       </Typography>
+
       <Typography mb={2}>
-        Category: <Link to={ROUTES.SEARCH}>{category}</Link>
+        Category:{" "}
+        <Link
+          to={ROUTES.SEARCH(categoryId ? `?category=${categoryId}` : "")}
+          style={{ textDecoration: "underline" }}
+        >
+          {categoryTitle}
+        </Link>
       </Typography>
+
       <CollectionTagList tags={data.collection.collectionTags} />
 
       {isOwner && <CollectionActions collection={data.collection} />}

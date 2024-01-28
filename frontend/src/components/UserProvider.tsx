@@ -1,7 +1,9 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-import { api } from "../api";
-import { User, UserCtx } from "../types";
+import { api } from "@/api";
+import { User, UserCtx } from "@/types";
+
+const RELOGIN_INTERVAL_MS = 60 * 1000;
 
 export const UserContext = createContext<UserCtx>({
   user: null,
@@ -39,7 +41,7 @@ export function UserProvider({ children }: { children?: ReactNode | ReactNode[] 
       } else {
         setUser(user);
       }
-    }, 60 * 1000);
+    }, RELOGIN_INTERVAL_MS);
     return () => clearInterval(interval);
   }, [user]);
 

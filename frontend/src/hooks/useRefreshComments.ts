@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-import { api } from "../api";
+import { api } from "@/api";
+
+const REFRESH_INTERVAL_MS = 5 * 1000;
 
 export function useRefreshComments(itemId: number, currentCount: number) {
   const [diff, setDiff] = useState(0);
@@ -11,7 +13,7 @@ export function useRefreshComments(itemId: number, currentCount: number) {
   const { data: count, status } = useQuery({
     queryKey: [itemId, currentCount],
     queryFn: () => api.checkCommentCount(itemId),
-    refetchInterval: 5 * 1000,
+    refetchInterval: REFRESH_INTERVAL_MS,
   });
 
   useEffect(() => {

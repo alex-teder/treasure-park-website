@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { FormEventHandler, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { api } from "../api";
-import { CustomFieldEditor } from "../components/edit-collection/CustomFieldEditor";
-import { UserContext } from "../components/UserProvider";
-import { ROUTES } from "../router";
-import { Collection } from "../types";
-import { editCollectionSchema, newCollectionSchema } from "../zod/forms";
+import { api } from "@/api";
+import { CustomFieldEditor } from "@/components/edit-collection/CustomFieldEditor";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
+import { Collection } from "@/types";
+import { editCollectionSchema, newCollectionSchema } from "@/zod/forms";
 
 export function EditCollectionPage() {
   const location = useLocation();
@@ -76,7 +76,7 @@ export function EditCollectionPage() {
       setError("An error occured.");
       return;
     }
-    navigate(ROUTES.USER({ id: collectionToEdit ? collectionToEdit.userId : user!.id }));
+    navigate(ROUTES.USER(collectionToEdit ? collectionToEdit.userId : user!.id));
   };
 
   return (
@@ -99,7 +99,7 @@ export function EditCollectionPage() {
 
         <Grid xs={12} sm={6}>
           <Autocomplete
-            options={categories || []}
+            options={categories || [{ id: 0, title: "Other" }]}
             getOptionLabel={(item) => item.title}
             disableClearable
             renderInput={(params) => <TextField {...params} label={<span>Select category</span>} />}

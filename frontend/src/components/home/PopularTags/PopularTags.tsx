@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { TagCloud } from "react-tagcloud";
 
-import { api } from "../../../api";
-import { ROUTES } from "../../../router";
+import { api } from "@/api";
+import { ROUTES } from "@/router";
 
 export function PopularTags() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export function PopularTags() {
           disableRandomColor
           minSize={15}
           maxSize={30}
-          onClick={(tag) => navigate(ROUTES.SEARCH, { state: { q: tag.value } })}
+          onClick={({ value }) => navigate(ROUTES.SEARCH(`?q=${value}`))}
           onMouseOver={(_, e) => {
             const tagElement = e.target as HTMLElement;
             tagElement.style.textDecoration = "underline";

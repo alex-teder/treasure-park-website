@@ -3,15 +3,15 @@ import { Alert, Box, Button, CardMedia, CircularProgress } from "@mui/material";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { ChangeEventHandler, useState } from "react";
 
-import { attachmentsRef } from "../../storage/firebase-storage";
+import { attachmentsRef } from "@/storage/firebase-storage";
 
 const LIMIT_MB = 2;
 const MAX_FILE_SIZE = LIMIT_MB * 1024 * 1024;
 const MAX_IMAGES = 1;
 
-type ImageUploaderProps = { attachments: string[]; setAttachments: (urls: string[]) => void };
+type Props = { attachments: string[]; setAttachments: (urls: string[]) => void };
 
-export function ImageUploader({ attachments, setAttachments }: ImageUploaderProps) {
+export function ImageUploader({ attachments, setAttachments }: Props) {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 

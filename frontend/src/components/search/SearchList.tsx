@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 
-import { SearchResult } from "../../types";
+import { SearchResult } from "@/types";
+
 import { SearchListItem } from "./SearchListItem";
 
 export function SearchList({ searchResults }: { searchResults: SearchResult[] }) {

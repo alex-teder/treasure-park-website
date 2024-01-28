@@ -6,9 +6,9 @@ import { IconButton } from "@mui/material";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { api } from "../api";
-import { ROUTES } from "../router";
-import { UserContext } from "./UserProvider";
+import { api } from "@/api";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
 
 type LikeButtonProps = {
   initialLike: boolean;

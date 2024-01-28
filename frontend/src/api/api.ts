@@ -1,4 +1,3 @@
-import { MyApi } from "../types";
 import {
   categoriesSchema,
   collectionSchema,
@@ -12,12 +11,12 @@ import {
   topCollectionsSchema,
   userProfileSchema,
   userSchema,
-} from "../zod/responses";
+} from "@/zod/responses";
 
-class Api implements MyApi {
-  readonly BASE_URL: string = import.meta.env.DEV ? "http://127.0.0.1:8080/api/" : "/api/";
+class Api {
+  private readonly BASE_URL: string = import.meta.env.DEV ? "http://127.0.0.1:8080/api/" : "/api/";
 
-  async fetch(subUrl: string, options: RequestInit = {}) {
+  private async fetch(subUrl: string, options: RequestInit = {}) {
     let data;
     const response = await fetch(this.BASE_URL + subUrl, { ...options, credentials: "include" });
     if (response.headers.get("Content-Type")?.includes("application/json")) {

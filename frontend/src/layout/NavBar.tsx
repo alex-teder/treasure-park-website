@@ -2,18 +2,18 @@ import { Box, Button } from "@mui/material";
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { UserContext } from "../components/UserProvider";
-import { ROUTES } from "../router";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
 
 export function NavBar({ closeDrawer }: { closeDrawer: () => void }) {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const navItems = [
     { label: "Home", path: ROUTES.ROOT },
-    { label: "Search", path: ROUTES.SEARCH },
+    { label: "Search", path: ROUTES.SEARCH() },
     {
       label: "My collections",
-      path: user ? ROUTES.USER({ id: user.id }) : ROUTES.LOGIN,
+      path: user ? ROUTES.USER(user.id) : ROUTES.LOGIN,
     },
   ];
 

@@ -12,11 +12,14 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ROUTES } from "../../../router";
-import { Collection } from "../../../types";
+import { ROUTES } from "@/router";
+import { Collection } from "@/types";
+
 import { EmptyPadding } from "./EmptyPadding";
 import { NoItemsPlaceholder } from "./NoItemsPlaceholder";
 import { SearchField } from "./SearchField";
+
+const ITEMS_PER_PAGE = 10;
 
 export function CollectionItemList({
   collection,
@@ -27,7 +30,6 @@ export function CollectionItemList({
   items: Collection["items"];
   isOwner: boolean;
 }) {
-  const ITEMS_PER_PAGE = 10;
   const [page, setPage] = useState(0);
   const [searchField, setSearchField] = useState("");
   const navigate = useNavigate();
@@ -77,7 +79,7 @@ export function CollectionItemList({
               hover
               role="button"
               sx={{ cursor: "pointer" }}
-              onClick={() => navigate(ROUTES.ITEM({ id: item.id }))}
+              onClick={() => navigate(ROUTES.ITEM(item.id))}
             >
               <TableCell width={1}>{item.index}.</TableCell>
               <TableCell>{item.title}</TableCell>

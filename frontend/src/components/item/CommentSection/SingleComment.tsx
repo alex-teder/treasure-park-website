@@ -2,10 +2,11 @@ import { Avatar, CardContent, CardHeader, Divider } from "@mui/material";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { ROUTES } from "../../../router";
-import { Item } from "../../../types";
-import { formatDate } from "../../../utils/formatDate";
-import { UserContext } from "../../UserProvider";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
+import { Item } from "@/types";
+import { formatDate } from "@/utils/formatDate";
+
 import { SingleCommentActions } from "./SingleCommentActions";
 
 export function SingleComment({ comment }: { comment: Item["comments"][number] }) {
@@ -18,7 +19,7 @@ export function SingleComment({ comment }: { comment: Item["comments"][number] }
       <CardHeader
         avatar={<Avatar>U</Avatar>}
         title={
-          <Link to={ROUTES.USER({ id: comment.author.id })}>
+          <Link to={ROUTES.USER(comment.author.id)}>
             <b>@{comment.author.username}</b>
           </Link>
         }

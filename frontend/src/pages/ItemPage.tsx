@@ -15,19 +15,21 @@ import dayjs from "dayjs";
 import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { api } from "../api";
-import { CommentSection } from "../components/item/CommentSection";
-import { OwnerActions } from "../components/item/OwnerActions";
-import { LikeButton } from "../components/LikeButton";
-import { UserContext } from "../components/UserProvider";
-import { ROUTES } from "../router";
-import { CustomAttributeValue } from "../types";
-import { formatDate } from "../utils/formatDate";
-import { NotFoundPage } from "./NotFoundPage";
+import { api } from "@/api";
+import { DATE_STORING_FORMAT } from "@/components/edit-item/custom-fields/types";
+import { CommentSection } from "@/components/item/CommentSection";
+import { OwnerActions } from "@/components/item/OwnerActions";
+import { LikeButton } from "@/components/reused/LikeButton";
+import { UserContext } from "@/components/UserProvider";
+import { NotFoundPage } from "@/pages/NotFoundPage";
+import { ROUTES } from "@/router";
+import { CustomAttributeValue } from "@/types";
+import { formatDate } from "@/utils/formatDate";
 
 export function ItemPage() {
   const { itemId } = useParams();
   const { user } = useContext(UserContext);
+
   const { data, isPending, isFetching, isError, error } = useQuery({
     queryKey: [itemId],
     queryFn: () => api.getItem(parseInt(itemId!)),
@@ -50,7 +52,7 @@ export function ItemPage() {
     number: (value: CustomAttributeValue) => <span>{String(value)}</span>,
     checkbox: (value: CustomAttributeValue) => <span>{String(value)}</span>,
     date: (value: CustomAttributeValue) => (
-      <span>{dayjs(value as string, "YYYY-MM-DD").format("DD MMM YYYY")}</span>
+      <span>{dayjs(value as string, DATE_STORING_FORMAT).format("DD MMM YYYY")}</span>
     ),
   };
 
@@ -58,14 +60,12 @@ export function ItemPage() {
     <Container maxWidth="md">
       <Card sx={{ my: 2 }}>
         <CardHeader
-          avatar={<Avatar sx={{ color: "white", bgcolor: "indigo" }}>U</Avatar>}
+          avatar={<Avatar />}
           title={
-            <Link to={ROUTES.COLLECTION({ id: data.item.collectionId })}>
-              {data.item.collection.title}
-            </Link>
+            <Link to={ROUTES.COLLECTION(data.item.collectionId)}>{data.item.collection.title}</Link>
           }
           subheader={
-            <Link to={ROUTES.USER({ id: data.item.collection.user.id })}>
+            <Link to={ROUTES.USER(data.item.collection.user.id)}>
               {"@" + data.item.collection.user.username}
             </Link>
           }
@@ -86,6 +86,7 @@ export function ItemPage() {
               mx: "auto",
               display: "block",
               maxHeight: "650px",
+              minHeight: "300px",
               maxWidth: "100%",
               width: "auto",
               height: "auto",
@@ -113,11 +114,14 @@ export function ItemPage() {
             <CommentIcon />
           </IconButton>
           {data.item.comments.length}
+
           <div style={{ flexGrow: 1 }}></div>
+
           <Typography variant="caption" mr={2}>
             {formatDate(data.item.createdAt)}
           </Typography>
         </CardActions>
+
         <CommentSection comments={data.item.comments} itemId={data.item.id} />
       </Card>
     </Container>

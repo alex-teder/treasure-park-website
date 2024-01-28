@@ -3,10 +3,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { api } from "../../../api";
-import { ROUTES } from "../../../router";
-import { commentSchema } from "../../../zod/forms";
-import { UserContext } from "../../UserProvider";
+import { api } from "@/api";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
+import { commentSchema } from "@/zod/forms";
 
 export function NewCommentField({ itemId }: { itemId: number }) {
   const queryClient = useQueryClient();

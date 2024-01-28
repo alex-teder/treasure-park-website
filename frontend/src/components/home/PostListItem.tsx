@@ -6,18 +6,17 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  // CardMedia,
   IconButton,
   Typography,
 } from "@mui/material";
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { ROUTES } from "../../router";
-import { FeedPost } from "../../types";
-import { formatDate } from "../../utils/formatDate";
-import { LikeButton } from "../LikeButton";
-import { UserContext } from "../UserProvider";
+import { LikeButton } from "@/components/reused/LikeButton";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
+import { FeedPost } from "@/types";
+import { formatDate } from "@/utils/formatDate";
 
 export function PostListItem({ item }: { item: FeedPost }) {
   const navigate = useNavigate();
@@ -26,17 +25,15 @@ export function PostListItem({ item }: { item: FeedPost }) {
   return (
     <Card>
       <CardHeader
-        avatar={<Avatar sx={{ color: "white", bgcolor: "indigo" }}>U</Avatar>}
-        title={
-          <Link to={ROUTES.COLLECTION({ id: item.collection.id })}>{item.collection.title}</Link>
-        }
+        avatar={<Avatar />}
+        title={<Link to={ROUTES.COLLECTION(item.collection.id)}>{item.collection.title}</Link>}
         subheader={
-          <Link to={ROUTES.USER({ id: item.collection.user.id })}>
+          <Link to={ROUTES.USER(item.collection.user.id)}>
             {"@" + item.collection.user.username}
           </Link>
         }
       />
-      <Link to={ROUTES.ITEM({ id: item.id })}>
+      <Link to={ROUTES.ITEM(item.id)}>
         <Typography variant="h6" fontWeight="700" component="h5" sx={{ mx: 2 }}>
           {item.title}
         </Typography>
@@ -58,13 +55,14 @@ export function PostListItem({ item }: { item: FeedPost }) {
             minHeight: "250px",
             cursor: "pointer",
           }}
-          onClick={() => navigate(ROUTES.ITEM({ id: item.id }))}
+          onClick={() => navigate(ROUTES.ITEM(item.id))}
         />
       )}
 
       <CardContent>
         <Typography variant="body2">{item.description}</Typography>
       </CardContent>
+
       <CardActions sx={{ mb: 1 }}>
         <LikeButton
           initialLike={item.likes.some(({ userId }) => userId === user?.id)}
@@ -72,11 +70,13 @@ export function PostListItem({ item }: { item: FeedPost }) {
           itemId={item.id}
         />
 
-        <IconButton color="inherit" onClick={() => navigate(ROUTES.ITEM({ id: item.id }))}>
+        <IconButton color="inherit" onClick={() => navigate(ROUTES.ITEM(item.id))}>
           <CommentIcon />
         </IconButton>
         {item.comments.length}
+
         <div style={{ flexGrow: 1 }}></div>
+
         <Typography variant="caption" mr={2}>
           {formatDate(item.createdAt)}
         </Typography>

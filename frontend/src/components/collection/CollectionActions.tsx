@@ -2,10 +2,10 @@ import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { api } from "../../api";
-import { ROUTES } from "../../router";
-import { Collection } from "../../types";
-import { DangerDialog } from "../DangerDialog";
+import { api } from "@/api";
+import { DangerDialog } from "@/components/reused/DangerDialog";
+import { ROUTES } from "@/router";
+import { Collection } from "@/types";
 
 type CollectionActionsProps = {
   collection: Collection;
@@ -21,7 +21,7 @@ export function CollectionActions({ collection }: CollectionActionsProps) {
       console.error(error);
       return;
     }
-    navigate(ROUTES.USER({ id: collection.userId }));
+    navigate(ROUTES.USER(collection.userId));
   };
 
   return (

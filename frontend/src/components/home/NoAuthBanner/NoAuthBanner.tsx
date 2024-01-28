@@ -7,7 +7,7 @@ import {
   useTheme,
 } from "@mui/material";
 
-import bannerImg from "/src/assets/banner.jpg";
+import bannerImg from "@/assets/banner.jpg";
 
 import { BannerEmailForm } from "./BannerEmailForm";
 import { BannerText } from "./BannerText";

@@ -12,10 +12,10 @@ import {
 import { SyntheticEvent, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { api } from "../../api";
-import { ROUTES } from "../../router";
-import { signupFormSchema } from "../../zod/forms";
-import { UserContext } from "../UserProvider";
+import { api } from "@/api";
+import { UserContext } from "@/components/UserProvider";
+import { ROUTES } from "@/router";
+import { signupFormSchema } from "@/zod/forms";
 
 export function SignupForm() {
   const { state } = useLocation();
@@ -58,7 +58,9 @@ export function SignupForm() {
         onChange={(e) => setUsername(e.target.value)}
       />
       <PasswordField value={password} onChange={(e) => setPassword(e.target.value)} />
+
       {error && <Alert severity="error">{error}</Alert>}
+
       <Button type="submit" color="secondary" variant="contained">
         Sign up
       </Button>

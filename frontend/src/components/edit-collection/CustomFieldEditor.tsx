@@ -8,10 +8,13 @@ import {
   Remove as MinusIcon,
 } from "@mui/icons-material";
 import { Box, IconButton, TextField, Tooltip, Typography } from "@mui/material";
+import { ReactNode } from "react";
 
-import { Collection, CustomAttributeType } from "../../types";
-import { findLastIndex } from "../../utils/findLast";
-import { getRandomNumber } from "../../utils/getRandomNumber";
+import { Collection, CustomAttributeType } from "@/types";
+import { findLastIndex } from "@/utils/findLast";
+import { getRandomNumber } from "@/utils/getRandomNumber";
+
+const MAX_FIELDS_OF_TYPE = 3;
 
 type CustomFieldEditorProps = {
   attributes: Collection["attributes"];
@@ -20,9 +23,7 @@ type CustomFieldEditorProps = {
 };
 
 export function CustomFieldEditor({ attributes, setAttributes, mode }: CustomFieldEditorProps) {
-  const MAX_FIELDS_OF_TYPE = 3;
-
-  const customFields = {
+  const customFields: Record<CustomAttributeType, { label: string; icon: ReactNode }> = {
     smallText: { label: "Small text", icon: <Edit /> },
     bigText: { label: "Big text", icon: <Edit /> },
     number: { label: "Number", icon: <Numbers /> },
@@ -78,7 +79,9 @@ export function CustomFieldEditor({ attributes, setAttributes, mode }: CustomFie
                 >
                   <MinusIcon />
                 </IconButton>
+
                 {attributes.filter(({ type }) => type === (key as CustomAttributeType)).length}
+
                 <IconButton
                   disabled={
                     attributes.filter(({ type }) => type === (key as CustomAttributeType)).length >=
