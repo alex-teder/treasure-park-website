@@ -1,14 +1,14 @@
-#Treasure park
+# Treasure park
 
 An online platform for sharing and managing collections.
 
 Live link - [https://treasure-park.onrender.com/](https://treasure-park.onrender.com/)
 
-##Overview
+## Overview
 
 **Treasure park** is a web application designed for collectors to create, edit, and share their collections.
 
-##Features
+## Features
 
 - User authentication and authorization
 - Create collections with customizable fields
@@ -20,17 +20,15 @@ Live link - [https://treasure-park.onrender.com/](https://treasure-park.onrender
 - Responsive design for mobile and desktop
 - Two UI themes: dark and light
 
-##Getting started
+## Getting started
 
-###Installation
-
-Make sure you have Node.js and npm installed on your machine.
+### Installation
 
 1. Clone the repository.
 2. `npm install` the backend folder.
 3. `npm install` the frontend folder.
 
-###Development
+### Development
 
 Starting the backend dev server:
 ```
@@ -44,25 +42,17 @@ cd frontend
 npm run dev
 ```
 
-Default ports:
-backend - `8080`
-frontend - `5123`
-
-Environment variables for backend:
-`DATABASE_URL`
-`FRONTEND_DEV_PORT`
-`JWT_SECRET`
-
-###Build and deploy
+### Build and start the app
 ```
 npm run build
 npm start
 ```
 
-##Technologies used
+## Technologies used
 
 Database: 
-- MySQL hosted on [Planetscale](https://planetscale.com/).
+- MySQL hosted on [Planetscale](https://planetscale.com/)
+
 Backend:
 - [Typescript](https://www.typescriptlang.org/)
 - [Node.js](https://nodejs.org/)
@@ -71,6 +61,7 @@ Backend:
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 - [bcrypt](https://www.npmjs.com/package/bcrypt)
 - [zod](https://zod.dev/)
+
 Frontend:
 - [Typescript](https://www.typescriptlang.org/)
 - [React](https://react.dev/)
@@ -81,5 +72,6 @@ Frontend:
 - [TanStack Query](https://tanstack.com/query/latest)
 - [Dayjs](https://day.js.org/)
 - [zod](https://zod.dev/)
+
 Hosting:
 - [render.com](https://render.com/)
