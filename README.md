@@ -8,7 +8,7 @@ Live link - [https://treasure-park.onrender.com/](https://treasure-park.onrender
 
 **Treasure park** is a web application designed for collectors to create, edit, and share their collections.
 
-## Features
+### Features
 
 - User authentication and authorization
 - Create collections with customizable fields
