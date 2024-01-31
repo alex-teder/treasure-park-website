@@ -3,6 +3,7 @@
 An online platform for sharing and managing collections.
 
 Live link - [https://treasure-park.onrender.com/](https://treasure-park.onrender.com/)
+(goes to sleep when idle)
 
 ## Overview
 
