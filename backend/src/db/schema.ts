@@ -2,18 +2,19 @@ import { relations } from "drizzle-orm";
 import {
   boolean,
   char,
-  int,
+  serial,
+  integer,
   json,
-  mysqlEnum,
-  mysqlTable,
+  pgEnum,
+  pgTable,
   text,
   timestamp,
   uniqueIndex,
   varchar,
-} from "drizzle-orm/mysql-core";
+} from "drizzle-orm/pg-core";
 
-export const users = mysqlTable("users", {
-  id: int("id").autoincrement().primaryKey(),
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
   username: varchar("username", { length: 100 }).unique(),
   email: varchar("email", { length: 150 }).notNull().unique(),
   password: char("password", { length: 60 }).notNull(),
@@ -30,12 +31,12 @@ export const usersRelations = relations(users, ({ many }) => ({
   likes: many(likes),
 }));
 
-export const collections = mysqlTable("collections", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId")
+export const collections = pgTable("collections", {
+  id: serial("id").primaryKey(),
+  userId: integer("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  categoryId: int("categoryId").references(() => categories.id, { onDelete: "set null" }),
+  categoryId: integer("categoryId").references(() => categories.id, { onDelete: "set null" }),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
   createdAt: timestamp("createdAt").defaultNow(),
@@ -55,8 +56,8 @@ export const collectionsRelations = relations(collections, ({ one, many }) => ({
   attributes: many(attributes),
 }));
 
-export const categories = mysqlTable("categories", {
-  id: int("id").autoincrement().primaryKey(),
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
   title: varchar("title", { length: 50 }).notNull().unique(),
 });
 
@@ -64,7 +65,7 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
   collections: many(collections),
 }));
 
-export const tags = mysqlTable("tags", {
+export const tags = pgTable("tags", {
   title: varchar("title", { length: 50 }).primaryKey(),
 });
 
@@ -72,11 +73,11 @@ export const tagsRelations = relations(tags, ({ many }) => ({
   collectionTags: many(collectionTags),
 }));
 
-export const collectionTags = mysqlTable(
+export const collectionTags = pgTable(
   "collection_tags",
   {
-    id: int("id").autoincrement().primaryKey(),
-    collectionId: int("collectionId")
+    id: serial("id").primaryKey(),
+    collectionId: integer("collectionId")
       .notNull()
       .references(() => collections.id, { onDelete: "cascade" }),
     tag: varchar("tag", { length: 50 })
@@ -84,7 +85,7 @@ export const collectionTags = mysqlTable(
       .references(() => tags.title, { onDelete: "cascade" }),
   },
   (t) => ({
-    idx: uniqueIndex("idx").on(t.collectionId, t.tag),
+    idx: uniqueIndex("colleciton_tags_idx").on(t.collectionId, t.tag),
   })
 );
 
@@ -99,9 +100,9 @@ export const collectionTagsRelations = relations(collectionTags, ({ one }) => ({
   }),
 }));
 
-export const items = mysqlTable("items", {
-  id: int("id").autoincrement().primaryKey(),
-  collectionId: int("collectionId")
+export const items = pgTable("items", {
+  id: serial("id").primaryKey(),
+  collectionId: integer("collectionId")
     .notNull()
     .references(() => collections.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 255 }).notNull(),
@@ -120,13 +121,15 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
   attachments: many(attachments),
 }));
 
-export const attributes = mysqlTable("attributes", {
-  id: int("id").autoincrement().primaryKey(),
-  collectionId: int("collectionId")
+export const attrTypeEnum = pgEnum("type", ["smallText", "bigText", "number", "checkbox", "date"]);
+
+export const attributes = pgTable("attributes", {
+  id: serial("id").primaryKey(),
+  collectionId: integer("collectionId")
     .notNull()
     .references(() => collections.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 50 }).notNull(),
-  type: mysqlEnum("type", ["smallText", "bigText", "number", "checkbox", "date"]).notNull(),
+  type: attrTypeEnum("type"),
 });
 
 export const attributesRelations = relations(attributes, ({ one, many }) => ({
@@ -137,20 +140,20 @@ export const attributesRelations = relations(attributes, ({ one, many }) => ({
   items: many(items),
 }));
 
-export const itemAttributes = mysqlTable(
+export const itemAttributes = pgTable(
   "item_attributes",
   {
-    id: int("id").autoincrement().primaryKey(),
-    attributeId: int("attributeId")
+    id: serial("id").primaryKey(),
+    attributeId: integer("attributeId")
       .notNull()
       .references(() => attributes.id, { onDelete: "cascade" }),
-    itemId: int("itemId")
+    itemId: integer("itemId")
       .notNull()
       .references(() => items.id, { onDelete: "cascade" }),
     value: json("value").$type<{ value: string | number | boolean }>(),
   },
   (t) => ({
-    idx: uniqueIndex("idx").on(t.attributeId, t.itemId),
+    idx: uniqueIndex("item_attributes_idx").on(t.attributeId, t.itemId),
   })
 );
 
@@ -165,12 +168,12 @@ export const itemAttributesRelations = relations(itemAttributes, ({ one }) => ({
   }),
 }));
 
-export const comments = mysqlTable("comments", {
-  id: int("id").autoincrement().primaryKey(),
-  authorId: int("authorId")
+export const comments = pgTable("comments", {
+  id: serial("id").primaryKey(),
+  authorId: integer("authorId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  itemId: int("itemId")
+  itemId: integer("itemId")
     .notNull()
     .references(() => items.id, { onDelete: "cascade" }),
   text: varchar("text", { length: 2500 }).notNull(),
@@ -188,19 +191,19 @@ export const commentsRelations = relations(comments, ({ one }) => ({
   }),
 }));
 
-export const likes = mysqlTable(
+export const likes = pgTable(
   "likes",
   {
-    id: int("id").autoincrement().primaryKey(),
-    userId: int("userId")
+    id: serial("id").primaryKey(),
+    userId: integer("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    itemId: int("itemId")
+    itemId: integer("itemId")
       .notNull()
       .references(() => items.id, { onDelete: "cascade" }),
   },
   (t) => ({
-    idx: uniqueIndex("idx").on(t.userId, t.itemId),
+    idx: uniqueIndex("likes_idx").on(t.userId, t.itemId),
   })
 );
 
@@ -215,9 +218,9 @@ export const likesRelations = relations(likes, ({ one }) => ({
   }),
 }));
 
-export const attachments = mysqlTable("attachments", {
-  id: int("id").autoincrement().primaryKey(),
-  itemId: int("itemId")
+export const attachments = pgTable("attachments", {
+  id: serial("id").primaryKey(),
+  itemId: integer("itemId")
     .notNull()
     .references(() => items.id, { onDelete: "cascade" }),
   url: varchar("url", { length: 255 }).notNull(),
