@@ -28,6 +28,7 @@
     "fastify": "^4.25.2",
     "fastify-plugin": "^4.5.1",
     "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.22.3"
   },
@@ -35,6 +36,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.10.6",
+    "@types/pg": "^8.11.0",
     "drizzle-kit": "^0.20.9",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
