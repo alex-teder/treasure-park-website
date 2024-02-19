@@ -18,10 +18,10 @@ export async function signUp({
 }) {
   try {
     const hashedPassword = await hashPassword(password);
-    const { insertId } = await db
+    const [{ id }] = await db
       .insert(users)
-      .values({ email, username, password: hashedPassword });
-    const id = parseInt(insertId);
+      .values({ email, username, password: hashedPassword })
+      .returning({id: users.id});
     const isAdmin = false;
     const { accessToken } = issueToken({ id, email, isAdmin });
     return { user: { id, email, isAdmin }, accessToken };

@@ -48,6 +48,6 @@ export async function changeUserPermissions({
 }
 
 export async function deleteUser({ id }: { id: number }) {
-  const { rowsAffected } = await db.delete(users).where(eq(users.id, id));
-  if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted.", 400);
+  const rows = await db.delete(users).where(eq(users.id, id)).returning();
+  if (!rows.length) throw new ErrorWithCode("Nothing was deleted.", 400);
 }

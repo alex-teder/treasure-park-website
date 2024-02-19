@@ -74,8 +74,7 @@ export async function createItem({
   if (actorId && collection.userId !== actorId) {
     throw new ErrorWithCode("Not allowed.", 403);
   }
-  const { insertId } = await db.insert(items).values(input);
-  const id = parseInt(insertId);
+  const [{ id }] = await db.insert(items).values(input).returning({id: items.id});
   await createItemAttributes({ itemId: id, attributesToCreate: input.attributes });
   await createAttachments({ itemId: id, urls: input.attachments });
   return id;
@@ -99,11 +98,11 @@ export async function updateItem({
   if (actorId && item.collection.userId !== actorId) {
     throw new ErrorWithCode("Not allowed.", 403);
   }
-  const { rowsAffected } = await db
+  const rows = await db
     .update(items)
     .set({ title: input.title, description: input.description || null })
-    .where(eq(items.id, id));
-  if (!rowsAffected) throw new ErrorWithCode("Nothing was updated", 403);
+    .where(eq(items.id, id)).returning();
+  if (!rows.length) throw new ErrorWithCode("Nothing was updated", 403);
   await createItemAttributes({ itemId: id, attributesToCreate: input.attributes });
   await createAttachments({ itemId: id, urls: input.attachments });
   return id;
@@ -114,6 +113,6 @@ export async function deleteItem({ id, actorId }: { id: number; actorId?: number
   if (actorId && item.collection.userId !== actorId) {
     throw new ErrorWithCode("Not allowed.", 403);
   }
-  const { rowsAffected } = await db.delete(items).where(eq(items.id, id));
-  if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted", 403);
+  const rows = await db.delete(items).where(eq(items.id, id)).returning();
+  if (!rows.length) throw new ErrorWithCode("Nothing was deleted", 403);
 }

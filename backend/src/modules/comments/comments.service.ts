@@ -4,16 +4,16 @@ import { comments } from "../../db/schema";
 import { ErrorWithCode } from "../../utils/errors";
 
 export async function createComment(input: { authorId: number; itemId: number; text: string }) {
-  const { insertId } = await db.insert(comments).values(input);
-  return parseInt(insertId);
+  const [{ id }] = await db.insert(comments).values(input).returning({id: comments.id});
+  return id;
 }
 
 export async function deleteComment({ id, actorId }: { id: number; actorId?: number }) {
   const isAdminAction = !actorId;
-  const { rowsAffected } = await db
+  const rows = await db
     .delete(comments)
-    .where(and(eq(comments.id, id), isAdminAction ? undefined : eq(comments.authorId, actorId)));
-  if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted", 403);
+    .where(and(eq(comments.id, id), isAdminAction ? undefined : eq(comments.authorId, actorId))).returning();
+  if (!rows.length) throw new ErrorWithCode("Nothing was deleted", 403);
 }
 
 export async function getCommentsCount({ itemId }: { itemId: number }) {

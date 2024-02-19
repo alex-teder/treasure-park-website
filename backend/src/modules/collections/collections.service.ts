@@ -42,8 +42,7 @@ export async function createCollection(input: {
   attributes: { title: string; type: CustomAttributeType }[];
 }) {
   const { tags, attributes, ...rest } = input;
-  const { insertId } = await db.insert(collections).values({ ...rest });
-  const id = parseInt(insertId);
+  const [{ id }] = await db.insert(collections).values({ ...rest }).returning({id: collections.id});
   await createCollectionTags({ collectionId: id, tagTitles: tags });
   await createAttributes({ collectionId: id, attributesToCreate: attributes });
   return { id };
@@ -65,21 +64,23 @@ export async function updateCollection({
   actorId?: number;
 }) {
   const { tags, attributes, ...rest } = input;
-  const { rowsAffected } = await db
+  const rows = await db
     .update(collections)
     .set({ ...rest })
-    .where(and(eq(collections.id, id), actorId ? eq(collections.userId, actorId) : undefined));
-  if (!rowsAffected) throw new ErrorWithCode("Nothing was updated", 400);
+    .where(and(eq(collections.id, id), actorId ? eq(collections.userId, actorId) : undefined))
+    .returning();
+  if (!rows.length) throw new ErrorWithCode("Nothing was updated", 400);
   await createCollectionTags({ collectionId: id, tagTitles: input.tags });
   await renameAttributes(attributes);
   await cleanUpUnusedTags();
 }
 
 export async function deleteCollection({ id, actorId }: { id: number; actorId?: number }) {
-  const { rowsAffected } = await db
+  const rows = await db
     .delete(collections)
-    .where(and(eq(collections.id, id), actorId ? eq(collections.userId, actorId) : undefined));
-  if (!rowsAffected) throw new ErrorWithCode("Nothing was deleted", 403);
+    .where(and(eq(collections.id, id), actorId ? eq(collections.userId, actorId) : undefined))
+    .returning();
+  if (!rows.length) throw new ErrorWithCode("Nothing was deleted", 403);
   await cleanUpUnusedTags();
 }
 

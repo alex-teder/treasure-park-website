@@ -21,8 +21,7 @@ export async function renameAttributes(attributesToRename: { id: number; title: 
     query.append(sql`WHEN id = ${attr.id} THEN ${attr.title} `);
   }
   query.append(sql.raw(`END WHERE id IN (${attributesToRename.map(({ id }) => id)});`));
-  const { rowsAffected } = await db.execute(query);
-  return rowsAffected;
+  await db.execute(query);
 }
 
 export async function createItemAttributes({

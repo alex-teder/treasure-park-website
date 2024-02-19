@@ -29,7 +29,7 @@ export async function createCollectionTags({
   await db
     .insert(collectionTags)
     .values(tagTitles.map((tag) => ({ tag, collectionId })))
-    .onDuplicateKeyUpdate({ set: { tag: sql`tag` } });
+    .onConflictDoNothing();
 }
 
 export async function cleanUpUnusedTags() {
@@ -38,8 +38,8 @@ export async function cleanUpUnusedTags() {
     await db.select().from(tags).where(notInArray(tags.title, usedTags))
   ).map(({ title }) => title);
   if (!tagsToDelete.length) return;
-  const { rowsAffected } = await db.delete(tags).where(inArray(tags.title, tagsToDelete));
-  return rowsAffected;
+  const rows = await db.delete(tags).where(inArray(tags.title, tagsToDelete)).returning();
+  return rows.length;
 }
 
 async function createTags(tagTitles: string[]) {
@@ -47,5 +47,5 @@ async function createTags(tagTitles: string[]) {
   await db
     .insert(tags)
     .values(tagTitles.map((title) => ({ title })))
-    .onDuplicateKeyUpdate({ set: { title: sql`title` } });
+    .onConflictDoNothing();
 }

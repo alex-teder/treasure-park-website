@@ -18,8 +18,8 @@ export async function likeItem(input: { userId: number; itemId: number }) {
 }
 
 export async function unlikeItem({ userId, itemId }: { userId: number; itemId: number }) {
-  const { rowsAffected } = await db
+  const rows = await db
     .delete(likes)
-    .where(and(eq(likes.itemId, itemId), eq(likes.userId, userId)));
-  if (!rowsAffected) throw new ErrorWithCode("Nothing was updated.", 400);
+    .where(and(eq(likes.itemId, itemId), eq(likes.userId, userId))).returning();
+  if (!rows.length) throw new ErrorWithCode("Nothing was updated.", 400);
 }
